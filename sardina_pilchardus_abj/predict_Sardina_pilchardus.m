@@ -148,14 +148,10 @@ function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
   %% uni-variate data
   
   % juvenile data set 1
-  f = f_juv_pen;
-  vT = v * TC_tL_juv1;kT_J = k_J * TC_tL_juv1;
-  kT_M = k_M * TC_tL_juv1; pT_Am = p_Am * TC_tL_juv1;
-  UT_Hb = E_Hb / pT_Am;
-  VT_Hb = UT_Hb/ (1 - kap);          % [LAURE : VHb depends on TC, calculation was missing]
-  pars_E0 = [VT_Hb; g; kT_J; kT_M; vT]; % pars for initial_scaled_reserve
+  f = f_juv_pen; 
+  pars_E0 = [V_Hb; g; k_J; k_M; v]; % pars for initial_scaled_reserve
   [U_E0 L_b info] = initial_scaled_reserve(f, pars_E0); % d cm^2, initial scaled reserve
-  E_0 = pT_Am * U_E0;    % J, initial reserve (of embryo)
+  E_0 = p_Am * U_E0;    % J, initial reserve (of embryo)
   pars_lj = [g; k; l_T; v_Hb; v_Hj; v_Hp];
   [t_j t_p t_b l_j l_p l_b l_i rho_j rho_B info] = get_tj(pars_lj, f);
   %L_b = L_m * l_b;                       % cm, structural length at birth at f
@@ -171,9 +167,6 @@ function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
 
   % juvenile data set 2
   f = f_juv_pen;
-  vT = v * TC_tL_juv2;kT_J = k_J * TC_tL_juv2;
-  kT_M = k_M * TC_tL_juv2; pT_Am = p_Am * TC_tL_juv2;
- 
   a = [-1e-10;tL_juv2(:,1)];
   [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, p_Am, v, g, k_J, kap, f, E_Hb, E_Hj, T_A, T_ref, temp.tL_juv2); 
   ELH(1,:) = []; L = ELH(:,2); % L3 = L.^3; U = LUH(:,2); 
@@ -183,9 +176,6 @@ function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
 
   % juvenile data set 3
   f = f_juv_pen;
-  vT = v * TC_tL_juv3;kT_J = k_J * TC_tL_juv3;
-  kT_M = k_M * TC_tL_juv3; pT_Am = p_Am * TC_tL_juv3;
- 
   a = [-1e-10;tL_juv3(:,1)];
   [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, p_Am, v, g, k_J, kap, f, E_Hb, E_Hj, T_A, T_ref, temp.tL_juv3); 
   ELH(1,:) = []; L = ELH(:,2); % L3 = L.^3; U = LUH(:,2); 
@@ -197,59 +187,40 @@ function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
   % we recalcultate E0, Lb and Lj as f is assumed to be different between
   % Peniche and Lagoa de Obidos
   f = f_juv_lag;
-  vT = v * TC_tL_juv4;kT_J = k_J * TC_tL_juv4;
-  kT_M = k_M * TC_tL_juv4; pT_Am = p_Am * TC_tL_juv4;
-  UT_Hb = E_Hb / pT_Am;
-  VT_Hb = UT_Hb/ (1 - kap);          % [LAURE : VHb depends on TC, calculation was missing]
-  pars_E0 = [VT_Hb; g; kT_J; kT_M; vT]; % pars for initial_scaled_reserve
+  pars_E0 = [V_Hb; g; k_J; k_M; v]; % pars for initial_scaled_reserve
   [U_E0 L_b info] = initial_scaled_reserve(f, pars_E0); % d cm^2, initial scaled reserve
-  E_0 = pT_Am * U_E0;    % J, initial reserve (of embryo)
+  E_0 = p_Am * U_E0;    % J, initial reserve (of embryo)
   pars_lj = [g; k; l_T; v_Hb; v_Hj; v_Hp];
   [t_j t_p t_b l_j l_p l_b l_i rho_j rho_B info] = get_tj(pars_lj, f);
   %L_b = L_m * l_b;                       % cm, structural length at birth at f
   L_j = l_j * L_m;  
-  
-  
   a = [-1e-10;tL_juv4(:,1)];
   [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, p_Am, v, g, k_J, kap, f, E_Hb, E_Hj, T_A, T_ref, temp.tL_juv4); 
   ELH(1,:) = []; L = ELH(:,2); 
   EL4 = L/ del_M_SL;
-
   EW4 = (del_M_SL * LW_juv4(:,1)).^3  .* (1 + f * w);
 
   % juvenile data set 5
   f = f_juv_lag;
-  vT = v * TC_tL_juv5;kT_J = k_J * TC_tL_juv5;
-  kT_M = k_M * TC_tL_juv5; pT_Am = p_Am * TC_tL_juv5;
- 
   a = [-1e-10;tL_juv5(:,1)];
   [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, p_Am, v, g, k_J, kap, f, E_Hb, E_Hj, T_A, T_ref, temp.tL_juv5); 
   ELH(1,:) = []; L = ELH(:,2); % L3 = L.^3; U = LUH(:,2); 
   EL5 = L/ del_M_SL;
-   
   EW5 = (del_M_SL * LW_juv5(:,1)).^3 .* (1 + f * w);
 
   % juvenile data set 6
   f = f_juv_lag;
-  vT = v * TC_tL_juv6;kT_J = k_J * TC_tL_juv6;
-  kT_M = k_M * TC_tL_juv6; pT_Am = p_Am * TC_tL_juv6;
- 
   a = [-1e-10;tL_juv6(:,1)];
   [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, p_Am, v, g, k_J, kap, f, E_Hb, E_Hj, T_A, T_ref, temp.tL_juv6); 
   ELH(1,:) = []; L = ELH(:,2); 
   EL6 = L/ del_M_SL;
-
   EW6 = (del_M_SL * LW_juv6(:,1)).^3  .* (1 + f * w);
 
   % larval data set
   f = f_tL_larv;
-  vT = v * TC_tL_larv;kT_J = k_J * TC_tL_larv;
-  kT_M = k_M * TC_tL_larv; pT_Am = p_Am * TC_tL_larv;
-  
   a = [-1e-10;tL_larv(:,1)];
   [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, p_Am, v, g, k_J, kap, f, E_Hb, E_Hj, T_A, T_ref, temp.tL_larv); 
   ELH(1,:) = []; L = ELH(:,2); 
- 
   EL_larv = L/ del_Mb;
 
 
