@@ -90,9 +90,10 @@ data.Ri  = 1035;   units.Ri  = '#/d';  label.Ri  = 'maximum reprod rate';      b
   % for f = 0.9. guess Ri = 1150 * 0.9 = 1035;
 data.Wd0 = 0.03e-3;  units.Wd0 = 'g';    label.Wd0 = 'egg dry weight';    bibkey.Wd0 = 'Nunes2015' ;
 % Wd0 = 18 to 40 microg dry weight - see Cristina Nunes
-data.E0 = data.Wd0 * 22e3;  units.E0 = 'J';    label.E0 = 'egg energy content';    bibkey.E0 = {'Lask1962';'Nunes2015'} ;
+data.E0 = data.Wd0 * 29e3;  units.E0 = 'J';    label.E0 = 'egg energy content';    bibkey.E0 = {'Lask1962';'Nunes2015'} ;
 % Energy density of an egg between 20 and 30kJ /g dry weight Kalmer 2005
-% 
+% % !! should be consistent with <E> = mu_E/w_E
+
 % uni-variate data
 %------------------
 % Mene2003 - Chap. 5

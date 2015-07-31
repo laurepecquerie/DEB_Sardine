@@ -20,15 +20,15 @@ estim_options('default'); % runs estimation, uses nmregr method and filter
 %                     2 - saves data to .mat file and graphs to .png files
 %                     (prints results to screen using a customized results file when there is one)
 
-estim_options('max_step_number',1e3); % set options for parameter estimation
+estim_options('max_step_number',5e3); % set options for parameter estimation
 estim_options('max_fun_evals',5e3);  % set options for parameter estimation
 
-% estim_options('pars_init_method', 1); % from .mat
+%  estim_options('pars_init_method', 1); % from .mat
 estim_options('pars_init_method', 2); % from pars_init
 
 estim_options('results_output', 1);
 
-%estim_options('method', 'nm');
-estim_options('method', 'no')
+estim_options('method', 'nm');
+% estim_options('method', 'no')
 
 estim_pars; % run estimation

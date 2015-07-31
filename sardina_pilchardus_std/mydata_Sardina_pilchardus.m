@@ -91,7 +91,9 @@ data.Wd0 = 3e-5;  units.Wd0 = 'g';    label.Wd0 = 'egg dry weight';    bibkey.Wd
 % Wd0 = 18 to 40 microg dry weight - see Cristina Nunes
 data.E0 = data.Wd0 * 29e3;  units.E0 = 'J';    label.E0 = 'egg energy content';    bibkey.E0 = {'Lask1962';'Nunes2015'} ;
 % Energy density of an egg between 20 and 30kJ /g dry weight Kalmer 2005
-% 
+%% !! should be consistent with <E> = mu_E/w_E
+ 
+
 % uni-variate data
 %------------------
 % Mene2003 - Chap. 5
@@ -1128,7 +1130,7 @@ LW_ad   = [ 12.2    14      0.63
             22.4	108    18.86];
 data.LW_ad(:,1) = LW_ad(:,1);
 data.LW_ad(:,2) = LW_ad(:,2) - LW_ad(:,3);          % remove the gonad 
-units.LW_ad = {'d', 'cm'};     label.LW_ad = {'total length', 'wet weight without gonads'};  bibkey.LW_ad = '';
+units.LW_ad = {'d', 'cm'};     label.LW_ad = {'total length', 'wet weight without gonads'};  bibkey.LW_ad = 'IPMA';
   temp.LW_ad = T_C + 15;  % K, temperature [LAURE: which temp? should we set it as a parameter?]
       
 
@@ -1165,6 +1167,7 @@ weight.tdw = 100 * weight.tdw;
       eval(['weight.', nm{i},' = 10 * weight.', nm{i}, ';']);
     end
  end
+ weight.Ri = 20 * weight.Ri;
  
 % uni-variate data: 
  weight.tL_juv1 = 10 * weight.tL_juv1;
@@ -1173,13 +1176,13 @@ weight.tdw = 100 * weight.tdw;
  weight.tL_juv4 = 10 * weight.tL_juv4;
  weight.tL_juv5 = 10 * weight.tL_juv5;
  weight.tL_juv6 = 10 * weight.tL_juv6;
- weight.tL_ad_f = 100 * weight.tL_ad_f ;    
+ weight.tL_ad_f = 10 * weight.tL_ad_f ;    
  %weight.tL_ad_m =  100 * weight.tL_ad_m;   
  weight.LW_juv4 = 10 * weight.LW_juv4;
  weight.LW_juv5 = 10 * weight.LW_juv5;
  weight.LW_juv6 = 10 * weight.LW_juv6;
- weight.LW_ad =  10  * weight.LW_ad;    
- weight.tE =  100  * weight.tE;    
+ weight.LW_ad =  100  * weight.LW_ad;    
+ weight.tE =  200  * weight.tE;    
 
 
 %% set pseudodata and respective weights
@@ -1190,11 +1193,11 @@ weight.tdw = 100 * weight.tdw;
 % the pseudodata and respective weights were set automatically with the function setpseudodata
 % if one wants to ovewrite one of the values it should always present an explanation
 % example:
-data.psd.kap_G = 0.81; 
-weight.psd.kap_G = 5 * weight.psd.kap_G;  % to correspond to old mydata_Sardina_pilchardus                 
+%data.psd.kap_G = 0.81; 
+%weight.psd.kap_G = 5 * weight.psd.kap_G;  % to correspond to old mydata_Sardina_pilchardus                 
 
 data.psd_dE = 0.4;      units.psd_dE = 'g/cm^3';    label.psd_dE = 'density of reserve';        bibkey.psd_dE = 'Fill';    
-weight.psd_dE = 100 * 1 ./ data.psd_dE^2;
+weight.psd_dE = 50 * 1 ./ data.psd_dE^2;
 
  
 %% pack data and txt_data for output

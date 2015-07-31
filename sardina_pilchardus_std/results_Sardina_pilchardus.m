@@ -115,10 +115,13 @@ function results_Sardina_pilchardus(txt_par, par, chem, metapar, txt_data, data)
   title('Mene2003')
 
   subplot(2,3,5)
+  hold on
+  plot(data.ap, data.Lp, 'ok', Prd_data.ap, Prd_data.Lp, '+b')
+  plot(data.am, data.Li, 'ok', Prd_data.am, Prd_data.Li, '+b')
   plot(tL_ad_f(:,1), tL_ad_f(:,2), '.k', tLad, ELad, 'k')
   xlabel('age, d')
   ylabel('length, cm')
-  axis([0 2200 0 27])
+  axis([0 Prd_data.am 0 27])
   title('Silv')
  
   subplot(2,3,6)
@@ -152,12 +155,15 @@ function results_Sardina_pilchardus(txt_par, par, chem, metapar, txt_data, data)
 
   
   subplot(3,1,2)
+  hold on
   plot(L, EW, 'g', LW_ad(:,1), LW_ad(:,2), '.r', 'markersize', 15, 'linewidth', 2)
+  plot(data.Lp, data.Wwp, 'ok', Prd_data.Lp, Prd_data.Wwp, '+b', 'markersize', 8, 'linewidth', 1.5)
+  plot(data.Li, data.Wwi, 'ok', Prd_data.Li, Prd_data.Wwi, '+b','markersize', 8, 'linewidth', 1.5)
   set(gca, 'Fontsize', 12, 'Box', 'on')
   xlabel('total length, cm')
   ylabel('wet weight, g')
   title('Catchment 2002-2011')
-  axis([0 25 0 100])
+  axis([0 27 0 150])
   
   subplot(3,1,3)
   hold on
