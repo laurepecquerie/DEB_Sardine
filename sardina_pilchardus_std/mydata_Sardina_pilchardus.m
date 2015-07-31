@@ -1196,9 +1196,11 @@ weight.tdw = 100 * weight.tdw;
 %data.psd.kap_G = 0.81; 
 %weight.psd.kap_G = 5 * weight.psd.kap_G;  % to correspond to old mydata_Sardina_pilchardus                 
 
-data.psd_dE = 0.4;      units.psd_dE = 'g/cm^3';    label.psd_dE = 'density of reserve';        bibkey.psd_dE = 'Fill';    
-weight.psd_dE = 50 * 1 ./ data.psd_dE^2;
+data.psd.dE = 0.4;      units.psd.dE = 'g/cm^3';    label.psd.dE = 'density of reserve';        bibkey.psd.dE = 'Fill';    
+weight.psd.dE = 10 * 1 ./ data.psd.dE^2;
 
+data.psd.wE = 22;      units.psd.wE = 'g/mol';    label.psd.wE = 'molecular weight of reserve';        bibkey.psd.wE = 'Fill';    
+weight.psd.wE = 10 * 1 ./ data.psd.wE^2;
  
 %% pack data and txt_data for output
 data.weight = weight;
