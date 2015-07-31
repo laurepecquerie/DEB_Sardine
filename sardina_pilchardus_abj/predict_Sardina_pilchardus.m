@@ -26,7 +26,7 @@ function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
   
   %% unpack par, chem, cpar and data
   cpar = parscomp_st(par, chem);
-  v2struct(chem); v2struct(par);  v2struct(cpar);
+  v2struct(chem); v2struct(par);  v2struct(cpar);% order is important for now ; we overwrite w_V ; d_E ; w_E in chem
   v2struct(data);
   
   del_M_SL = del_M / 0.87; % -, shape coefficient for standard length - juveniles and adults % Gaygusuz et al. 2006
@@ -38,7 +38,7 @@ function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
     return
   end
 
-  if mu_E <= 0 || d_E <= 0  % non-negativity
+  if mu_E <= 0 || d_E <= 0 || w_E <= 0|| w_V <= 0 % non-negativity
     info = 0;
     Prd_data = {};
     return
@@ -91,7 +91,7 @@ function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
   pars_E0 = [V_Hb; g; k_J; k_M; v]; % pars for initial_scaled_reserve
   [U_E0 L_b info] = initial_scaled_reserve(f, pars_E0); % d cm^2, initial scaled reserve
   E_0 = p_Am * U_E0;    % J, initial reserve (of embryo)
-  Wd_0 = E_0 / mu_E;
+  Wd_0 = E_0 * w_E / mu_E;
   
   % birth
   pars_lj = [g; k; l_T; v_Hb; v_Hj; v_Hp];

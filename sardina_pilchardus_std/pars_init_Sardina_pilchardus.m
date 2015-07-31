@@ -39,20 +39,21 @@ par.kap_P = 0.1;    free.kap_P = 0;    units.kap_P = '-';      label.kap_P = 'ka
 par.v = 0.02*5;     free.v     = 1;    units.v = 'cm/d';       label.v = 'v';          % energy conductance
 par.kap = 0.6;      free.kap   = 0;    units.kap = '-';        label.kap = 'kap';      % allocation fraction to soma
 par.kap_R = 0.95;   free.kap_R = 0;    units.kap_R = '-';      label.kap_R = 'kap_R';  % reproduction efficiency
-par.p_M = 18;       free.p_M   = 1;    units.p_M = 'J/d.cm^3'; label.p_M = '[p_M]';    % vol-spec somatic maint
+par.p_M = 3* 18;       free.p_M   = 1;    units.p_M = 'J/d.cm^3'; label.p_M = '[p_M]';    % vol-spec somatic maint
 par.p_T =  0;       free.p_T   = 0;    units.p_T = 'J/d.cm^2'; label.p_T = '{p_T}';    % surf-spec somatic maint
 par.k_J = 0.002;    free.k_J   = 0;    units.k_J = '1/d';      label.k_J = 'k_J';      % maturity maint rate coefficient
-par.E_G = 6100;     free.E_G   = 0;    units.E_G = 'J/cm^3';   label.E_G = '[E_G]';    % spec cost for structure
+par.E_G = 6300;     free.E_G   = 0;    units.E_G = 'J/cm^3';   label.E_G = '[E_G]';    % spec cost for structure
 par.E_Hh = 0.1;     free.E_Hh  = 0;    units.E_Hh = 'J';       label.E_Hh = 'E_Hh';    % maturity at hatching
 par.E_Hb = 0.32   ; free.E_Hb  = 1;    units.E_Hb = 'J';       label.E_Hb = 'E_Hb';    % maturity at birth
 %par.E_Hj =  1.944e1; free.E_Hj  = 1;    units.E_Hj = 'J';       label.E_Hj = 'E_Hj';    % maturity at metamorphosis
-par.E_Hp = 3e4;     free.E_Hp  = 1;    units.E_Hp = 'J';       label.E_Hp = 'E_Hp';    % maturity at puberty
+par.E_Hp = 1.5 * 3e4;     free.E_Hp  = 1;    units.E_Hp = 'J';       label.E_Hp = 'E_Hp';    % maturity at puberty
 par.h_a = 0.5 * 1.184e-8; free.h_a   = 1;    units.h_a = '1/d^2';    label.h_a = 'h_a';      % Weibull aging acceleration
 par.s_G = 1e-4;     free.s_G   = 0;    units.s_G = '-';        label.s_G = 's_G';      % Gompertz stress coefficient
 %% chemical parameters
 par.d_E = 0.44;      free.d_E   = 1;    units.d_E = 'g/cm^3';   label.d_E = 'd_E';      % density of reserve
-par.mu_E = 575e3;   free.mu_E   = 1;   units.mu_E = 'J/mol';   label.mu_E = 'mu_E';      % chemical potential of reserve
-par.w_E = 22;       free.w_E = 1;      units.w_E = 'g/mol';   label.w_E = 'w_E';      % molecular weight of reserve
+par.mu_E = 600e3;   free.mu_E   = 1;   units.mu_E = 'J/mol';   label.mu_E = 'mu_E';      % chemical potential of reserve
+par.w_E = 20;       free.w_E = 1;      units.w_E = 'g/mol';   label.w_E = 'w_E';      % molecular weight of reserve
+par.w_V = 23;       free.w_V = 1;      units.w_V = 'g/mol';   label.w_V = 'w_V';      % molecular weight of structure
 
 %% auxiliary parameters
 par.T_A   = 9000;   free.T_A   = 0;    units.T_A = 'K';        label.T_A = 'T_A';      % Arrhenius temperature
@@ -81,7 +82,7 @@ txt_par.units = units; txt_par.label = label; par.free = free; % pack units, lab
 %
 % data show variations between 0.6 and 0.75 of water content
 % d_E should be removed form chem if we estimate it
-d_V = 0.25;
+d_V = 0.23;
 d_E =  par.d_E;
 mmu_E = par.mu_E/ 1e3;
 % d_E = 0.6;
@@ -92,7 +93,7 @@ d_O = [0.2;  d_V;  d_E;  0.2];    % g/cm^3, specific densities for organics
 
 % chemical potentials from Kooy2010 Tab 4.2
 %        X     V      E      P
-mu_O = [525;  500;  mmu_E;  480] * 1e3; % J/mol, chemical potentials for organics
+mu_O = [525;  510;  mmu_E;  480] * 1e3; % J/mol, chemical potentials for organics
 %       C  H  O  N     CO2, H2O, O2, NH3
 mu_M = [0; 0; 0; 0]; % chemical potential of minerals
 

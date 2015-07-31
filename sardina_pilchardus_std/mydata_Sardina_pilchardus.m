@@ -89,7 +89,7 @@ data.Ri  = 1035;   units.Ri  = '#/d';  label.Ri  = 'maximum reprod rate';      b
   % for f = 0.9. guess Ri = 1150 * 0.9 = 1035;
 data.Wd0 = 3e-5;  units.Wd0 = 'g';    label.Wd0 = 'egg dry weight';    bibkey.Wd0 = 'Nunes2015' ;
 % Wd0 = 18 to 40 microg dry weight - see Cristina Nunes
-data.E0 = data.Wd0 * 29e3;  units.E0 = 'J';    label.E0 = 'egg energy content';    bibkey.E0 = {'Lask1962';'Nunes2015'} ;
+data.E0 = data.Wd0 * 29e3;  units.E0 = 'J';    label.E0 = 'egg energy content';    bibkey.E0 = {'Lask1962','Nunes2015'} ;
 % Energy density of an egg between 20 and 30kJ /g dry weight Kalmer 2005
 %% !! should be consistent with <E> = mu_E/w_E
  
@@ -1167,7 +1167,9 @@ weight.tdw = 100 * weight.tdw;
       eval(['weight.', nm{i},' = 10 * weight.', nm{i}, ';']);
     end
  end
- weight.Ri = 20 * weight.Ri;
+ %weight.Ri = 10 * weight.Ri;
+ 
+ weight.ab = 0; 
  
 % uni-variate data: 
  weight.tL_juv1 = 10 * weight.tL_juv1;
@@ -1196,12 +1198,16 @@ weight.tdw = 100 * weight.tdw;
 %data.psd.kap_G = 0.81; 
 %weight.psd.kap_G = 5 * weight.psd.kap_G;  % to correspond to old mydata_Sardina_pilchardus                 
 
-data.psd.dE = 0.4;      units.psd.dE = 'g/cm^3';    label.psd.dE = 'density of reserve';        bibkey.psd.dE = 'Fill';    
-weight.psd.dE = 10 * 1 ./ data.psd.dE^2;
+data.psd.d_E = 0.4;      units.psd.d_E = 'g/cm^3';    label.psd.d_E = 'density of reserve';       % bibkey.psd.d_E = 'Fill';    
+weight.psd.d_E = 10 * 1 ./ data.psd.d_E^2;
 
-data.psd.wE = 22;      units.psd.wE = 'g/mol';    label.psd.wE = 'molecular weight of reserve';        bibkey.psd.wE = 'Fill';    
-weight.psd.wE = 10 * 1 ./ data.psd.wE^2;
+data.psd.w_E = 20;      units.psd.w_E = 'g/mol';    label.psd.w_E = 'molecular weight of reserve';      %  bibkey.psd.w_E = 'Fill';    
+weight.psd.w_E = 100 * 1 ./ data.psd.w_E^2;
  
+data.psd.w_V = 23;      units.psd.w_V = 'g/mol';    label.psd.w_V = 'molecular weight of reserve';      %  bibkey.psd.w_V = 'Fill';    
+weight.psd.w_V = 100 * 1 ./ data.psd.w_V^2;
+ 
+
 %% pack data and txt_data for output
 data.weight = weight;
 data.temp = temp;

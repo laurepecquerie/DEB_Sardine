@@ -38,7 +38,7 @@ function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
     return
   end
 
-  if mu_E <= 0 || d_E <= 0  % non-negativity
+  if mu_E <= 0 || d_E <= 0 || w_E <= 0|| w_V <= 0 % non-negativity
     info = 0;
     Prd_data = {};
     return
@@ -78,7 +78,7 @@ function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
   pars_E0 = [V_Hb; g; k_J; k_M; v]; % pars for initial_scaled_reserve
   [U_E0 L_b info] = initial_scaled_reserve(f, pars_E0); % d cm^2, initial scaled reserve
   E_0 = p_Am * U_E0;    % J, initial reserve (of embryo)
-  Wd_0 = E_0 / mu_E;
+  Wd_0 = E_0 * w_E / mu_E;
   
   
   % life cycle
