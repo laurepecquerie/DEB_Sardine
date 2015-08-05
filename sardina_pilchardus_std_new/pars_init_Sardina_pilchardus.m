@@ -36,7 +36,7 @@ metaPar.model = 'std'; % see online manual for explanation and alternatives
 par.T_ref = C2K(20); free.T_ref = 0; units.T_ref = 'K';        label.T_ref = 'Reference temperature';
 
 %% core primary parameters
-par.z    = 1;      free.z     = 1;   units.z     = '-';        label.z     = 'zoom factor'; %for z = 1: L_m = 1 cm
+par.z    = 5;      free.z     = 1;   units.z     = '-';        label.z     = 'zoom factor'; %for z = 1: L_m = 1 cm
 par.F_m   = 6.5;   free.F_m   = 0;   units.F_m   = 'l/d.cm^2'; label.F_m   = '{F_m}, max spec searching rate';
 par.kap_X = 0.8;   free.kap_X = 0;   units.kap_X = '-';        label.kap_X = 'digestion efficiency of food to reserve';
 par.kap_P = 0.1;   free.kap_P = 0;   units.kap_P = '-';        label.kap_P = 'faecation efficiency of food to faeces';
@@ -49,7 +49,7 @@ par.k_J   = 0.002; free.k_J   = 1;   units.k_J   = '1/d';      label.k_J   = 'ma
 par.E_G   = 6200;  free.E_G   = 1;   units.E_G   = 'J/cm^3';   label.E_G   = '[E_G], spec cost for structure';
 %par.E_Hh = 0.1;     free.E_Hh  = 0;    units.E_Hh = 'J';       label.E_Hh = 'E_Hh';    % maturity at hatching
 par.E_Hb  = .275;  free.E_Hb  = 1;   units.E_Hb  = 'J';        label.E_Hb  = 'maturity at birth';
-par.E_Hp  = 50;    free.E_Hp  = 1;   units.E_Hp  = 'J';        label.E_Hp  = 'maturity at puberty';
+par.E_Hp  = 5000;    free.E_Hp  = 1;   units.E_Hp  = 'J';        label.E_Hp  = 'maturity at puberty';
 par.h_a   = 1e-6;  free.h_a   = 1;   units.h_a   = '1/d^2';    label.h_a   = 'Weibull aging acceleration';
 par.s_G   = 1e-4;  free.s_G   = 0;   units.s_G   = '-';        label.s_G   = 'Gompertz stress coefficient';
 
