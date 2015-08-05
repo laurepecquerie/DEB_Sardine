@@ -1,12 +1,13 @@
-%% predict_Sardina_pilchardus
+%% predict_my_pet
 % Obtains predictions, using parameters and data
 
 %%
-function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
-  % created by Starrlight Augustine, Dina Lika, Bas Kooijman, Goncalo Marques and Laure Pecquerie 2015/01/30
+function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
+  % created by Starrlight Augustine, Dina Lika, Bas Kooijman, Goncalo Marques and Laure Pecquerie 2015/01/30; 
+  % last modified 2015/07/29
   
   %% Syntax
-  % [Prd_data, info] = <../predict_my_pet.m *predict_my_pet*>(par, chem, data)
+  % [prdData, info] = <../predict_my_pet.m *predict_my_pet*>(par, chem, data)
   
   %% Description
   % Obtains predictions, using parameters and data
@@ -19,44 +20,68 @@ function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
   %  
   % Output
   %
-  % * Prd_data: structure with predicted values for data
+  % * prdData: structure with predicted values for data
+  % * info: identified for correct setting of predictions (see remarks)
   
   %% Remarks
-  % Template for use in add_my_pet
+  % Template for use in add_my_pet.
+  % The code calls <parscomp_st.html *parscomp_st*> in order to compute
+  % scaled quantities, compound parameters, molecular weights and compose
+  % matrixes of mass to energy couplers and chemical indices.
+  % With the use of filters, setting info = 0, prdData = {}, return, has the effect
+  % that the parameter-combination is not selected for finding the
+  % best-fitting combination; this setting acts as customized filter.
   
-  %% unpack par, chem, cpar and data
-  cpar = parscomp_st(par, chem);
-  v2struct(chem); v2struct(par);  v2struct(cpar);
-  v2struct(data);
+  %% Example of a costumized filter
+  % See the lines just below unpacking
   
-  del_M_SL = del_M / 0.87; % -, shape coefficient for standard length - juveniles and adults % Gaygusuz et al. 2006
-  
-  %% customized filters
-  if f_juv_pen <= 0 || f_juv_lag <= 0 || f_tL_larv <= 0 || f_tL_ad <= 0 % non-negativity
+  % unpack par, data, auxData
+  cPar = parscomp_st(par); vars_pull(par); 
+  vars_pull(cPar);  vars_pull(data);  vars_pull(auxData);
+    
+  % customized filters
+    if f_juv_pen <= 0 || f_juv_lag <= 0 || f_tL_larv <= 0 || f_tL_ad <= 0 % non-negativity
     info = 0;
-    Prd_data = {};
+    prdData = {};
     return
   end
 
   if mu_E <= 0 || d_E <= 0 || w_E <= 0|| w_V <= 0 % non-negativity
     info = 0;
-    Prd_data = {};
+    prdData = {};
     return
   end
 
   if d_E >= 1  % fraction
     info = 0;
-    Prd_data = {};
+    prdData = {};
     return
   end
   
   if kap_G >= mu_V / mu_E || kap_X >= mu_X / mu_E  % constraint required for mass conservation and no production of CO2
     info = 0;
-    Prd_data = {};
+    prdData = {};
     return
   end
+  
+  
+%   if k * v_Hp >= f_tL^3  % constraint required for reaching puberty with f_tL
+%     info = 0;
+%     prdData = {};
+%     return
+%   end
+%   
+%   if ~reach_birth(g, k, v_Hb, f_tL) % constraint required for reaching birth with f_tL
+%     info = 0;
+%     prdData = {};
+%     return;
+%   end  
+%   
 
-  %% compute temperature correction factors
+
+  del_M_SL = del_M / 0.87; % -, shape coefficient for standard length - juveniles and adults % Gaygusuz et al. 2006
+  
+  % compute temperature correction factors
   TC_ab = tempcorr(temp.ab, T_ref, T_A);
   TC_ap = tempcorr(temp.ap, T_ref, T_A);
   TC_am = tempcorr(temp.am, T_ref, T_A);
@@ -71,8 +96,15 @@ function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
   TC_tL_ad = tempcorr(temp.tL_ad_f, T_ref, T_A); % same for adult females and males
   TC_LW_ad = tempcorr(temp.LW_ad, T_ref, T_A);
 
-
-  %% zero-variate data
+% uncomment if you need this for computing moles of a gas to a volume of gas
+% - else feel free to delete  these lines
+% molar volume of gas at 1 bar and 20 C is 24.4 L/mol
+% T = C2K(20); % K, temp of measurement equipment- apperently this is
+% always the standard unless explicitely stated otherwise in a paper (pers.
+% comm. Mike Kearney).
+% X_gas = T_ref/ T/ 24.4;  % M,  mol of gas per litre at T_ref and 1 bar;
+  
+% zero-variate data
 
   % egg -  
   pars_E0 = [V_Hb; g; k_J; k_M; v]; % pars for initial_scaled_reserve
@@ -116,20 +148,20 @@ function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
   
   %% pack to output
   % the names of the fields in the structure must be the same as the data names in the mydata file
-  Prd_data.ab  = aT_b;
-  Prd_data.ap  = aT_p;
-  Prd_data.am  = aT_m;
-  Prd_data.Lb  = Lw_b;
-  Prd_data.Lp  = Lw_p;
-  Prd_data.Li  = Lw_i;
-  Prd_data.Wwb = Ww_b;
-  Prd_data.Wwp = Ww_p;
-  Prd_data.Wwi = Ww_i;
-  Prd_data.Ri  = RT_i;
-  Prd_data.Wd0 = Wd_0;
-  Prd_data.E0  = E_0;
+  prdData.ab  = aT_b;
+  prdData.ap  = aT_p;
+  prdData.am  = aT_m;
+  prdData.Lb  = Lw_b;
+  prdData.Lp  = Lw_p;
+  prdData.Li  = Lw_i;
+  prdData.Wwb = Ww_b;
+  prdData.Wwp = Ww_p;
+  prdData.Wwi = Ww_i;
+  prdData.Ri  = RT_i;
+  prdData.Wd0 = Wd_0;
+  prdData.E0  = E_0;
   
-  %% uni-variate data
+  % uni-variate data
   
   % juvenile data set 1
   f = f_juv_pen;
@@ -296,26 +328,25 @@ function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
   
   %% pack to output
   % the names of the fields in the structure must be the same as the data names in the mydata file
-  Prd_data.tL_juv1 = EL1;
-  Prd_data.tL_juv2 = EL2;
-  Prd_data.tL_juv3 = EL3;
-  Prd_data.tL_juv4 = EL4;
-  Prd_data.tL_juv5 = EL5;
-  Prd_data.tL_juv6 = EL6;
-  Prd_data.tL_larv = EL_larv;
-  Prd_data.tL_ad_f = EL_ad_f;
-%   Prd_data.tL_ad_m = EL_ad_m;
-  Prd_data.LW_juv4 = EW4;
-  Prd_data.LW_juv5 = EW5;
-  Prd_data.LW_juv6 = EW6;
-  Prd_data.LW_ad = EW_ad;
-  Prd_data.tE    = EE;
-  Prd_data.tdw   = Edw;
+  prdData.tL_juv1 = EL1;
+  prdData.tL_juv2 = EL2;
+  prdData.tL_juv3 = EL3;
+  prdData.tL_juv4 = EL4;
+  prdData.tL_juv5 = EL5;
+  prdData.tL_juv6 = EL6;
+  prdData.tL_larv = EL_larv;
+  prdData.tL_ad_f = EL_ad_f;
+  prdData.LW_juv4 = EW4;
+  prdData.LW_juv5 = EW5;
+  prdData.LW_juv6 = EW6;
+  prdData.LW_ad   = EW_ad;
+  prdData.tE      = EE;
+  prdData.tdw     = Edw;
 
   
   %% extra pseudodata
   
-  Prd_data.psd.d_E = d_E;
+  prdData.psd.d_E = d_E;
   
   
   %% sub subfuctions

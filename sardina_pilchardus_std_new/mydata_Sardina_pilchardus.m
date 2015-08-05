@@ -1,98 +1,104 @@
-%% mydata_Sardina_pilchardus
+%% mydata_my_pet
 % Sets referenced data
 
 %%
-function [data, txt_data, metadata] = mydata_Sardina_pilchardus 
+function [data, auxData, metaData, txtData, weights] = mydata_Sardina_pilchardus 
   % created by Starrlight Augustine, Bas Kooijman, Dina Lika, Goncalo Marques and Laure Pecquerie 2015/03/31
+  % last modified: 2015/07/28 
   
   %% Syntax
-  % [data, txt_data, metadata] = <../mydata_my_pet.m *mydata_my_pet*>
+  % [data, auxData, metaData, txtData, weights] = <../mydata_my_pet.m *mydata_my_pet*>
   
   %% Description
-  % Sets data, pseudodata, metadata, explanatory text, weight coefficients.
-  % Meant to be a template in add_my_pet
+  % Sets data, pseudodata, metadata, auxdata, explanatory text, weights coefficients.
+  % Meant to be a template in add-my-pet
   %
   % Output
   %
   % * data: structure with data
-  % * txt_data: text vector for the presentation of results
-  % * metadata: structure with info about this entry
+  % * auxData: structure with auxilliairy information concerning the data
+  %   (temperature, food, initial size of organisms etc.). auxData is
+  %   unpacked in predict and the user needs to construct predictions
+  %   accordingly.
+  % * txtData: text vector for the presentation of results
+  % * metaData: structure with info about this entry
+  % * weights: structure with weights for each data set
   
   %% To do (remove these remarks after editing this file)
-  % * copy this template; replace 'my_pet' by the name of your species
-  % * fill in metadata fields with the proper information
-  % * insert references for the data (an example is given)
-  % * edit fact-list for your species, where you can add species and/or data properties
+  % * copy this template; replace 'my_pet' by the name of your species (Genus_species)
+  % * fill in metaData fields with the proper information
+  % * insert references for each data (an example is given), for multiple references, please use commas to separate references
   % * edit real data; remove all data that to not belong to your pet
-  % * complete reference list
-  % * OPTIONAL : add discussion points / comments before the reference list
+  % * list facts - this is where you can add relevant/interesting information on its biology
+  % * edit discussion concerning e.g. choice of model, assumptions needed to model certain data sets etc. 
+  % * fill in all of the references
 
-  %% Facts
-  % * Standard model with egg (not foetal) development and no acceleration
- 
-%% set metadata
+%% set metaData
 
-T_C = 273.15; % K, temperature at 0 degrees C (used in T_typical)
+metaData.phylum     = 'Chordata'; 
+metaData.class      = 'Actinopterygii'; 
+metaData.order      = 'Clupeiformes'; 
+metaData.family     = 'Clupeidae';
+metaData.species    = 'Sardina_pilchardus'; 
+metaData.species_en = 'European pilchard'; 
+metaData.T_typical  = C2K(15); % K, body temp
+metaData.data_0     = {'ab'; 'ap'; 'am'; 'Lb'; 'Lp'; 'Li'; 'Wwb'; 'Wwp'; 'Wwi'; 'Ri'; 'Wd0'; 'E0'}; % tags for different types of zero-variate data
+metaData.data_1     = {'t-L'; 'L-W'}; % tags for different types of uni-variate data
 
-metadata.phylum     = 'Chordata'; 
-metadata.class      = 'Actinopterygii'; 
-metadata.order      = 'Clupeiformes'; 
-metadata.family     = 'Clupeidae';
-metadata.species    = 'Sardina_pilchardus'; 
-metadata.species_en = 'European pilchard'; 
-metadata.T_typical  = T_C + 15; % K [LAURE : ?? Cristina?]
-metadata.data_0     = {'ab'; 'ap'; 'am'; 'Lb'; 'Lp'; 'Li'; 'Wwb'; 'Wwp'; 'Wwi'; 'Ri'; 'Wd0'; 'E0'};  % tags for different types of zero-variate data
-metadata.data_1     = {'t-L'; 'L-W'}; % tags for different types of uni-variate data
+metaData.COMPLETE = 2.5; % using criteria of LikaKear2011
 
-metadata.COMPLETE = 2.5; % using criteria of LikaKear2011
-
-metadata.author   = {'Cristina Nunes, Gonçalo M. Marques, Tânia Sousa, Bas Kooijman'};                              % put names as authors as separate strings:  {'author1','author2'} , with corresponding author in first place 
-metadata.date_acc = [2013 08 26];                             % [year month day], date of entry is accepted into collection
-metadata.email    = {'cnunes@ipma.pt'};                   % e-mail of corresponding author
-metadata.address  = {'IPMA, Lisbon, Portugal'};        % affiliation, postcode, country of the corresponding author
+metaData.author   = {'Cristina Nunes, Gonçalo M. Marques, Tânia Sousa, Bas Kooijman'};                              % put names as authors as separate strings:  {'author1','author2'} , with corresponding author in first place 
+metaData.date_acc = [2013 08 26];                             % [year month day], date of entry is accepted into collection
+metaData.email    = {'cnunes@ipma.pt'};                   % e-mail of corresponding author
+metaData.address  = {'IPMA, Lisbon, Portugal'};        % affiliation, postcode, country of the corresponding author
 
 % uncomment and fill in the following fields when the entry is updated:
- metadata.author_mod_1  = {'Laure Pecquerie'};                       % put names as authors as separate strings:  {'author1','author2'} , with corresponding author in first place 
- metadata.date_mod_1    = [2015 04 27];                      % [year month day], date modified entry is accepted into the collection
- metadata.email_mod_1   = {'laure.pecquerie@ird.fr'};            % e-mail of corresponding author
- metadata.address_mod_1 = {'IRD UMR LEMAR, 29280 Plouzane, France'}; % affiliation, postcode, country of the corresponding author
+% metaData.author_mod_1  = {'FirstName3 LastName3'};          % put names as authors as separate strings:  {'author1','author2'} , with corresponding author in first place 
+% metaData.date_mod_1    = [2017 09 18];                      % [year month day], date modified entry is accepted into the collection
+% metaData.email_mod_1   = {'myname@myuniv.univ'};            % e-mail of corresponding author
+% metaData.address_mod_1 = {'affiliation, zipcode, country'}; % affiliation, postcode, country of the corresponding author
+
+% for curators only ------------------------------
+% metaData.curator     = {'FirstName LastName'};
+% metaData.email_cur   = {'myname@myuniv.univ'}; 
+% metaData.date_acc    = [2015 04 22]; 
+%-------------------------------------------------
 
 %% set data
 % zero-variate data;
 % typically depend on scaled functional response f.
 % here assumed to be equal for all real data; the value of f is specified in pars_init_my_pet.
+% add an optional comment structure to give any additional explanations on
+% how the value was chosen, see the last column of the ab data set for an
+% example
 
 % age 0 is at onset of embryo development
-data.ab = 8;      units.ab = 'd';    label.ab = 'age at birth';                bibkey.ab = 'Mene2003';    
-  temp.ab = T_C + 15;  % K, temperature (guess)
-  % ab = ah + 4d - Mene2003
-data.ap = 365;     units.ap = 'd';    label.ap = 'age at puberty';             bibkey.ap = 'Guess';
-  temp.ap = T_C + 15;  % K, temperature 
-data.am = 8 * 365;     units.am = 'd';    label.am = 'life span';              bibkey.am = 'Guess';   
-  temp.am = T_C + 15;  % K, temperature 
-data.Lb  = 0.5;    units.Lb  = 'cm';   label.Lb  = 'total length at birth';    bibkey.Lb  = 'Mene2003'; %[LAURE : standard or total? see Cristina]
-data.Lp  = 13;     units.Lp  = 'cm';   label.Lp  = 'total length at puberty';         bibkey.Lp  = 'guess';
-data.Li  = 23.8;   units.Li  = 'cm';   label.Li  = 'ultimate total length';    bibkey.Li  = 'Fishbase';
-data.Wwb = 2.5e-4; units.Wwb = 'g';    label.Wwb = 'wet weight at birth';      bibkey.Wwb = 'guess';
-% wet weight at puberty [same relationship as mature adult. ie includes
-% gonad weight. should be lower]-->LAURE : I'm not sure it's a problem, they should not have gonads?
-data.Wwp = 20;     units.Wwp = 'g';    label.Wwp = 'wet weight at puberty';    bibkey.Wwp = 'Anon2015';
-data.Wwi = 112;    units.Wwi = 'g';    label.Wwi = 'ultimate wet weight';      bibkey.Wwi = 'Fishbase';
-data.Ri  = 1035;   units.Ri  = '#/d';  label.Ri  = 'maximum reprod rate';      bibkey.Ri  = 'guess';   
-    temp.Ri = T_C + 15;  % K, temperature (guess)
-  % for an individual of ultimate length Li 
-  % 8-9 months of spawning season (8.5)
-  % a spawning event every 12-15 days (13.5)
-  % a maximum of 45000 eggs at the peak
-  % ((8.5*30/13.5)*45000)/365 = 2329 eggs/day ~ 2300 eggs/day
-  % let us suppose the peak the average is 1/2 of the peak and we have Ri = 1150;
-  % for f = 0.9. guess Ri = 1150 * 0.9 = 1035;
+data.ab = 8;      units.ab = 'd';    label.ab = 'age at birth';  bibkey.ab = 'Mene2003';   comment.ab  = 'ab = ah + 4d - Mene2003'; 
+  temp.ab = C2K(15);  units.temp.ab = 'K'; label.temp.ab = 'temperature';
+data.ap = 365;     units.ap = 'd';    label.ap = 'age at puberty'; bibkey.ap = 'Guessed';
+  temp.ap = C2K(15);  units.temp.ap = 'K'; label.temp.ap = 'temperature';
+data.am = 8 * 365;     units.am = 'd';    label.am = 'life span';     bibkey.am = 'Guessed';   
+  temp.am = C2K(15);  units.temp.am = 'K'; label.temp.am = 'temperature'; 
+data.Lb  = 0.5;   units.Lb  = 'cm';   label.Lb  = 'standard length at birth';    bibkey.Lb  = 'Mene2003';  
+data.Lp  = 13;   units.Lp  = 'cm';   label.Lp  = 'total length at puberty';      bibkey.Lp  = 'Guessed'; % for multiple references, please use commas to separate references
+data.Li  = 23.8;   units.Li  = 'cm';   label.Li  = 'ultimate total length';      bibkey.Li  = 'Fishbase';
+data.Wwb = 2.5e-4; units.Wwb = 'g';    label.Wwb = 'wet weight at birth';        bibkey.Wwb = 'Anon2015';
+data.Wwp = 20;   units.Wwp = 'g';    label.Wwp = 'wet weight at puberty';      bibkey.Wwp = 'Anon2015';
+data.Wwi = 112;   units.Wwi = 'g';    label.Wwi = 'ultimate wet weight';        bibkey.Wwi = 'Fishbase';
+data.Ri  = 1035;    units.Ri  = '#/d';  label.Ri  = 'maximum reprod rate';        bibkey.Ri  = 'Guessed';   
+comment.Ri = [' for an individual of ultimate length Li, 8-9 months of spawning season (8.5)'...
+   'a spawning event every 12-15 days (13.5), a maximum of 45000 eggs at the peak;'...
+   '((8.5*30/13.5)*45000)/365 = 2329 eggs/day ~ 2300 eggs/day;'...
+   'let us suppose the peak the average is 1/2 of the peak and we have Ri = 1150;'...
+   'for f = 0.9. guess Ri = 1150 * 0.9 = 1035 '];
+  temp.Ri = C2K(15);  units.temp.Ri = 'K'; label.temp.Ri = 'temperature';
 data.Wd0 = 3e-5;  units.Wd0 = 'g';    label.Wd0 = 'egg dry weight';    bibkey.Wd0 = 'Nunes2015' ;
-% Wd0 = 18 to 40 microg dry weight - see Cristina Nunes
+comment.Wd0 = '18 to 40 microg dry weight - see Cristina Nunes for ref';
 data.E0 = data.Wd0 * 29e3;  units.E0 = 'J';    label.E0 = 'egg energy content';    bibkey.E0 = {'Lask1962','Nunes2015'} ;
-% Energy density of an egg between 20 and 30kJ /g dry weight Kalmer 2005
+comment.E0 = 'Energy density of an egg between 20 and 30kJ /g dry weight in Kalmer 2005';
 %% !! should be consistent with <E> = mu_E/w_E
- 
+  
+% uni-variate data
 
 % uni-variate data
 %------------------
@@ -122,7 +128,7 @@ data.tL_juv1(:,1) = data.ab + data.tL_juv1(:,1);  % tranforming otolith age into
 % [LAURE : are we sure it's similar T between ab and tL-juv?] ? 
 units.tL_juv1 = {'d', 'cm'};     label.tL_juv1 = {'time since birth', 'standard length'};  bibkey.tL_juv1 = 'Mene2003';
 %   temp.tL_juv1 = T_C + 15;  % K, temperature [LAURE: which temp? should we set it as a parameter?]
-  temp.tL_juv1 = T_C + 15;  % K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_juv1 = C2K(15); units.temp.tL_juv1 = 'K'; label.temp.tL_juv1 = 'temperature';  % K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 % Peniche. winter 89 
 data.tL_juv2 = [125.01	8.68
@@ -204,7 +210,7 @@ data.tL_juv2 = [125.01	8.68
 %tL_juv2 = [tL_juv2, 10./tL_juv2(:,2).^2];      % append weight coefficients for WLS criterion
 data.tL_juv2(:,1) = data.ab + data.tL_juv2(:,1);  % tranforming otolith age into organism age
 units.tL_juv2 = {'d', 'cm'};     label.tL_juv2 = {'time since birth', 'standard length'};  bibkey.tL_juv2 = 'Mene2003';
-  temp.tL_juv2 = T_C + 13;  % K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_juv2 = C2K(13);  units.temp.tL_juv2 = 'K'; label.temp.tL_juv2 = 'temperature';% K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 % Peniche. spring 90 
 data.tL_juv3 = [145.10	9.14
@@ -237,7 +243,7 @@ data.tL_juv3 = [145.10	9.14
 data.tL_juv3(:,1) = data.ab + data.tL_juv3(:,1);  % tranforming otolith age into organism age
 % LAURE : are we sure it's similar T ? 
 units.tL_juv3 = {'d', 'cm'};     label.tL_juv3 = {'time since birth', 'standard length'};  bibkey.tL_juv3 = 'Mene2003';
-  temp.tL_juv3 = T_C + 15;  % K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_juv3 = C2K(15);  units.temp.tL_juv3 = 'K'; label.temp.tL_juv3 = 'temperature';% K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 % Lagoa de Óbidos. summer 89 
 data.tL_juv4 = [69.63	3.87
@@ -301,7 +307,7 @@ data.tL_juv4 = [69.63	3.87
 %data.tL_juv4 = [tL_juv4, 10./tL_juv4(:,2).^2];      % append weight coefficients for WLS criterion
 data.tL_juv4(:,1) = data.ab + data.tL_juv4(:,1);  % tranforming otolith age into organism age
 units.tL_juv4 = {'d', 'cm'};     label.tL_juv4 = {'time since birth', 'standard length'};  bibkey.tL_juv4 = 'Mene2003';
-  temp.tL_juv4 = T_C + 15;  % K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_juv4 = C2K(15); units.temp.tL_juv4 = 'K'; label.temp.tL_juv4 = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 
 % Lagoa de Óbidos. spring 90 
@@ -331,7 +337,7 @@ data.tL_juv5 = [42.97	3.27
 %tL_juv5 = [tL_juv5, 10./tL_juv5(:,2).^2];      % append weight coefficients for WLS criterion
 data.tL_juv5(:,1) = data.ab + data.tL_juv5(:,1);  % tranforming otolith age into organism age
 units.tL_juv5 = {'d', 'cm'};     label.tL_juv5 = {'time since birth', 'standard length'};  bibkey.tL_juv5 = 'Mene2003';
-  temp.tL_juv5 = T_C + 15;  % K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_juv5 = C2K(15);  units.temp.tL_juv5 = 'K'; label.temp.tL_juv5 = 'temperature';% K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 % Lagoa de Óbidos. summer 90 
 
@@ -383,7 +389,7 @@ data.tL_juv6 = [61.94	3.99
 %tL_juv6 = [tL_juv6, 10./tL_juv6(:,2).^2];      % append weight coefficients for WLS criterion
 data.tL_juv6(:,1) = data.ab + data.tL_juv6(:,1);  % tranforming otolith age into organism age
 units.tL_juv6 = {'d', 'cm'};     label.tL_juv6 = {'time since birth', 'standard length'};  bibkey.tL_juv6 = 'Mene2003';
-  temp.tL_juv6 = T_C + 15;  % K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_juv6 = C2K(15); units.temp.tL_juv6 = 'K'; label.temp.tL_juv6 = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 % Larval data - fig. 7c in Mene2003
 
@@ -458,7 +464,7 @@ data.tL_larv = [4.03     6.00 % 4 days is the average age at first feeding (abso
 data.tL_larv(:,2) = data.tL_larv(:,2)/10;  % converting mm to cm 
 %tL_larv = [tL_larv, 1./tL_larv(:,2).^2];      % append weight coefficients for WLS criterion
 units.tL_larv = {'d', 'cm'};     label.tL_larv = {'time since birth', 'standard length'};  bibkey.tL_larv = 'Mene2003';
-  temp.tL_larv = T_C + 15;  % K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_larv = C2K(15); units.temp.tL_larv = 'K'; label.temp.tL_larv = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
 % [LAURE : should we add data.ab as in the previous dataset?]
 
 % adult female average data [LAURE : bibkey, temp missing]
@@ -471,7 +477,7 @@ data.tL_ad_f = [1.00	14.42
 data.tL_ad_f(:,1) = data.tL_ad_f(:,1)*365;  % converting years to days 
 %tL_ad_f = [tL_ad_f, 100./tL_ad_f(:,2).^2];      % append weight coefficients for WLS criterion
 units.tL_ad_f = {'d', 'cm'};     label.tL_ad_f = {'time since birth', 'total length'};  bibkey.tL_ad_f = '';
-  temp.tL_ad_f = T_C + 15;  % K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_ad_f = C2K(15);  units.temp.tL_ad_f = 'K'; label.temp.tL_ad_f = 'temperature';% K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 % adult male average data [LAURE : bibkey, temp]
 %data.tL_ad_m = [1.00	14.38
@@ -483,7 +489,7 @@ units.tL_ad_f = {'d', 'cm'};     label.tL_ad_f = {'time since birth', 'total len
 % data.tL_ad_m(:,1) = data.tL_ad_m(:,1)*365;  % converting years to days 
 %tL_ad_m = [tL_ad_m, 100./tL_ad_m(:,2).^2];      % append weight coefficients for WLS criterion
 % units.tL_ad_m = {'d', 'cm'};     label.tL_ad_m = {'time since birth', 'total length'};  bibkey.tL_ad_m = '';
-%   temp.tL_ad_m = T_C + 15;  % K, temperature [LAURE: which temp? should we set it as a parameter?]
+%   temp.tL_ad_m = C2K(15); units.temp.tL_ad_m = 'K'; label.temp.tL_ad_m = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 % Lagoa de Óbidos. summer 89 
 
@@ -664,7 +670,7 @@ data.LW_juv4 = [3.8446	0.57421875
            7.2917	3.43359375
            7.3413	3.7578125];
  units.LW_juv4 = {'cm', 'g'};     label.LW_juv4 = {'total length', 'wet weight'};  bibkey.LW_juv4 = 'Mene2003';
-  temp.LW_juv4= T_C + 15;  % K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.LW_juv4= C2K(15);  units.temp.LW_juv4 = 'K'; label.temp.LW_juv4 = 'temperature';% K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 
 % Lagoa de Óbidos. spring 90 
@@ -694,7 +700,7 @@ data.LW_juv5 = [3.1266	0.21875
            6.5402	3
            6.8558	3.4453125];
 units.LW_juv5 = {'cm', 'g'};     label.LW_juv5 = {'total length', 'wet weight'};  bibkey.LW_juv5 = 'Mene2003';
-  temp.LW_juv5= T_C + 15;  % K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.LW_juv5= C2K(15); units.temp.LW_juv5 = 'K'; label.temp.LW_juv5 = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 % Lagoa de Óbidos. summer 90 
 
@@ -760,7 +766,7 @@ data.LW_juv6 = [3.9792	0.77734375
            5.234	1.7109375
            5.3013	1.6796875];
 units.LW_juv6 = {'cm', 'g'};     label.LW_juv6 = {'total length', 'wet weight'};  bibkey.LW_juv6 = 'Mene2003';
-  temp.LW_juv6= T_C + 15;  % K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.LW_juv6= C2K(15); units.temp.LW_juv6 = 'K'; label.temp.LW_juv6 = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 
 % Catchment 2002-2011 
@@ -1131,7 +1137,7 @@ LW_ad   = [ 12.2    14      0.63
 data.LW_ad(:,1) = LW_ad(:,1);
 data.LW_ad(:,2) = LW_ad(:,2) - LW_ad(:,3);          % remove the gonad 
 units.LW_ad = {'d', 'cm'};     label.LW_ad = {'total length', 'wet weight without gonads'};  bibkey.LW_ad = 'IPMA';
-  temp.LW_ad = T_C + 15;  % K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.LW_ad = C2K(15);  units.temp.LW_ad = 'K'; label.temp.LW_ad = 'temperature';% K, temperature [LAURE: which temp? should we set it as a parameter?]
       
 
 %% Energy density kJ/g dw
@@ -1146,115 +1152,131 @@ data.tdw = [t (1 - water)];
 units.tdw = {'d', '-'};     label.tdw= {'day of the year', 'dry weight / wet weight ratio'};  bibkey.tdw = 'RosaGonz2010';
 
 
-  
-  
 %% set weights for all real data
-weight = setweights(data, []);
+weights = setweights(data, []);
 
-
-%% overwriting weights (remove these remarks after editing the file)
-% the weights were set automatically with the function setweigths,
 % if one wants to ovewrite one of the weights it should always present an explanation example:
-%
+
 % zero-variate data 
  % --> more weight to real data (/pseudodata) to correspond to old mydata_Sardina_pilchardus
- nm = fieldnames(weight); % vector of cells with names of data sets
+ nm = fieldnames(weights); % vector of cells with names of data sets
  for i = 1:numel(nm)
     eval(['[ndata nvar] = size(data.', nm{i},');']);
     if nvar == 1 % zero-variate data
-      eval(['weight.', nm{i},' = 10 * weight.', nm{i}, ';']);
+      eval(['weights.', nm{i},' = 10 * weights.', nm{i}, ';']);
     end
  end
- %weight.Ri = 10 * weight.Ri;
+ %weights.Ri = 10 * weights.Ri;
  
- weight.ab = 0; 
- 
-% uni-variate data: 
- weight.tL_juv1 = 10 * weight.tL_juv1;
- weight.tL_juv2 = 10 * weight.tL_juv2;
- weight.tL_juv3 = 10 * weight.tL_juv3;
- weight.tL_juv4 = 10 * weight.tL_juv4;
- weight.tL_juv5 = 10 * weight.tL_juv5;
- weight.tL_juv6 = 10 * weight.tL_juv6;
- weight.tL_ad_f = 10 * weight.tL_ad_f ;    
- %weight.tL_ad_m =  100 * weight.tL_ad_m;   
- weight.LW_juv4 = 10 * weight.LW_juv4;
- weight.LW_juv5 = 10 * weight.LW_juv5;
- weight.LW_juv6 = 10 * weight.LW_juv6;
- weight.LW_ad =  100  * weight.LW_ad;    
- weight.tE =  200  * weight.tE;    
- weight.tdw = 100 * weight.tdw;
+ weights.ab = 0; 
 
+ % uni-variate data: 
+ weights.tL_juv1 = 10 * weights.tL_juv1;
+ weights.tL_juv2 = 10 * weights.tL_juv2;
+ weights.tL_juv3 = 10 * weights.tL_juv3;
+ weights.tL_juv4 = 10 * weights.tL_juv4;
+ weights.tL_juv5 = 10 * weights.tL_juv5;
+ weights.tL_juv6 = 10 * weights.tL_juv6;
+ weights.tL_ad_f = 10 * weights.tL_ad_f ;    
+ %weight.tL_ad_m =  100 * weight.tL_ad_m;   
+ weights.LW_juv4 = 10 * weights.LW_juv4;
+ weights.LW_juv5 = 10 * weights.LW_juv5;
+ weights.LW_juv6 = 10 * weights.LW_juv6;
+ weights.LW_ad =  100  * weights.LW_ad;    
+ weights.tE =  200  * weights.tE;    
+ weights.tdw = 100 * weights.tdw;
+
+ 
 
 %% set pseudodata and respective weights
-% (pseudo data are in data.psd and weights are in weight.psd)
-[data, units, label, weight] = addpseudodata(data, units, label, weight);
-
-%% overwriting pseudodata and respective weights (remove these remarks after editing the file)
-% the pseudodata and respective weights were set automatically with the function setpseudodata
-% if one wants to ovewrite one of the values it should always present an explanation
-% example:
-%data.psd.kap_G = 0.81; 
-%weight.psd.kap_G = 5 * weight.psd.kap_G;  % to correspond to old mydata_Sardina_pilchardus                 
+% (pseudo data are in data.psd and weights are in weights.psd)
+[data, units, label, weights] = addpseudodata(data, units, label, weights);
 
 data.psd.d_E = 0.4;      units.psd.d_E = 'g/cm^3';    label.psd.d_E = 'density of reserve';       % bibkey.psd.d_E = 'Fill';    
-weight.psd.d_E = 10 * 1 ./ data.psd.d_E^2;
+weights.psd.d_E = 10 * 1 ./ data.psd.d_E^2;
 
 data.psd.w_E = 20;      units.psd.w_E = 'g/mol';    label.psd.w_E = 'molecular weight of reserve';      %  bibkey.psd.w_E = 'Fill';    
-weight.psd.w_E = 100 * 1 ./ data.psd.w_E^2;
+weights.psd.w_E = 100 * 1 ./ data.psd.w_E^2;
  
 data.psd.w_V = 23;      units.psd.w_V = 'g/mol';    label.psd.w_V = 'molecular weight of reserve';      %  bibkey.psd.w_V = 'Fill';    
-weight.psd.w_V = 100 * 1 ./ data.psd.w_V^2;
- 
+weights.psd.w_V = 100 * 1 ./ data.psd.w_V^2;
 
-%% pack data and txt_data for output
-data.weight = weight;
-data.temp = temp;
-txt_data.units = units;
-txt_data.label = label;
-txt_data.bibkey = bibkey;
+%% pack auxData and txtData for output
+auxData.temp = temp;
+txtData.units = units;
+txtData.label = label;
+txtData.bibkey = bibkey;
+if exist('comment','var')
+  txtData.comment = comment;
+end
+
+%% Discussion points
+%D1 = 'Author_mod_1: I found information on the number of eggs per female as a function of length in Anon2013 that was much higher than in Anon2015 but chose to not include it as the temperature was not provided';
+% optional bibkey: metaData.bibkey.D1 = 'Anon2013';
+%D2 = 'Author_mod_1: I was surprised to observe that the weights coefficient for ab changed so much the parameter values';     
+% optional bibkey: metaData.bibkey.D2 = 'Kooy2010';
+%metaData.discussion = struct('D1', D1, 'D2', D2);
+
+%% Facts
+% list facts: F1, F2, etc.
+% make sure each fact has a corresponding bib key
+% do not put any DEB modelling assumptions here, only relevant information on
+% biology and life-cycles etc.
+%F1 = 'The larval stage lasts 202 days and no feeding occurs';
+%metaData.bibkey.F1 = 'Wiki'; % optional bibkey
+%metaData.facts = struct('F1',F1);
 
 %% References
-  bibkey = 'Wiki'; type = 'Misc'; bib = ...
-  'URL = {http://en.wikipedia.org/wiki/European_pilchard}';  
-  eval(['metadata.biblist.' bibkey, '= ''@', type, '{', bibkey, ', ' bib, '}'';']);
-  %
+% the following two references should be kept-----------------------------------------------------------
+bibkey = 'Kooy2010'; type = 'Book'; bib = [ ...  % used in setting of chemical parameters and pseudodata
+'author = {Kooijman, S.A.L.M.}, ' ...
+'year = {2010}, ' ...
+'title  = {Dynamic Energy Budget theory for metabolic organisation}, ' ...
+'publisher = {Cambridge Univ. Press, Cambridge}, ' ...
+'pages = {Table 4.2 (page 150), 8.1 (page 300)}, ' ...
+'howpublished = {\url{http://www.bio.vu.nl/thb/research/bib/Kooy2010.html}}'];
+metaData.biblist.(bibkey) = ['''@', type, '{', bibkey, ', ' bib, '}'';'];
+%
+bibkey = 'LikaKear2011'; type = 'Article'; bib = [ ...  % used for the estimation method
+'author = {Lika, K. and Kearney, M.R. and Freitas, V. and van der Veer, H.W. and van der Meer, J. and Wijsman, J.W.M. and Pecquerie, L. and Kooijman, S.A.L.M.},'...
+'year = {2011},'...
+'title = {The ''''covariation method'''' for estimating the parameters of the standard Dynamic Energy Budget model \textrm{I}: Philosophy and approach},'...
+'journal = {Journal of Sea Research},'...
+'volume = {66},'...
+'number = {4},'...
+'pages = {270-277},'...
+'DOI = {10.1016/j.seares.2011.07.010},'...
+'howpublished = {\url{http://www.sciencedirect.com/science/article/pii/S1385110111001055}}'];
+metaData.biblist.(bibkey) = ['''@', type, '{', bibkey, ', ' bib, '}'';'];
+%------------------------------------------------------------------------------------------------------
 
-   bibkey = 'Fishbase'; type = 'Misc'; bib = ...
-  'URL = {http://www.fishbase.org/summary/1350}';  
-  eval(['metadata.biblist.' bibkey, '= ''@', type, '{', bibkey, ', ' bib, '}'';']);
-  
-  
-  bibkey = 'Mene2003'; type = 'phdthesis'; bib = [ ...  
+ % References for the data, following BibTex rules
+ % author names : author = {Last Name, F. and Last Name2, F2. and Last Name 3, F3. and Last Name 4, F4.}
+ % latin names in title e.g. \emph{Pleurobrachia pileus}
+
+bibkey = 'Wiki'; type = 'Misc'; bib = [...
+'howpublished = {\url{http://en.wikipedia.org/wiki/European_pilchard}},'...
+'note = {Accessed : 2015-04-30}'];
+metaData.biblist.(bibkey) = ['''@', type, '{', bibkey, ', ' bib, '}'';'];
+%
+bibkey = 'Fishbase'; type = 'Misc'; bib = [...
+'howpublished = {\url{http://www.fishbase.org/summary/1350}},'...
+'note = {Accessed : 2015-04-30}'];
+metaData.biblist.(bibkey) = ['''@', type, '{', bibkey, ', ' bib, '}'';'];
+
+bibkey = 'Mene2003'; type = 'phdthesis'; bib = [ ...  
   'author = {Meneses. I}, ' ...
   'year = {2003}, ' ...
   'title  = {Estimação de factores que condicionam a variabilidade do recrutamento de peixes na costa atlântica da península Ibérica}, ' ...
   'school = {Instituto Nacional de Investigação Agrária e das Pescas}'];
-  eval(['metadata.biblist.' bibkey, '= ''@', type, '{', bibkey, ', ' bib, '}'';']);
-
-   bibkey = 'RosaGonz2010'; type = 'Article'; bib = [ ... %
-   'author = {M{\o}ller, L. F. and Canon, J. M. and Tiselius, P.}, ' ... 
+metaData.biblist.(bibkey) = ['''@', type, '{', bibkey, ', ' bib, '}'';'];
+%
+bibkey = 'RosaGonz2010'; type = 'Article'; bib = [ ... %
+   'author = {Rosa, Rui and Gonzalez, Liliana and Broitman, Bernardo R. and Garrido, Susana and Santos, A. Miguel P. and Nunes, Maria L.}, ' ... 
    'year = {2010}, ' ...
    'title = {Bioenergetics of small pelagic fishes in upwelling systems: relationship between fish condition, coastal ecosystem dynamics and fisheries}, '...
-   'journal = {MARINE ECOLOGY PROGRESS SERIES}, ' ...
+   'journal = {Marine Ecology Progress Series}, ' ...
    'volume = {410}, ' ...
    'pages = {205--218}'];
-   eval(['metadata.biblist.' bibkey, '= ''@', type, '{', bibkey, ', ' bib, '}'';']);
-%   %
-%   bibkey = 'Anon2015'; type = 'Misc'; bib = [ ...
-%   'author = {Anonymous}, ' ...
-%   'year = {2015}, ' ...
-%   'URL = {http://www.fishbase.org/summary/Rhincodon-typus.html}'];
-%   eval(['metadata.biblist.' bibkey, '= ''@', type, '{', bibkey, ', ' bib, '}'';']);
-
- 
-%% Discussion points
-% pt1 = 'Author_mod_1: I found information on the number of eggs per female as a function of length in Anon2013 that was much higher than in Anon2015 but chose to not include it as the temperature was not provided';
-% pt2 = 'Author_mod_1: I was surprised to observe that the weight coefficient for ab changed so much the parameter values';     
-% metadata.discussion = {pt1; pt2}; 
-
-%% Author_mod_1 comments
-% 
-% bibkey ap?
-% bibkey am
-% type of length = total length?
+metaData.biblist.(bibkey) = ['''@', type, '{', bibkey, ', ' bib, '}'';'];
+%

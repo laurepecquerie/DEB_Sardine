@@ -32,28 +32,28 @@ metapar.model = 'std'; % see online manual for explanation and alternatives
 %   d for time; cm for length; J for energy; K for temperature
 
 %% primary parameters
-par.z = 5.1;        free.z     = 1;    units.z = '-';          label.z = 'z';          % zoom factor; for z = 1: L_m = 1 cm
+par.z = 4.7;        free.z     = 1;    units.z = '-';          label.z = 'z';          % zoom factor; for z = 1: L_m = 1 cm
 par.F_m = 6.5;      free.F_m   = 0;    units.F_m = 'l/d.cm^2'; label.F_m = '{F_M}';    % max spec searching rate
 par.kap_X = 0.8;    free.kap_X = 0;    units.kap_X = '-';      label.kap_X = 'kap_X';  % digestion efficiency of food to reserve
 par.kap_P = 0.1;    free.kap_P = 0;    units.kap_P = '-';      label.kap_P = 'kap_P';  % faecation efficiency of food to faeces
-par.v = 0.02*5;     free.v     = 1;    units.v = 'cm/d';       label.v = 'v';          % energy conductance
-par.kap = 0.6;      free.kap   = 0;    units.kap = '-';        label.kap = 'kap';      % allocation fraction to soma
+par.v = 0.15;     free.v     = 1;    units.v = 'cm/d';       label.v = 'v';          % energy conductance
+par.kap = 0.6;      free.kap   = 1;    units.kap = '-';        label.kap = 'kap';      % allocation fraction to soma
 par.kap_R = 0.95;   free.kap_R = 0;    units.kap_R = '-';      label.kap_R = 'kap_R';  % reproduction efficiency
-par.p_M = 3* 18;       free.p_M   = 1;    units.p_M = 'J/d.cm^3'; label.p_M = '[p_M]';    % vol-spec somatic maint
+par.p_M = 75;       free.p_M   = 1;    units.p_M = 'J/d.cm^3'; label.p_M = '[p_M]';    % vol-spec somatic maint
 par.p_T =  0;       free.p_T   = 0;    units.p_T = 'J/d.cm^2'; label.p_T = '{p_T}';    % surf-spec somatic maint
 par.k_J = 0.002;    free.k_J   = 0;    units.k_J = '1/d';      label.k_J = 'k_J';      % maturity maint rate coefficient
-par.E_G = 6300;     free.E_G   = 0;    units.E_G = 'J/cm^3';   label.E_G = '[E_G]';    % spec cost for structure
+par.E_G = 6300;     free.E_G   = 1;    units.E_G = 'J/cm^3';   label.E_G = '[E_G]';    % spec cost for structure
 par.E_Hh = 0.1;     free.E_Hh  = 0;    units.E_Hh = 'J';       label.E_Hh = 'E_Hh';    % maturity at hatching
-par.E_Hb = 0.32   ; free.E_Hb  = 1;    units.E_Hb = 'J';       label.E_Hb = 'E_Hb';    % maturity at birth
+par.E_Hb = 0.3   ; free.E_Hb  = 1;    units.E_Hb = 'J';       label.E_Hb = 'E_Hb';    % maturity at birth
 %par.E_Hj =  1.944e1; free.E_Hj  = 1;    units.E_Hj = 'J';       label.E_Hj = 'E_Hj';    % maturity at metamorphosis
-par.E_Hp = 1.5 * 3e4;     free.E_Hp  = 1;    units.E_Hp = 'J';       label.E_Hp = 'E_Hp';    % maturity at puberty
-par.h_a = 0.5 * 1.184e-8; free.h_a   = 1;    units.h_a = '1/d^2';    label.h_a = 'h_a';      % Weibull aging acceleration
+par.E_Hp = 4e4;     free.E_Hp  = 1;    units.E_Hp = 'J';       label.E_Hp = 'E_Hp';    % maturity at puberty
+par.h_a = 6e-9; free.h_a   = 1;    units.h_a = '1/d^2';    label.h_a = 'h_a';      % Weibull aging acceleration
 par.s_G = 1e-4;     free.s_G   = 0;    units.s_G = '-';        label.s_G = 's_G';      % Gompertz stress coefficient
 %% chemical parameters
-par.d_E = 0.44;      free.d_E   = 1;    units.d_E = 'g/cm^3';   label.d_E = 'd_E';      % density of reserve
-par.mu_E = 600e3;   free.mu_E   = 1;   units.mu_E = 'J/mol';   label.mu_E = 'mu_E';      % chemical potential of reserve
-par.w_E = 20;       free.w_E = 1;      units.w_E = 'g/mol';   label.w_E = 'w_E';      % molecular weight of reserve
-par.w_V = 23;       free.w_V = 1;      units.w_V = 'g/mol';   label.w_V = 'w_V';      % molecular weight of structure
+par.d_E = 0.4;      free.d_E   = 1;    units.d_E = 'g/cm^3';   label.d_E = 'd_E';      % density of reserve
+par.mu_E = 650e3;   free.mu_E   = 1;   units.mu_E = 'J/mol';   label.mu_E = 'mu_E';      % chemical potential of reserve
+par.w_E = 19;       free.w_E = 1;      units.w_E = 'g/mol';   label.w_E = 'w_E';      % molecular weight of reserve
+par.w_V = 22;       free.w_V = 1;      units.w_V = 'g/mol';   label.w_V = 'w_V';      % molecular weight of structure
 
 %% auxiliary parameters
 par.T_A   = 9000;   free.T_A   = 0;    units.T_A = 'K';        label.T_A = 'T_A';      % Arrhenius temperature
@@ -65,7 +65,7 @@ par.f = 0.9;             free.f     = 0;       units.f = '-';           label.f 
 par.f_juv_pen = 0.9;   free.f_juv_pen  = 0;  units.f_juv_pen = '-';   label.f_juv_pen = 'f_juv_pen';    % scaled functional response for Peniche data
 par.f_juv_lag = 0.9;   free.f_juv_lag  = 0;  units.f_juv_lag = '-';   label.f_juv_lag = 'f_juv_lag';    % scaled functional response for Lagoa de Obidos data
 par.f_tL_larv = 0.9;   free.f_tL_larv  = 1;  units.f_tL_larv = '-';   label.f_tL_larv = 'f_tL_larv';    % scaled functional response for 1-var data
-par.f_tL_ad = 0.9;     free.f_tL_ad  = 1;    units.f_tL_ad = '-';     label.f_tL_ad = 'f_tL_ad';    % scaled functional response for 1-var data
+par.f_tL_ad = 0.7;     free.f_tL_ad  = 1;    units.f_tL_ad = '-';     label.f_tL_ad = 'f_tL_ad';    % scaled functional response for 1-var data
 
 txt_par.units = units; txt_par.label = label; par.free = free; % pack units, label, free in structure
 
