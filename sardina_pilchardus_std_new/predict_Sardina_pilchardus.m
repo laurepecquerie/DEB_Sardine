@@ -37,7 +37,8 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   
   % unpack par, data, auxData
   cPar = parscomp_st(par); vars_pull(par); 
-  vars_pull(cPar);  vars_pull(data);  vars_pull(auxData);
+  vars_pull(cPar); % w_E and w_V are overwritten in the next line (we want to estimate them, they are set in pars_init)
+  vars_pull(par); vars_pull(data);  vars_pull(auxData);
     
   % customized filters
     if f_juv_pen <= 0 || f_juv_lag <= 0 || f_tL_larv <= 0 || f_tL_ad <= 0 % non-negativity
