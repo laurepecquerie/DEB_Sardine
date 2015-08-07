@@ -283,12 +283,24 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   E_init = f_init * L_init.^3 * p_Am / v ;
   % we check that L_init is > Lp
   pars_H = [kap, kap_R, g ,k_J, k_M, L_T, v, U_Hb U_Hp];
-   [H_init, a, info] = maturity(L_init, 0.7, pars_H);
-   if H_init < U_Hp
-       disp('not an adult')
-   end                                             
-  [t ELHR] = ode45(@dget_ELHR, tdw(:,1), [E_init L_init E_Hp 0], [], L_m, p_Am, v, g, k_J, kap, E_Hb, E_Hp, T_A, T_ref); 
-  E = ELHR(:,1); L = ELHR(:,2); E_R = ELHR(:,4); 
+  [H_init, a, info] = maturity(L_init, 0.7, pars_H);
+  if H_init < U_Hp
+    disp('not an adult')
+  end
+  
+  t = tdw(:, 1);
+  
+  % 1st spawning : day 275 = October 2nd - spawning every 20 days = every other time point
+  initSpawningTime = 275; % day
+  spawningInterval = 20;  % days
+  time2spawn = initSpawningTime:spawningInterval:t(end);
+  
+  mergedTime = union(tdw(:,1)', time2spawn');
+  posDataTime = ismember(mergedTime, tdw(:,1)');
+  posSpawningTime = ismember(mergedTime, time2spawn');
+  
+  [mergedTime, ELHR] = ode45(@dget_ELHR, mergedTime, [E_init L_init E_Hp 0], [], L_m, p_Am, v, g, k_J, kap, E_Hb, E_Hp, T_A, T_ref); 
+  E = ELHR(posDataTime,1); L = ELHR(posDataTime,2); E_R = ELHR(posDataTime,4); 
   Wd_V = L.^3 * d_V ;
   E_V = L.^3 * M_V * mu_V;
   Wd_E = E * w_E / mu_E;
@@ -297,43 +309,25 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   Ww_V = L.^3 * 1;% we assume dV = 1g/cm^3 in ww
   Ww_E = E / mu_E * w_E / d_E; % we assume dE = 1g / cm^3 in ww
   
-  % relative fecundity : 338-448 eggs/ g (ovary-free weight?) - zwolinski et al. 2001
-  % reproduction module (made to match time points in mydata_Sard: 
-  % 1st spawning : day 275 = October 2nd - spawning every 20 days = every other time point
-  initSpawningTime = 275; % day
-  spawningInterval = 20;  % days
-  time2spawn = initSpawningTime:spawningInterval:t(end);
-  taux = t(t < initSpawningTime);
-  taux = taux(end);
-  times2ode = [taux, time2spawn];
-  [times2ode ELHR] = ode45(@dget_ELHR, times2ode, [E(t == taux), L(t == taux) E_Hp 0], [], L_m, p_Am, v, g, k_J, kap, E_Hb, E_Hp, T_A, T_ref); 
-  Espawn = ELHR(2:end, 1); Lspawn = ELHR(2:end, 2); E_Rspawn = ELHR(2:end, 4); 
+  Espawn = ELHR(posSpawningTime, 1); Lspawn = ELHR(posSpawningTime, 2); E_Rspawn = ELHR(posSpawningTime, 4); 
   Ww_Vspawn = Lspawn.^3 * 1;% we assume dV = 1g/cm^3 in ww
   Ww_Espawn = Espawn / mu_E * w_E / d_E; % we assume dE = 1g / cm^3 in ww
 
-  for i = 1:length(time2spawn)
+  i = 1;
+  isE_Rempty = (E_Rspawn(1) == 0);
+  while i <= length(time2spawn) && ~isE_Rempty
+    % relative fecundity : 338-448 eggs/ g (ovary-free weight?) - zwolinski et al. 2001
     N_batch(i) = 400 * (Ww_Vspawn(i) + Ww_Espawn(i)); % for now I ignore Ww_R to calculate the batch fecundity
     E_batch(i) = N_batch(i) * E_0; % Energy in batch
     
-    E_R(t > time2spawn(i)) = max(E_R(t > time2spawn(i)) - E_batch(i) / kap_R, 0);
+    E_R(t >= time2spawn(i)) = max(E_R(t >= time2spawn(i)) - E_batch(i) / kap_R, 0);
+    E_R2modify = max(E_Rspawn(time2spawn  >= time2spawn(i)) - E_batch(i) / kap_R, 0);
+    E_Rspawn(time2spawn >= time2spawn(i)) = E_R2modify;
+    isE_Rempty = (E_R2modify(1) == 0);  % stop spawning when E_R empties
+    
+    i = i + 1;
   end
   
-  
-  
-%    i_sp1 = find( t >= 275,1);
-%    spawn = 1; E_batch = zeros(length(t),1); N_batch = zeros(length(t),1);
-%    i = i_sp1;
-%    while and(spawn,i <=length(t)) 
-%         N_batch(i) = 400 * (Ww_V(i) + Ww_E(i)); % for now I ignore Ww_R to calculate the batch fecundity
-%         E_batch(i) = N_batch(i) * E_0; % Energy in batch
-%         if E_R(i) - E_batch(i) / kap_R >=0
-%             E_R(i:end) = E_R(i:end) - E_batch(i) / kap_R;
-%         else 
-%             E_R(i:end) = E_R(i:end) - E_R(i); % empty buffer and stop spawning
-%             spawn = 0;
-%         end
-%         i = i + 2;
-%    end
   Wd_R = E_R * w_E / mu_E;
   Etot_per_Wd = ((E + E_V + E_R) ./ (Wd_E + Wd_V + Wd_R)) / 1000;% in kJ/g dw
  
