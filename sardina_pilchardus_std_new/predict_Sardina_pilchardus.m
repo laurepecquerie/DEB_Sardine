@@ -320,13 +320,21 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
     N_batch(i) = 400 * (Ww_Vspawn(i) + Ww_Espawn(i)); % for now I ignore Ww_R to calculate the batch fecundity
     E_batch(i) = N_batch(i) * E_0; % Energy in batch
     
-    E_R(t >= time2spawn(i)) = max(E_R(t >= time2spawn(i)) - E_batch(i) / kap_R, 0);
-    E_R2modify = max(E_Rspawn(time2spawn  >= time2spawn(i)) - E_batch(i) / kap_R, 0);
-    E_Rspawn(time2spawn >= time2spawn(i)) = E_R2modify;
-    isE_Rempty = (E_R2modify(1) == 0);  % stop spawning when E_R empties
+    if E_Rspawn(i) < E_batch(i) / kap_R
+      E_batch(i) = kap_R * E_Rspawn(i);
+      isE_Rempty = 1;  % stop spawning when E_R empties
+    end
+    
+    E_R(t >= time2spawn(i)) = E_R(t >= time2spawn(i)) - E_batch(i) / kap_R;
+    E_Rspawn(time2spawn >= time2spawn(i)) = max(E_Rspawn(time2spawn  >= time2spawn(i)) - E_batch(i) / kap_R, 0);
     
     i = i + 1;
   end
+  
+%   % compute the initial E_R if the periodicity condition is not fulfilled
+%   if E_R(end) > 0 && i <= length(time2spawn) % if i > length(time2spawn) there is no more possible batch could lower the final E_R
+%     E_R = findInitE_R(t, E_R, time2spawn, Ww_Vspawn + Ww_Espawn, N_batch(i-1) * E_0 - E_batch(i-1), i, kap_R, E_0);
+%   end
   
   Wd_R = E_R * w_E / mu_E;
   Etot_per_Wd = ((E + E_V + E_R) ./ (Wd_E + Wd_V + Wd_R)) / 1000;% in kJ/g dw
@@ -428,4 +436,28 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   %% pack derivatives
   dELHR = [dE; dL; dH ; dR];
   
+  function E_R = findInitE_R(t, E_R, time2spawn, Wwspawn, workingBatch, i, kap_R, E_0) 
+  %% compute E_R in the casethe periodicity condition is not fulfiled with an initial E_R equal to 0
+    
+  periodic = 0;
+  while i <= length(time2spawn) && ~periodic
+    % relative fecundity : 338-448 eggs/ g (ovary-free weight?) - zwolinski et al. 2001
+    
+    if E_R(end) - E_R(1) <= workingBatch/ kap_R
+      workingBatch = kap_R * E_R(end);
+      periodic = 1;  % stop spawning when E_R empties
+    else
+      if i < length(time2spawn)
+        N_batch = 400 * Wwspawn(i+1); % for now I ignore Ww_R to calculate the batch fecundity
+        workingBatch = N_batch * E_0; % Energy in batch
+      end
+    end
+    E_R(t < time2spawn(i)) = E_R(t < time2spawn(i)) + workingBatch/ kap_R;
+   
+    i = i + 1;
+  end  
   
+  
+  
+  
+     
