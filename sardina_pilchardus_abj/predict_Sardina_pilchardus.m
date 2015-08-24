@@ -124,7 +124,6 @@ function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
   a_m = t_m/ k_M; aT_m = a_m/ TC_am;        % d, mean life span
 
   % reproduction
-  %pars_R = [kap; kap_R; g; k_J; k_M; L_T; v; U_Hb; U_Hp; L_b; L_j; L_p]; % compose parameter vector
   pars_R = [kap, kap_R, g, k_J, k_M, L_T, v, U_Hb, U_Hj, U_Hp];
   [R_i, UE0, Lb, Lj, Lp, info]  =  reprod_rate_j(L_i, f, pars_R);                 % ultimate reproduction rate
   RT_i = TC_Ri * R_i;
@@ -154,10 +153,8 @@ function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
   E_0 = p_Am * U_E0;    % J, initial reserve (of embryo)
   pars_lj = [g; k; l_T; v_Hb; v_Hj; v_Hp];
   [t_j t_p t_b l_j l_p l_b l_i rho_j rho_B info] = get_tj(pars_lj, f);
-  %L_b = L_m * l_b;                       % cm, structural length at birth at f
+  L_b = L_m * l_b;                       % cm, structural length at birth at f
   L_j = l_j * L_m;                       % cm, length at metamorphosis
-
-  
   a = [-1e-10;tL_juv1(:,1)];
   [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, p_Am, v, g, k_J, kap, f, E_Hb, E_Hj, T_A, T_ref, temp.tL_juv1); 
   ELH(1,:) = []; L = ELH(:,2); % L3 = L.^3; U = LUH(:,2); 
@@ -192,7 +189,7 @@ function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
   E_0 = p_Am * U_E0;    % J, initial reserve (of embryo)
   pars_lj = [g; k; l_T; v_Hb; v_Hj; v_Hp];
   [t_j t_p t_b l_j l_p l_b l_i rho_j rho_B info] = get_tj(pars_lj, f);
-  %L_b = L_m * l_b;                       % cm, structural length at birth at f
+  L_b = L_m * l_b;                       % cm, structural length at birth at f
   L_j = l_j * L_m;  
   a = [-1e-10;tL_juv4(:,1)];
   [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, p_Am, v, g, k_J, kap, f, E_Hb, E_Hj, T_A, T_ref, temp.tL_juv4); 
@@ -218,6 +215,10 @@ function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
 
   % larval data set
   f = f_tL_larv;
+  [t_j t_p t_b l_j l_p l_b l_i rho_j rho_B info] = get_tj(pars_lj, f);
+  L_b = L_m * l_b;                       % cm, structural length at birth at f
+  L_j = l_j * L_m;  
+  
   a = [-1e-10;tL_larv(:,1)];
   [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, p_Am, v, g, k_J, kap, f, E_Hb, E_Hj, T_A, T_ref, temp.tL_larv); 
   ELH(1,:) = []; L = ELH(:,2); 
@@ -226,6 +227,10 @@ function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
 
   % adult female data set
   f = f_tL_ad;
+  [t_j t_p t_b l_j l_p l_b l_i rho_j rho_B info] = get_tj(pars_lj, f);
+  L_b = L_m * l_b;                       % cm, structural length at birth at f
+  L_j = l_j * L_m;  
+ 
   vT = v * TC_tL_ad;kT_J = k_J * TC_tL_ad;
   kT_M = k_M * TC_tL_ad; pT_Am = p_Am * TC_tL_ad;
  
@@ -250,11 +255,11 @@ function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
   % We look at a year cycle for an individual of 17 cm, starting day 55 (minimum T)
   % reproduction is not specified yet
   L_init = 17 * del_M;
-  % we assume same average f as for the tL_ad_f dataset
+  % we assume same average f as for the tL_ad_f dataset ; thus same Lb, Lj
   f_init = f_tL_ad + 0.2 * sin(2 * pi * (tE(1,1)+220)/365); 
   E_init = f_init * L_init.^3 * p_Am / v ;
   % we check that L_init is > Lp
-  pars_H = [kap, kap_R, g ,k_J, k_M, L_T, v, U_Hb U_Hj U_Hp];
+  pars_H = [kap, kap_R, g ,k_J, k_M, L_T, v, U_Hb, U_Hj, U_Hp];
    [H_init, a, info] = maturity_j(L_init, 0.7, pars_H);
    if H_init < U_Hp
        disp('not an adult')

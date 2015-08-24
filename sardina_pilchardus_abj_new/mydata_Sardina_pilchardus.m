@@ -42,7 +42,7 @@ metaData.family     = 'Clupeidae';
 metaData.species    = 'Sardina_pilchardus'; 
 metaData.species_en = 'European pilchard'; 
 metaData.T_typical  = C2K(15); % K, body temp
-metaData.data_0     = {'ab'; 'ap'; 'am'; 'Lb'; 'Lp'; 'Li'; 'Wwb'; 'Wwp'; 'Wwi'; 'Ri'; 'Wd0'; 'E0'}; % tags for different types of zero-variate data
+metaData.data_0     = {'ab'; 'ap'; 'am'; 'Lb'; 'Lj'; 'Lp'; 'Li'; 'Wwb'; 'Wwp'; 'Wwi'; 'Ri'; 'Wd0'; 'E0'}; % tags for different types of zero-variate data
 metaData.data_1     = {'t-L'; 'L-W'}; % tags for different types of uni-variate data
 
 metaData.COMPLETE = 2.5; % using criteria of LikaKear2011
@@ -53,10 +53,10 @@ metaData.email    = {'cnunes@ipma.pt'};                   % e-mail of correspond
 metaData.address  = {'IPMA, Lisbon, Portugal'};        % affiliation, postcode, country of the corresponding author
 
 % uncomment and fill in the following fields when the entry is updated:
-% metaData.author_mod_1  = {'FirstName3 LastName3'};          % put names as authors as separate strings:  {'author1','author2'} , with corresponding author in first place 
-% metaData.date_mod_1    = [2017 09 18];                      % [year month day], date modified entry is accepted into the collection
-% metaData.email_mod_1   = {'myname@myuniv.univ'};            % e-mail of corresponding author
-% metaData.address_mod_1 = {'affiliation, zipcode, country'}; % affiliation, postcode, country of the corresponding author
+ metaData.author_mod_1  = {'Laure Pecquerie, Gonçalo M. Marques' };          % put names as authors as separate strings:  {'author1','author2'} , with corresponding author in first place 
+ metaData.date_mod_1    = [2015 08 24];                      % [year month day], date modified entry is accepted into the collection
+ metaData.email_mod_1   = {'laure.pecquerie@ird.fr'};            % e-mail of corresponding author
+ metaData.address_mod_1 = {'IRD/LEMAR, 29280, Plouzané, France'}; % affiliation, postcode, country of the corresponding author
 
 % for curators only ------------------------------
 % metaData.curator     = {'FirstName LastName'};
@@ -80,6 +80,7 @@ data.ap = 365;     units.ap = 'd';    label.ap = 'age at puberty'; bibkey.ap = '
 data.am = 8 * 365;     units.am = 'd';    label.am = 'life span';     bibkey.am = 'Guessed';   
   temp.am = C2K(15);  units.temp.am = 'K'; label.temp.am = 'temperature'; 
 data.Lb  = 0.5;   units.Lb  = 'cm';   label.Lb  = 'standard length at birth';    bibkey.Lb  = 'Mene2003';  
+data.Lj  = 4;    units.Lj  = 'cm';   label.Lj  = 'standard length at metamorphosis';    bibkey.Lj  = 'ReMene2009'; %[LAURE : see Cristina]
 data.Lp  = 13;   units.Lp  = 'cm';   label.Lp  = 'total length at puberty';      bibkey.Lp  = 'Guessed'; % for multiple references, please use commas to separate references
 data.Li  = 23.8;   units.Li  = 'cm';   label.Li  = 'ultimate total length';      bibkey.Li  = 'Fishbase';
 data.Wwb = 2.5e-4; units.Wwb = 'g';    label.Wwb = 'wet weight at birth';        bibkey.Wwb = 'Anon2015';
@@ -1151,14 +1152,14 @@ t = linspace(55, 365+55, 13)';
 data.tdw = [t, 1 - wWater([3:12, 1:3], 1)]; % beacuse it is from Mar to Mar we use [3:12, 1:3]
 units.tdw = {'d', '-'};     label.tdw= {'day of the year', 'dry weight / wet weight ratio'};  bibkey.tdw = 'RosaGonz2010';
 
-%% Energy density kJ/g dw
+%% Energy density J/g ww
 mE_per_Ww = [  2,  3,  4,  5,  6,  7,  8,  9,  10,  11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 4, 5, 6, 7, 8, 9, 10, 11, 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 1, 2, 3, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6; ...
      4740, 4670, 5276, 5630, 7914, 9257, 11161, 11527, 9906, 10734, 9779, 6887, 6037, 4991, 5488, 5530, 8587, 7958, 9785, 10848, 11712, 10180, 9700, 5529, 7244, 10234, 9890, 12775, 12585, 11552, 10228, 8908, 9817, 11507, 10058, 8852, 7507, 5415, 4954, 5367, 5408, 7385, 10536, 10246, 9306, 11573, 12091, 11353, 10599, 8231, 4907, 4424, 5770, 7506, 8499, 8952, 10167, 10433, 10423, 8441, 7001, 6091, 5202, 8555, 8244, 11773, 10500, 11508, 9171, 8850, 6450, 4219, 4079, 5255, 8305, 9222, 8970, 14182, 13574, 12206, 11058, 9233, 7086, 6125, 5162, 4434, 8092, 6688, 8905, 9418, 11050, 10759, 10186, 9683, 9097, 5853, 5063, 5004, 7492, 6780, 6921, 7369, 8558, 9590, 8784, 7837, 7355, 6329, 5454, 5139, 6504, 9017, 10473, 12870, 13551, 11665, 12198, 9681, 6553, 5482, 4702, 6252, 7814, 9683];
 
 mE_per_Wd = mE_per_Ww;
 mE_per_Wd(2, :) = mE_per_Ww(2, :) ./(1 - mwWater(2, :)/100); % conversion from wet to dry weight
 for i = 1:12
-  E_per_Wd(i, 1) = mean(mE_per_Wd(2, (mE_per_Wd(1, :) == i)))/1000;
+  E_per_Wd(i, 1) = mean(mE_per_Wd(2, (mE_per_Wd(1, :) == i)))/1000; % from J to kJ
 end
 data.tE = [t, E_per_Wd([3:12, 1:3], 1)];
 units.tE = {'d', 'kJ.g-1 dw'};     label.tE = {'day of the year', 'specific energy density'};  bibkey.tE = 'RosaGonz2010';

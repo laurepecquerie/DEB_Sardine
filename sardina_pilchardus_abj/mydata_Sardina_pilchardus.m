@@ -71,7 +71,7 @@ data.ap = 365;     units.ap = 'd';    label.ap = 'age at puberty';             b
 data.am = 8 * 365;     units.am = 'd';    label.am = 'life span';              bibkey.am = 'Guess';   
   temp.am = T_C + 15;  % K, temperature 
 data.Lb  = 0.5;    units.Lb  = 'cm';   label.Lb  = 'total length at birth';    bibkey.Lb  = 'Mene2003'; %[LAURE : standard or total? see Cristina]
-data.Lj  = 4;    units.Lj  = 'cm';   label.Lj  = 'standard length at metamorphosis';    bibkey.Lj  = 'ReMene2009'; %[LAURE : see Cristina]
+data.Lj  = 4;      units.Lj  = 'cm';   label.Lj  = 'standard length at metamorphosis';    bibkey.Lj  = 'ReMene2009'; %[LAURE : see Cristina]
 data.Lp  = 13;     units.Lp  = 'cm';   label.Lp  = 'total length at puberty';         bibkey.Lp  = 'guess';
 data.Li  = 23.8;   units.Li  = 'cm';   label.Li  = 'ultimate total length';    bibkey.Li  = 'Fishbase';
 data.Wwb = 2.5e-4; units.Wwb = 'g';    label.Wwb = 'wet weight at birth';      bibkey.Wwb = 'guess';

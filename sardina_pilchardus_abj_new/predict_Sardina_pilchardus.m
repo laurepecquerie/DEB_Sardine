@@ -115,44 +115,51 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   
   
   % life cycle
-  pars_tp = [g k l_T v_Hb v_Hp];
-  [t_p t_b l_p l_b info] = get_tp(pars_tp, f);
-
+  pars_lj = [g; k; l_T; v_Hb; v_Hj; v_Hp];
+  [t_j t_p t_b l_j l_p l_b l_i rho_j rho_B info] = get_tj(pars_lj, f);
+  if info ~= 1 % numerical procedure failed
+    fprintf('warning: invalid parameter value combination for get_tj \n')
+  end
+  
   % birth
-  L_b = L_m * l_b;                  % cm, structural length at birth of foetus  at f = 1
-  Lw_b = L_b/ del_Mb;                % cm, total length at birth
-  Ww_b = L_b^3 * (1 + f * w);       % g, wet weight at birth
-  aT_b = t_b/ k_M/ TC_ab;           % d, age at birth of foetus at f and T
+  L_b = l_b * L_m;                       % cm, structural length at birth at f
+  Lw_b = L_b/ del_Mb;                    % cm, standard length at birth at f
+  Ww_b = L_b^3 * (1 + f * w);            % g, wet weight at birth at f
+  a_b = t_b/ k_M; aT_b = a_b/ TC_ab;     % d, age at birth at f, temp corrected
 
+  % metamorphosis
+  L_j = l_j * L_m;                       % cm, length at metamorphosis
+  a_j = t_j/ k_M;                        % d, age at metam at f and T_ref
+  Lw_j = L_j/ del_M_SL;                  % cm, standard length at metamorphosis at f
+  
   % puberty 
-  L_p = L_m * l_p;                  % cm, structural length at puberty at f
-  Lw_p = L_p/ del_M;                % cm, total length at puberty at f
-  Ww_p = L_p^3 * (1 + f * w);       % g, wet weight at puberty 
-  aT_p = t_p/ k_M/ TC_ap;           % d, time since birth at puberty at f and T
+  L_p = l_p * L_m; 					     % cm, structural length at puberty
+  Lw_p = L_p/ del_M;                     % cm, physical length at puberty
+  Ww_p = L_p^3 * (1 + f * w);            % g, wet weight at puberty
+  aT_p = t_p/ k_M/ TC_ap;                % d, age at puberty
 
   % ultimate
-  l_i = f - l_T;                    % -, scaled ultimate length at f
-  L_i = L_m * l_i;                  % cm, ultimate structural length at f
-  Lw_i = L_i/ del_M;                % cm, ultimate total length at f
-  Ww_i = L_i^3 * (1 + f * w);       % g, ultimate wet weight 
-
-  % reproduction
-  pars_R = [kap; kap_R; g; k_J; k_M; L_T; v; U_Hb; U_Hp]; % compose parameter vector
-  RT_i = TC_Ri * reprod_rate(L_i, f, pars_R);% #/d, max repord rate
-
+  L_i = L_m * l_i;                       % cm, ultimate structural length
+  Lw_i = L_i/ del_M;                     % cm, ultimate physical length
+  Ww_i = L_i^3 * (1 + f * w);            % g, ultimate wet weight
   
   % life span
   pars_tm = [g; l_T; h_a/ k_M^2; s_G];   % compose parameter vector
   t_m = get_tm_s(pars_tm, f, l_b, l_p);  % -, scaled mean life span
   a_m = t_m/ k_M; aT_m = a_m/ TC_am;        % d, mean life span
 
-  
+  % reproduction
+  pars_R = [kap, kap_R, g, k_J, k_M, L_T, v, U_Hb, U_Hj, U_Hp];
+  [R_i, UE0, Lb, Lj, Lp, info]  =  reprod_rate_j(L_i, f, pars_R);                 % ultimate reproduction rate
+  RT_i = TC_Ri * R_i;
+    
   %% pack to output
   % the names of the fields in the structure must be the same as the data names in the mydata file
   prdData.ab  = aT_b;
   prdData.ap  = aT_p;
   prdData.am  = aT_m;
   prdData.Lb  = Lw_b;
+  prdData.Lj  = Lw_j;
   prdData.Lp  = Lw_p;
   prdData.Li  = Lw_i;
   prdData.Wwb = Ww_b;
@@ -165,16 +172,20 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   % uni-variate data
   
   % juvenile data set 1
-  f = f_juv_pen;
+   f = f_juv_pen; 
+  pars_E0 = [V_Hb; g; k_J; k_M; v]; % pars for initial_scaled_reserve
+  [U_E0 L_b info] = initial_scaled_reserve(f, pars_E0); % d cm^2, initial scaled reserve
+  E_0 = p_Am * U_E0;    % J, initial reserve (of embryo)
+  pars_lj = [g; k; l_T; v_Hb; v_Hj; v_Hp];
+  [t_j t_p t_b l_j l_p l_b l_i rho_j rho_B info] = get_tj(pars_lj, f);
+  L_b = L_m * l_b;                       % cm, structural length at birth at f
+  L_j = l_j * L_m;                       % cm, length at metamorphosis
+
   vT = v * TC_tL_juv1;kT_J = k_J * TC_tL_juv1;
   pT_Am = p_Am * TC_tL_juv1;
  
-   pars_E0 = [V_Hb; g; k_J; k_M; v]; % pars for initial_scaled_reserve
-  [U_E0 L_b info] = initial_scaled_reserve(f, pars_E0); % d cm^2, initial scaled reserve
-  E_0 = p_Am * U_E0;    % J, initial reserve (of embryo)
-  
   a = [-1e-10;tL_juv1(:,1)];
-  [a ELH] = ode45(@dget_ELH, a, [E_0 1e-10 0], [], L_m, pT_Am, vT, g, kT_J, kap, E_Hb, f); 
+  [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, pT_Am, vT, g, kT_J, kap, E_Hb, E_Hj, f); 
   ELH(1,:) = []; L = ELH(:,2); % L3 = L.^3; U = LUH(:,2); 
   EL1 = L/ del_M_SL;
 %   EWt1 = J_E_Am * U * w_E + L3 * d_V;
@@ -185,7 +196,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   vT = v * TC_tL_juv2;kT_J = k_J * TC_tL_juv2;
   pT_Am = p_Am * TC_tL_juv2;
   a = [-1e-10;tL_juv2(:,1)];
-  [a ELH] = ode45(@dget_ELH, a, [E_0 1e-10 0], [], L_m, pT_Am, vT, g, kT_J, kap, E_Hb, f); 
+  [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, pT_Am, vT, g, kT_J, kap, E_Hb, E_Hj, f); 
   ELH(1,:) = []; L = ELH(:,2); % L3 = L.^3; U = LUH(:,2); 
   EL2 = L/ del_M_SL;
 %   EWt2 = J_E_Am * U * w_E + L3 * d_V;
@@ -196,7 +207,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   vT = v * TC_tL_juv3;kT_J = k_J * TC_tL_juv3;
   pT_Am = p_Am * TC_tL_juv3;
   a = [-1e-10;tL_juv3(:,1)];
-  [a ELH] = ode45(@dget_ELH, a, [E_0 1e-10 0], [], L_m, pT_Am, vT, g, kT_J, kap, E_Hb, f); 
+  [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, pT_Am, vT, g, kT_J, kap, E_Hb, E_Hj, f); 
   ELH(1,:) = []; L = ELH(:,2); % L3 = L.^3; U = LUH(:,2); 
   EL3 = L/ del_M_SL;
 %   EWt3 = J_E_Am * U * w_E + L3 * d_V;
@@ -206,18 +217,21 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   % we recalcultate E0, Lb and Lj as f is assumed to be different between
   % Peniche and Lagoa de Obidos
   f = f_juv_lag;
-  vT = v * TC_tL_juv4;kT_J = k_J * TC_tL_juv4;
-  pT_Am = p_Am * TC_tL_juv4;
-  
   pars_E0 = [V_Hb; g; k_J; k_M; v]; % pars for initial_scaled_reserve
   [U_E0 L_b info] = initial_scaled_reserve(f, pars_E0); % d cm^2, initial scaled reserve
   E_0 = p_Am * U_E0;    % J, initial reserve (of embryo)
+  pars_lj = [g; k; l_T; v_Hb; v_Hj; v_Hp];
+  [t_j t_p t_b l_j l_p l_b l_i rho_j rho_B info] = get_tj(pars_lj, f);
+  L_b = L_m * l_b;                       % cm, structural length at birth at f
+  L_j = l_j * L_m;  
+  
+  vT = v * TC_tL_juv4;kT_J = k_J * TC_tL_juv4;
+  pT_Am = p_Am * TC_tL_juv4;
   
   a = [-1e-10;tL_juv4(:,1)];
-  [a ELH] = ode45(@dget_ELH, a, [E_0 1e-10 0], [], L_m, pT_Am, vT, g, kT_J, kap, E_Hb, f); 
+  [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, pT_Am, vT, g, kT_J, kap, E_Hb, E_Hj, f); 
   ELH(1,:) = []; L = ELH(:,2); 
   EL4 = L/ del_M_SL;
-
   EW4 = (del_M_SL * LW_juv4(:,1)).^3  .* (1 + f * w);
 
   % juvenile data set 5
@@ -225,10 +239,9 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   vT = v * TC_tL_juv5;kT_J = k_J * TC_tL_juv5;
   pT_Am = p_Am * TC_tL_juv5;
   a = [-1e-10;tL_juv5(:,1)];
-  [a ELH] = ode45(@dget_ELH, a, [E_0 1e-10 0], [], L_m, pT_Am, vT, g, kT_J, kap, E_Hb, f); 
+  [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, pT_Am, vT, g, kT_J, kap, E_Hb, E_Hj, f); 
   ELH(1,:) = []; L = ELH(:,2); % L3 = L.^3; U = LUH(:,2); 
   EL5 = L/ del_M_SL;
-   
   EW5 = (del_M_SL * LW_juv5(:,1)).^3 .* (1 + f * w);
 
   % juvenile data set 6
@@ -236,37 +249,37 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   vT = v * TC_tL_juv6;kT_J = k_J * TC_tL_juv6;
   pT_Am = p_Am * TC_tL_juv6;
   a = [-1e-10;tL_juv6(:,1)];
-  [a ELH] = ode45(@dget_ELH, a, [E_0 1e-10 0], [], L_m, pT_Am, vT, g, kT_J, kap, E_Hb, f); 
+  [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, pT_Am, vT, g, kT_J, kap, E_Hb, E_Hj, f); 
   ELH(1,:) = []; L = ELH(:,2); 
   EL6 = L/ del_M_SL;
-
   EW6 = (del_M_SL * LW_juv6(:,1)).^3  .* (1 + f * w);
 
   % larval data set
   f = f_tL_larv;
+   [t_j t_p t_b l_j l_p l_b l_i rho_j rho_B info] = get_tj(pars_lj, f);
+  L_b = L_m * l_b;                       % cm, structural length at birth at f
+  L_j = l_j * L_m;  
   vT = v * TC_tL_larv;kT_J = k_J * TC_tL_larv;
   pT_Am = p_Am * TC_tL_larv;
   a = [-1e-10;tL_larv(:,1)];
-  [a ELH] = ode45(@dget_ELH, a, [E_0 1e-10 0], [], L_m, pT_Am, vT, g, kT_J, kap, E_Hb, f); 
+  [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, pT_Am, vT, g, kT_J, kap, E_Hb, E_Hj, f); 
   ELH(1,:) = []; L = ELH(:,2); 
- 
   EL_larv = L/ del_Mb;
 
 
   % adult female data set
   f = f_tL_ad;
-  vT = v * TC_tL_ad;kT_J = k_J * TC_tL_ad;
-  pT_Am = p_Am * TC_tL_ad;
+  [t_j t_p t_b l_j l_p l_b l_i rho_j rho_B info] = get_tj(pars_lj, f);
+  L_b = L_m * l_b;                       % cm, structural length at birth at f
+  L_j = l_j * L_m;  
  
-   pars_E0 = [V_Hb; g; k_J; k_M; v]; % pars for initial_scaled_reserve
-  [U_E0 L_b info] = initial_scaled_reserve(f, pars_E0); % d cm^2, initial scaled reserve
-  E_0 = p_Am * U_E0;    % J, initial reserve (of embryo)
+  vT = v * TC_tL_ad;kT_J = k_J * TC_tL_ad;
+  kT_M = k_M * TC_tL_ad; pT_Am = p_Am * TC_tL_ad;
  
   a = [-1e-10;tL_ad_f(:,1)];
-  [a ELH] = ode45(@dget_ELH, a, [E_0 1e-10 0], [], L_m, pT_Am, vT, g, kT_J, kap, E_Hb, f); 
+  [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, pT_Am, vT, g, kT_J, kap, E_Hb, E_Hj, f); 
   ELH(1,:) = []; L = ELH(:,2); % L3 = L.^3; U = LUH(:,2); 
   EL_ad_f = L/ del_M;
-
 
   % adult female length-weigth data set - without reproduction buffer and
   % without gonads
@@ -278,12 +291,12 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   % We look at a year cycle for an individual of 17 cm, starting day 55 (minimum T)
   % reproduction is not specified yet
   L_init = 17 * del_M;
-  % we assume same average f as for the tL_ad_f dataset
+  % we assume same average f as for the tL_ad_f dataset, thus same Lb, Lj
   f_init = f_tL_ad + 0.2 * sin(2 * pi * (tE(1,1)+220)/365); 
   E_init = f_init * L_init.^3 * p_Am / v ;
   % we check that L_init is > Lp
-  pars_H = [kap, kap_R, g ,k_J, k_M, L_T, v, U_Hb, U_Hp];
-  [H_init, a, info] = maturity(L_init, 0.7, pars_H);
+  pars_H = [kap, kap_R, g ,k_J, k_M, L_T, v, U_Hb, U_Hj, U_Hp];
+  [H_init, a, info] = maturity_j(L_init, 0.7, pars_H);
   if H_init < U_Hp
     disp('not an adult')
   end
@@ -299,7 +312,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   posDataTime = ismember(mergedTime, tdw(:,1)');
   posSpawningTime = ismember(mergedTime, time2spawn');
   
-  [mergedTime, ELHR] = ode45(@dget_ELHR, mergedTime, [E_init L_init E_Hp 0], [], L_m, p_Am, v, g, k_J, kap, E_Hb, E_Hp, T_A, T_ref); 
+  [mergedTime, ELHR] = ode45(@dget_ELHR_j, mergedTime, [E_init L_init E_Hp 0], [], Lb, Lj, L_m, p_Am, v, g, k_J, kap, E_Hb, E_Hj, E_Hp, T_A, T_ref); 
   E = ELHR(posDataTime,1); L = ELHR(posDataTime,2); E_R = ELHR(posDataTime,4); 
   Wd_V = L.^3 * d_V ;
   E_V = L.^3 * M_V * mu_V;
@@ -375,7 +388,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   
   %% sub subfuctions
 
-  function dELH = dget_ELH(t, ELH, Lm, p_Am, v, g, k_J, kap, Hb, f)
+  function dELH = dget_ELH_pj(t, ELH, Lb, Lj, Lm, p_Am, v, g, k_J, kap, Hb, Hj, f)
   %% change in state variables during juvenile stage
   %% dELH = dget_ELH_pj(t, ELH)
   %% ELH: 3-vector
@@ -388,24 +401,33 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
  
   %% unpack variables
   E = ELH(1); L = ELH(2); H = ELH(3);
+  
+   if H < Hb 
+    sM = 1; % -, multiplication factor for v and {p_Am}
+  elseif H < Hj
+    sM = L/ Lb;
+  else
+    sM = Lj/ Lb;
+  end
+
 
   e = v * E/ L^3/ p_Am; % -, scaled reserve density; 
-  r =  v * (e/ L - 1/ Lm)/ (e + g); % 1/d, spec growth rate
-  p_C = E * ( v/ L - r); % cm^2, scaled mobilisation
+  r =  sM * v * (e/ L - 1/ Lm/ sM)/ (e + g); % 1/d, spec growth rate
+  p_C = E * (sM * v/ L - r); % cm^2, scaled mobilisation
   
   % generate dH/dt, dE/dt, dL/dt
   dH = (1 - kap) * p_C - k_J * H;
-  dE = (H > Hb)  * p_Am * f * L^2 - p_C;
+  dE = (H > Hb)  * sM * p_Am * f * L^2 - p_C;
   dL = r * L/3;
 
   %% pack derivatives
   dELH = [dE; dL; dH];
   
   
-  function dELHR = dget_ELHR(t, ELHR, Lm, p_Am, v, g, k_J, kap, Hb, Hp, T_A, T_ref)
-  %% change in state variables during juvenile stage
-  %% dELHR = dget_ELHR(t, ELHR)
-  %% ELHR: 4-vector
+  function dELHR = dget_ELHR_j(t, ELHR, Lb, Lj, Lm, p_Am, v, g, k_J, kap, Hb, Hj, Hp, T_A, T_ref)
+  % change in state variables during juvenile stage
+  % dELHR = dget_ELHR_j(t, ELHR)
+  % ELHR: 4-vector
   %  E: reserve E
   %  L: structural length
   %  H: maturity E_H
@@ -422,14 +444,21 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   %TC = tempcorr(273 + 15, T_ref, T_A);
   TC = tempcorr(T, T_ref, T_A);
   vT = v * TC; kT_J = k_J * TC; pT_Am = p_Am * TC;
+  
+  if H < Hb 
+    sM = 1; % -, multiplication factor for v and {p_Am}
+  elseif H < Hj
+    sM = L/ Lb;
+  else
+    sM = Lj/ Lb;
+  end
  
- 
-  e = vT * E/ L^3/ pT_Am; % -, scaled reserve density; 
-  rT = vT * (e/ L - 1/ Lm)/ (e + g); % 1/d, spec growth rate
-  pT_C = E * ( vT/ L - rT); % cm^2, scaled mobilisation
+ e = vT * E/ L^3/ pT_Am; % -, scaled reserve density; 
+  rT = sM * vT * (e/ L - 1/ Lm/ sM)/ (e + g); % 1/d, spec growth rate
+  pT_C = E * (sM * vT/ L - rT); % cm^2, scaled mobilisation
   
   % generate dH/dt, dE/dt, dL/dt
-  dE = (H > Hb) * pT_Am * f * L^2 - pT_C;
+  dE = (L > Lb) * sM * pT_Am * f * L^2 - pT_C;
   dL = rT * L/3;
   dH = (H < Hp) * (1 - kap) * pT_C - kT_J * H;
   dR = (H >= Hp) * (1 - kap) * pT_C - kT_J * H;

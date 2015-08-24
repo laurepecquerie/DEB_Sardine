@@ -23,10 +23,11 @@ function [par, metaPar, txtPar] = pars_init_Sardina_pilchardus(metaData)
   % * txtPar: structure with information on parameters
 
 % parameters: initial values at reference temperature:
-metaPar.model = 'std'; % see online manual for explanation and alternatives 
+% see online manual for explanation and alternatives 
 % be aware that each model type is associated with a specific list of core
 % primary parameters. Those listed here are for model 'std'. See the manual
 % for parameters associated with the other model types.
+metaPar.model = 'abj'; 
 
 % edit the values below such that predictions are not too far off;
 % the values must be set in the standard DEB units:
@@ -36,21 +37,22 @@ metaPar.model = 'std'; % see online manual for explanation and alternatives
 par.T_ref = C2K(20); free.T_ref = 0; units.T_ref = 'K';        label.T_ref = 'Reference temperature';
 
 %% core primary parameters
-par.z    = 5;      free.z     = 1;   units.z     = '-';        label.z     = 'zoom factor'; %for z = 1: L_m = 1 cm
+par.z    = 2;      free.z     = 1;   units.z     = '-';        label.z     = 'zoom factor'; %for z = 1: L_m = 1 cm
 par.F_m   = 6.5;   free.F_m   = 0;   units.F_m   = 'l/d.cm^2'; label.F_m   = '{F_m}, max spec searching rate';
 par.kap_X = 0.8;   free.kap_X = 0;   units.kap_X = '-';        label.kap_X = 'digestion efficiency of food to reserve';
 par.kap_P = 0.1;   free.kap_P = 0;   units.kap_P = '-';        label.kap_P = 'faecation efficiency of food to faeces';
-par.v     = 0.02;  free.v     = 1;   units.v     = 'cm/d';     label.v     = 'energy conductance';
+par.v     = 0.15;  free.v     = 1;   units.v     = 'cm/d';     label.v     = 'energy conductance';
 par.kap   = 0.8;   free.kap   = 1;   units.kap   = '-';        label.kap   = 'allocation fraction to soma';
 par.kap_R = 0.95;  free.kap_R = 0;   units.kap_R = '-';        label.kap_R = 'reproduction efficiency';
-par.p_M   = 18;    free.p_M   = 1;   units.p_M   = 'J/d.cm^3'; label.p_M   = '[p_M], vol-spec somatic maint';
+par.p_M   = 95;    free.p_M   = 1;   units.p_M   = 'J/d.cm^3'; label.p_M   = '[p_M], vol-spec somatic maint';
 par.p_T   =  0;    free.p_T   = 0;   units.p_T   = 'J/d.cm^2'; label.p_T   = '{p_T}, surf-spec somatic maint';
 par.k_J   = 0.002; free.k_J   = 1;   units.k_J   = '1/d';      label.k_J   = 'maturity maint rate coefficient';
 par.E_G   = 6200;  free.E_G   = 1;   units.E_G   = 'J/cm^3';   label.E_G   = '[E_G], spec cost for structure';
 %par.E_Hh = 0.1;     free.E_Hh  = 0;    units.E_Hh = 'J';       label.E_Hh = 'E_Hh';    % maturity at hatching
-par.E_Hb  = .275;  free.E_Hb  = 1;   units.E_Hb  = 'J';        label.E_Hb  = 'maturity at birth';
-par.E_Hp  = 5000;    free.E_Hp  = 1;   units.E_Hp  = 'J';        label.E_Hp  = 'maturity at puberty';
-par.h_a   = 1e-6;  free.h_a   = 1;   units.h_a   = '1/d^2';    label.h_a   = 'Weibull aging acceleration';
+par.E_Hb  = 1;  free.E_Hb  = 1;   units.E_Hb  = 'J';        label.E_Hb  = 'maturity at birth';
+par.E_Hj  = 50;      free.E_Hj = 1;   units.E_Hj = 'J';          label.E_Hj  = 'maturity at metamorphosis';
+par.E_Hp  = 20000;    free.E_Hp  = 1;   units.E_Hp  = 'J';        label.E_Hp  = 'maturity at puberty';
+par.h_a   = 1.184e-8;  free.h_a   = 1;   units.h_a   = '1/d^2';    label.h_a   = 'Weibull aging acceleration';
 par.s_G   = 1e-4;  free.s_G   = 0;   units.s_G   = '-';        label.s_G   = 'Gompertz stress coefficient';
 
 %% auxiliary parameters
