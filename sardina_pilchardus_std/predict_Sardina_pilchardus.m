@@ -1,12 +1,13 @@
-%% predict_Sardina_pilchardus
+%% predict_my_pet
 % Obtains predictions, using parameters and data
 
 %%
-function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
-  % created by Starrlight Augustine, Dina Lika, Bas Kooijman, Goncalo Marques and Laure Pecquerie 2015/01/30
+function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
+  % created by Starrlight Augustine, Dina Lika, Bas Kooijman, Goncalo Marques and Laure Pecquerie 2015/01/30; 
+  % last modified 2015/07/29
   
   %% Syntax
-  % [Prd_data, info] = <../predict_my_pet.m *predict_my_pet*>(par, chem, data)
+  % [prdData, info] = <../predict_my_pet.m *predict_my_pet*>(par, chem, data)
   
   %% Description
   % Obtains predictions, using parameters and data
@@ -19,44 +20,69 @@ function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
   %  
   % Output
   %
-  % * Prd_data: structure with predicted values for data
+  % * prdData: structure with predicted values for data
+  % * info: identified for correct setting of predictions (see remarks)
   
   %% Remarks
-  % Template for use in add_my_pet
+  % Template for use in add_my_pet.
+  % The code calls <parscomp_st.html *parscomp_st*> in order to compute
+  % scaled quantities, compound parameters, molecular weights and compose
+  % matrixes of mass to energy couplers and chemical indices.
+  % With the use of filters, setting info = 0, prdData = {}, return, has the effect
+  % that the parameter-combination is not selected for finding the
+  % best-fitting combination; this setting acts as customized filter.
   
-  %% unpack par, chem, cpar and data
-  cpar = parscomp_st(par, chem);
-  v2struct(chem); v2struct(par);  v2struct(cpar);
-  v2struct(data);
+  %% Example of a costumized filter
+  % See the lines just below unpacking
   
-  del_M_SL = del_M / 0.87; % -, shape coefficient for standard length - juveniles and adults % Gaygusuz et al. 2006
-  
-  %% customized filters
-  if f_juv_pen <= 0 || f_juv_lag <= 0 || f_tL_larv <= 0 || f_tL_ad <= 0 % non-negativity
+  % unpack par, data, auxData
+  cPar = parscomp_st(par); vars_pull(par); 
+  vars_pull(cPar); % w_E and w_V are overwritten in the next line (we want to estimate them, they are set in pars_init)
+  vars_pull(par); vars_pull(data);  vars_pull(auxData);
+    
+  % customized filters
+    if f_juv_pen <= 0 || f_juv_lag <= 0 || f_tL_larv <= 0 || f_tL_ad <= 0 % non-negativity
     info = 0;
-    Prd_data = {};
+    prdData = {};
     return
   end
 
   if mu_E <= 0 || d_E <= 0 || w_E <= 0|| w_V <= 0 % non-negativity
     info = 0;
-    Prd_data = {};
+    prdData = {};
     return
   end
 
   if d_E >= 1  % fraction
     info = 0;
-    Prd_data = {};
+    prdData = {};
     return
   end
   
   if kap_G >= mu_V / mu_E || kap_X >= mu_X / mu_E  % constraint required for mass conservation and no production of CO2
     info = 0;
-    Prd_data = {};
+    prdData = {};
     return
   end
+  
+  
+%   if k * v_Hp >= f_tL^3  % constraint required for reaching puberty with f_tL
+%     info = 0;
+%     prdData = {};
+%     return
+%   end
+%   
+%   if ~reach_birth(g, k, v_Hb, f_tL) % constraint required for reaching birth with f_tL
+%     info = 0;
+%     prdData = {};
+%     return;
+%   end  
+%   
 
-  %% compute temperature correction factors
+
+  del_M_SL = del_M / 0.87; % -, shape coefficient for standard length - juveniles and adults % Gaygusuz et al. 2006
+  
+  % compute temperature correction factors
   TC_ab = tempcorr(temp.ab, T_ref, T_A);
   TC_ap = tempcorr(temp.ap, T_ref, T_A);
   TC_am = tempcorr(temp.am, T_ref, T_A);
@@ -71,8 +97,15 @@ function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
   TC_tL_ad = tempcorr(temp.tL_ad_f, T_ref, T_A); % same for adult females and males
   TC_LW_ad = tempcorr(temp.LW_ad, T_ref, T_A);
 
-
-  %% zero-variate data
+% uncomment if you need this for computing moles of a gas to a volume of gas
+% - else feel free to delete  these lines
+% molar volume of gas at 1 bar and 20 C is 24.4 L/mol
+% T = C2K(20); % K, temp of measurement equipment- apperently this is
+% always the standard unless explicitely stated otherwise in a paper (pers.
+% comm. Mike Kearney).
+% X_gas = T_ref/ T/ 24.4;  % M,  mol of gas per litre at T_ref and 1 bar;
+  
+% zero-variate data
 
   % egg -  
   pars_E0 = [V_Hb; g; k_J; k_M; v]; % pars for initial_scaled_reserve
@@ -116,20 +149,20 @@ function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
   
   %% pack to output
   % the names of the fields in the structure must be the same as the data names in the mydata file
-  Prd_data.ab  = aT_b;
-  Prd_data.ap  = aT_p;
-  Prd_data.am  = aT_m;
-  Prd_data.Lb  = Lw_b;
-  Prd_data.Lp  = Lw_p;
-  Prd_data.Li  = Lw_i;
-  Prd_data.Wwb = Ww_b;
-  Prd_data.Wwp = Ww_p;
-  Prd_data.Wwi = Ww_i;
-  Prd_data.Ri  = RT_i;
-  Prd_data.Wd0 = Wd_0;
-  Prd_data.E0  = E_0;
+  prdData.ab  = aT_b;
+  prdData.ap  = aT_p;
+  prdData.am  = aT_m;
+  prdData.Lb  = Lw_b;
+  prdData.Lp  = Lw_p;
+  prdData.Li  = Lw_i;
+  prdData.Wwb = Ww_b;
+  prdData.Wwp = Ww_p;
+  prdData.Wwi = Ww_i;
+  prdData.Ri  = RT_i;
+  prdData.Wd0 = Wd_0;
+  prdData.E0  = E_0;
   
-  %% uni-variate data
+  % uni-variate data
   
   % juvenile data set 1
   f = f_juv_pen;
@@ -249,13 +282,25 @@ function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
   f_init = f_tL_ad + 0.2 * sin(2 * pi * (tE(1,1)+220)/365); 
   E_init = f_init * L_init.^3 * p_Am / v ;
   % we check that L_init is > Lp
-  pars_H = [kap, kap_R, g ,k_J, k_M, L_T, v, U_Hb U_Hp];
-   [H_init, a, info] = maturity(L_init, 0.7, pars_H);
-   if H_init < U_Hp
-       disp('not an adult')
-   end                                             
-  [t ELHR] = ode45(@dget_ELHR, tE(:,1), [E_init L_init E_Hp 0], [], L_m, p_Am, v, g, k_J, kap, E_Hb, E_Hp, T_A, T_ref); 
-  E = ELHR(:,1); L = ELHR(:,2); E_R = ELHR(:,4); 
+  pars_H = [kap, kap_R, g ,k_J, k_M, L_T, v, U_Hb, U_Hp];
+  [H_init, a, info] = maturity(L_init, 0.7, pars_H);
+  if H_init < U_Hp
+    disp('not an adult')
+  end
+  
+  t = tdw(:, 1);
+  
+  % 1st spawning : day 275 = October 2nd - spawning every 20 days = every other time point
+  initSpawningTime = 275; % day
+  spawningInterval = 20;  % days
+  time2spawn = initSpawningTime:spawningInterval:t(end);
+  
+  mergedTime = union(tdw(:,1)', time2spawn');
+  posDataTime = ismember(mergedTime, tdw(:,1)');
+  posSpawningTime = ismember(mergedTime, time2spawn');
+  
+  [mergedTime, ELHR] = ode45(@dget_ELHR, mergedTime, [E_init L_init E_Hp 0], [], L_m, p_Am, v, g, k_J, kap, E_Hb, E_Hp, T_A, T_ref); 
+  E = ELHR(posDataTime,1); L = ELHR(posDataTime,2); E_R = ELHR(posDataTime,4); 
   Wd_V = L.^3 * d_V ;
   E_V = L.^3 * M_V * mu_V;
   Wd_E = E * w_E / mu_E;
@@ -264,23 +309,34 @@ function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
   Ww_V = L.^3 * 1;% we assume dV = 1g/cm^3 in ww
   Ww_E = E / mu_E * w_E / d_E; % we assume dE = 1g / cm^3 in ww
   
-  % relative fecundity : 338-448 eggs/ g (ovary-free weight?) - zwolinski et al. 2001
-  % reproduction module (made to match time points in mydata_Sard: 
-  % 1st spawning : day 275 = October 2nd - spawning every 20 days = every other time point
-   i_sp1 = find( t >=275,1);
-   spawn = 1; E_batch = zeros(length(t),1); N_batch = zeros(length(t),1);
-   i = i_sp1;
-   while and(spawn,i <=length(t)) 
-        N_batch(i) = 400 * (Ww_V(i) + Ww_E(i)); % for now I ignore Ww_R to calculate the batch fecundity
-        E_batch(i) = N_batch(i) * E_0; % Energy in batch
-        if E_R(i) - E_batch(i) / kap_R >=0
-            E_R(i:end) = E_R(i:end) - E_batch(i) / kap_R;
-        else 
-            E_R(i:end) = E_R(i:end) - E_R(i); % empty buffer and stop spawning
-            spawn = 0;
-        end
-        i = i + 2;
-   end
+  Espawn = ELHR(posSpawningTime, 1); Lspawn = ELHR(posSpawningTime, 2); E_Rspawn = ELHR(posSpawningTime, 4); 
+  Ww_Vspawn = Lspawn.^3 * 1;% we assume dV = 1g/cm^3 in ww
+  Ww_Espawn = Espawn / mu_E * w_E / d_E; % we assume dE = 1g / cm^3 in ww
+
+  i = 1;
+  isE_Rempty = (E_Rspawn(1) == 0);
+  while i <= length(time2spawn) && ~isE_Rempty
+    % relative fecundity : 338-448 eggs/ g (ovary-free weight?) - zwolinski et al. 2001
+    N_batch(i) = 400 * (Ww_Vspawn(i) + Ww_Espawn(i)); % for now I ignore Ww_R to calculate the batch fecundity
+    E_batch(i) = N_batch(i) * E_0; % Energy in batch
+    
+    if E_Rspawn(i) < E_batch(i) / kap_R
+      E_batch(i) = kap_R * E_Rspawn(i);
+      isE_Rempty = 1;  % stop spawning when E_R empties
+    end
+    
+    E_R(t >= time2spawn(i)) = E_R(t >= time2spawn(i)) - E_batch(i) / kap_R;
+    E_Rspawn(time2spawn >= time2spawn(i)) = max(E_Rspawn(time2spawn  >= time2spawn(i)) - E_batch(i) / kap_R, 0);
+    
+    i = i + 1;
+  end
+    
+  % compute the initial E_R if the periodicity condition is not fulfilled
+  if E_R(end) > 0 && i <= length(time2spawn) % if i > length(time2spawn) there is no more possible batch could lower the final E_R
+    E_R = findInitE_R(t, E_R, time2spawn, L(1)^3, L(end)^3, Ww_Vspawn + Ww_Espawn, N_batch(i-1) * E_0 - E_batch(i-1), i, kap_R, E_0);
+  end
+
+  
   Wd_R = E_R * w_E / mu_E;
   Etot_per_Wd = ((E + E_V + E_R) ./ (Wd_E + Wd_V + Wd_R)) / 1000;% in kJ/g dw
  
@@ -296,26 +352,25 @@ function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
   
   %% pack to output
   % the names of the fields in the structure must be the same as the data names in the mydata file
-  Prd_data.tL_juv1 = EL1;
-  Prd_data.tL_juv2 = EL2;
-  Prd_data.tL_juv3 = EL3;
-  Prd_data.tL_juv4 = EL4;
-  Prd_data.tL_juv5 = EL5;
-  Prd_data.tL_juv6 = EL6;
-  Prd_data.tL_larv = EL_larv;
-  Prd_data.tL_ad_f = EL_ad_f;
-%   Prd_data.tL_ad_m = EL_ad_m;
-  Prd_data.LW_juv4 = EW4;
-  Prd_data.LW_juv5 = EW5;
-  Prd_data.LW_juv6 = EW6;
-  Prd_data.LW_ad = EW_ad;
-  Prd_data.tE    = EE;
-  Prd_data.tdw   = Edw;
+  prdData.tL_juv1 = EL1;
+  prdData.tL_juv2 = EL2;
+  prdData.tL_juv3 = EL3;
+  prdData.tL_juv4 = EL4;
+  prdData.tL_juv5 = EL5;
+  prdData.tL_juv6 = EL6;
+  prdData.tL_larv = EL_larv;
+  prdData.tL_ad_f = EL_ad_f;
+  prdData.LW_juv4 = EW4;
+  prdData.LW_juv5 = EW5;
+  prdData.LW_juv6 = EW6;
+  prdData.LW_ad   = EW_ad;
+  prdData.tE      = EE;
+  prdData.tdw     = Edw;
 
   
   %% extra pseudodata
   
-  Prd_data.psd.d_E = d_E;
+  prdData.psd.d_E = d_E;
   
   
   %% sub subfuctions
@@ -382,4 +437,30 @@ function [Prd_data, info] = predict_Sardina_pilchardus(par, chem, T_ref, data)
   %% pack derivatives
   dELHR = [dE; dL; dH ; dR];
   
+  function E_R = findInitE_R(t, E_R, time2spawn, VInit, VFinal, Wwspawn, workingBatch, i, kap_R, E_0) 
+  %% compute E_R in the casethe periodicity condition is not fulfiled with an initial E_R equal to 0
+    
+  periodic = 0;
+  while i <= length(time2spawn) && ~periodic
+    % relative fecundity : 338-448 eggs/ g (ovary-free weight?) - zwolinski et al. 2001
+    E_RInitDensity = E_R(1)/ VInit;
+    E_RFinalDensity = E_R(end)/ VFinal; 
+    
+    if E_RFinalDensity - E_RInitDensity <= (workingBatch/ kap_R)/ VInit
+      workingBatch = kap_R * (E_RFinalDensity - E_RInitDensity) * VInit;
+      periodic = 1;  % stop spawning when E_R empties
+    end
+    E_R(t < time2spawn(i)) = E_R(t < time2spawn(i)) + workingBatch/ kap_R;
+ 
+    if i < length(time2spawn)
+      N_batch = 400 * Wwspawn(i+1); % for now I ignore Ww_R to calculate the batch fecundity
+      workingBatch = N_batch * E_0; % Energy in batch
+    end
+        
+    i = i + 1;
+  end  
   
+  
+  
+  
+     
