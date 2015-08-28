@@ -159,7 +159,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   % birth
   L_b = l_b * L_m;                       % cm, structural length at birth at f
   Lw_b = L_b/ del_Mb;                    % cm, standard length at birth at f
-  Ww_b = L_b^3 * (1 + f * w);            % g, wet weight at birth at f
+  Ww_b = L_b^3 * (1 + w_E / mu_E / d_E * f * E_m);   % g, wet weight at birth at f
   a_b = t_b/ k_M; aT_b = a_b/ TC_ab;     % d, age at birth at f, temp corrected
 
   % metamorphosis
@@ -170,18 +170,18 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   % puberty 
   L_p = l_p * L_m; 					     % cm, structural length at puberty
   Lw_p = L_p/ del_M;                     % cm, physical length at puberty
-  Ww_p = L_p^3 * (1 + f * w);            % g, wet weight at puberty
+  Ww_p = L_p^3 * (1 + w_E / mu_E / d_E * f * E_m);  % g, wet weight at puberty
   aT_p = t_p/ k_M/ TC_ap;                % d, age at puberty
 
   % ultimate
   L_i = L_m * l_i;                       % cm, ultimate structural length
   Lw_i = L_i/ del_M;                     % cm, ultimate physical length
-  Ww_i = L_i^3 * (1 + f * w);            % g, ultimate wet weight
+  Ww_i = L_i^3 * (1 + w_E / mu_E / d_E * f * E_m);  % g, ultimate wet weight
   
   % life span
   pars_tm = [g; l_T; h_a/ k_M^2; s_G];   % compose parameter vector
   t_m = get_tm_s(pars_tm, f, l_b, l_p);  % -, scaled mean life span
-  a_m = t_m/ k_M; aT_m = a_m/ TC_am;        % d, mean life span
+  a_m = t_m/ k_M; aT_m = a_m/ TC_am;     % d, mean life span
 
   % reproduction
   pars_R = [kap, kap_R, g, k_J, k_M, L_T, v, U_Hb, U_Hj, U_Hp];
@@ -269,7 +269,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, pT_Am, vT, g, kT_J, kap, E_Hb, E_Hj, f); 
   ELH(1,:) = []; L = ELH(:,2); 
   EL4 = L/ del_M_SL;
-  EW4 = (del_M_SL * LW_juv4(:,1)).^3  .* (1 + f * w);
+  EW4 = (del_M_SL * LW_juv4(:,1)).^3 * (1 + w_E / mu_E / d_E * f * E_m);
 
   % juvenile data set 5
   f = f_juv_lag;
@@ -279,7 +279,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, pT_Am, vT, g, kT_J, kap, E_Hb, E_Hj, f); 
   ELH(1,:) = []; L = ELH(:,2); % L3 = L.^3; U = LUH(:,2); 
   EL5 = L/ del_M_SL;
-  EW5 = (del_M_SL * LW_juv5(:,1)).^3 .* (1 + f * w);
+  EW5 = (del_M_SL * LW_juv5(:,1)).^3 * (1 + w_E / mu_E / d_E * f * E_m);
 
   % juvenile data set 6
   f = f_juv_lag;
@@ -289,7 +289,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, pT_Am, vT, g, kT_J, kap, E_Hb, E_Hj, f); 
   ELH(1,:) = []; L = ELH(:,2); 
   EL6 = L/ del_M_SL;
-  EW6 = (del_M_SL * LW_juv6(:,1)).^3  .* (1 + f * w);
+  EW6 = (del_M_SL * LW_juv6(:,1)).^3  * (1 + w_E / mu_E / d_E * f * E_m);
 
   % larval data set
   f = f_tL_larv;
@@ -321,7 +321,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   % adult female length-weigth data set - without reproduction buffer and
   % without gonads
   aL = LW_ad(:,1);
-  EW_ad = (del_M * aL).^3 * (1 + f * w);
+  EW_ad = (del_M * aL).^3 * (1 + w_E / mu_E / d_E * f * E_m);
   
  
   
