@@ -23,22 +23,22 @@ estim_options('default'); % runs estimation, uses nmregr method and filter
 %                     (prints results to screen using a customized results file when there is one)
 % 'report'        :   0 - does not print to screen the step numbers and the corresponding simplex ssq values 
 
-estim_options('max_step_number',800); % set options for parameter estimation
+estim_options('max_step_number',400); % set options for parameter estimation
 estim_options('max_fun_evals',5e3);  % set options for parameter estimation
 %estim_options('report',0);  % save time during the estimation 
 
 estim_options('pars_init_method', 2);
 estim_options('results_output', 1);
-estim_options('method', 'no');
- estim_pars; % run estimation
- return
+estim_options('method', 'nm');
+%  estim_pars; % run estimation
+%  return
 
 
 fprintf('estimation 1 ---- \n');
 estim_options('simplex_size', 0.05); % WLS estimate parameters using overwrite  
 estim_pars
 
-pause
+return
 
 estim_options('pars_init_method', 1); % from .mat file
 nm_estim = 4;

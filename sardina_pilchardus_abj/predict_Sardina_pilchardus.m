@@ -37,8 +37,8 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   
   % unpack par, data, auxData
   cPar = parscomp_st(par); %vars_pull(par); 
-  vars_pull(cPar); % w_E and w_V are overwritten in the next line (we want to estimate them, they are set in pars_init)
-  vars_pull(par); vars_pull(data);  vars_pull(auxData);
+  vars_pull(par); vars_pull(cPar); % w_E and w_V are overwritten in the next line (we want to estimate them, they are set in pars_init)
+  vars_pull(data);  vars_pull(auxData);
     
   % customized filters
     if f_juv_pen <= 0 || f_juv_lag <= 0 || f_tL_larv <= 0 || f_tL_ad <= 0 % non-negativity
@@ -58,8 +58,19 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
     prdData = {};
     return
   end
-
-  if d_E >= 1  % fraction
+  
+  if mu_E / w_E > 37000 || mu_E / w_E < 21000% (only lipids or lower than the observed minimum value total weight)
+    info = 0;
+    prdData = {};
+    return
+  end
+  
+  if mu_V / w_V > 21000 || mu_V / w_V < 15000  || mu_V > mu_E % if larger than 21000, larger than the minimum value observed
+    info = 0;
+    prdData = {};
+    return
+  end
+  if d_E >= 1 || d_V >= 1 % fraction
     info = 0;
     prdData = {};
     return
@@ -171,6 +182,11 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   L_i = L_m * l_i;                       % cm, ultimate structural length
   Lw_i = L_i/ del_M;                     % cm, ultimate physical length
   Ww_i = L_i^3 * (1 + f * w);            % g, ultimate wet weight
+  
+  Ww_iV = L_i^3; % dry weight of structure
+  
+  Ww_iE = (w_E / mu_E * f * p_Am / v * L_i^3) / d_E;
+  Ww_i2 = Ww_iV + Ww_iE;
   
   % life span
   pars_tm = [g; l_T; h_a/ k_M^2; s_G];   % compose parameter vector
@@ -337,7 +353,6 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   Wd_V = L.^3 * d_V ;
   E_V = L.^3 * M_V * mu_V;
   Wd_E = E * w_E / mu_E;
-  E_per_Wd = ((E + E_V) ./ (Wd_E + Wd_V)) / 1000; % in kJ/g dw
   
   Ww_V = L.^3 * 1;% we assume dV = 1g/cm^3 in ww
   Ww_E = E / mu_E * w_E / d_E; % we assume dE = 1g / cm^3 in ww
@@ -369,12 +384,10 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
     E_R = findInitE_R(t, E_R, time2spawn, L(1)^3, L(end)^3, Ww_Vspawn + Ww_Espawn, N_batch(i-1) * E_0 - E_batch(i-1), i, kap_R, E_0);
   end
 
-  
   Wd_R = E_R * w_E / mu_E;
   Etot_per_Wd = ((E + E_V + E_R) ./ (Wd_E + Wd_V + Wd_R)) / 1000;% in kJ/g dw
  
   EE = Etot_per_Wd; % including E_R
-  %EE = E_per_Wd; % without E_R
   
   % dry to wet weight ratio
   Ww_R = E_R / mu_E * w_E / d_E; % we assume dE = 1g / cm^3 in ww
