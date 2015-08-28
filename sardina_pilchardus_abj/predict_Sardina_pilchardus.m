@@ -64,8 +64,14 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
     prdData = {};
     return
   end
-  
-  if kap_G >= mu_V / mu_E || kap_X >= mu_X / mu_E  % constraint required for mass conservation and no production of CO2
+
+  if mu_E < mu_V  % fraction
+    info = 0;
+    prdData = {};
+    return
+  end
+   
+  if kap_G >= mu_V / mu_E %|| kap_X >= mu_X / mu_E  % constraint required for mass conservation and no production of CO2
     info = 0;
     prdData = {};
     return
@@ -197,6 +203,8 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   prdData.Ri  = RT_i;
   prdData.Wd0 = Wd_0;
   prdData.E0  = E_0;
+  
+  prdData.psd_mu_E  = mu_E;
   
   % uni-variate data
   

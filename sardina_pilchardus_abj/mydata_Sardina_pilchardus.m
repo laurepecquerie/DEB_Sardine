@@ -1205,6 +1205,10 @@ weights.Lj = 20 * weights.Lj;
 %% set pseudodata and respective weights
 % (pseudo data are in data.psd and weights are in weights.psd)
 [data, units, label, weights] = addpseudodata(data, units, label, weights);
+data.psd.kap_G = 0.6; % smaller kap_G to allow for greater mu_E
+
+data.psd_mu_E = 650000;      units.psd_mu_E = 'g/cm^3';    label.psd_mu_E = 'density of reserve';       % bibkey.psd.d_E = 'Fill';    
+weights.psd_mu_E = 10 * 1 ./ data.psd_mu_E^2;
 
 % data.psd.d_E = 0.4;      units.psd.d_E = 'g/cm^3';    label.psd.d_E = 'density of reserve';       % bibkey.psd.d_E = 'Fill';    
 % weights.psd.d_E = 10 * 1 ./ data.psd.d_E^2;
