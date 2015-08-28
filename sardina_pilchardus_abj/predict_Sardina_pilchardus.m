@@ -70,18 +70,31 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
     prdData = {};
     return
   end
+  
   if d_E >= 1 || d_V >= 1 % fraction
     info = 0;
     prdData = {};
     return
   end
   
-  if kap_G >= mu_V / mu_E || kap_X >= mu_X / mu_E  % constraint required for mass conservation and no production of CO2
+  % mu_X will be fixed once we obtain safistactory values for mu_E and mu_V
+  if kap_G >= mu_V / mu_E %|| kap_X >= mu_X / mu_E  % constraint required for mass conservation and no production of CO2
     info = 0;
     prdData = {};
     return
   end
   
+  if del_M < del_Mb 
+       info = 0;
+       prdData = {};
+       return
+   end
+   
+   if var_f_tL_ad < 0 || var_f_tL_ad > f_tL_ad
+       info = 0;
+       prdData = {};
+       return
+   end
    
    if ~reach_birth(g, k, v_Hb, f_tL_ad) % constraint required for reaching birth with f
      info = 0;
@@ -108,17 +121,6 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
        return
    end
 
-   if del_M < del_Mb 
-       info = 0;
-       prdData = {};
-       return
-   end
-   
-   if var_f_tL_ad < 0 || var_f_tL_ad > f_tL_ad
-       info = 0;
-       prdData = {};
-       return
-   end
    
   del_M_SL = del_M / 0.87; % -, shape coefficient for standard length - juveniles and adults % Gaygusuz et al. 2006
   
@@ -162,10 +164,12 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   end
   
   % birth
-  L_b = l_b * L_m;                       % cm, structural length at birth at f
-  Lw_b = L_b/ del_Mb;                    % cm, standard length at birth at f
-  Ww_b = L_b^3 * (1 + f * w);            % g, wet weight at birth at f
-  a_b = t_b/ k_M; aT_b = a_b/ TC_ab;     % d, age at birth at f, temp corrected
+  L_b = l_b * L_m;                            % cm, structural length at birth at f
+  Lw_b = L_b/ del_Mb;                         % cm, standard length at birth at f
+  Ww_Vb = L_b^3;                              % g, wet weight of structure at f
+  Ww_Eb = w_E / mu_E / d_E * f * E_m * L_b^3; % g, wet weight of reserve at f
+  Ww_b = Ww_Vb + Ww_Eb;                       % g, wet weight at birth at f
+  a_b = t_b/ k_M; aT_b = a_b/ TC_ab;          % d, age at birth at f, temp corrected
 
   % metamorphosis
   L_j = l_j * L_m;                       % cm, length at metamorphosis
@@ -173,21 +177,20 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   Lw_j = L_j/ del_M_SL;                  % cm, standard length at metamorphosis at f
   
   % puberty 
-  L_p = l_p * L_m; 					     % cm, structural length at puberty
-  Lw_p = L_p/ del_M;                     % cm, physical length at puberty
-  Ww_p = L_p^3 * (1 + f * w);            % g, wet weight at puberty
-  aT_p = t_p/ k_M/ TC_ap;                % d, age at puberty
+  L_p = l_p * L_m; 					          % cm, structural length at puberty
+  Lw_p = L_p/ del_M;                          % cm, physical length at puberty
+  Ww_Vp = L_p^3;                              % g, wet weight of structure at f
+  Ww_Ep = w_E / mu_E / d_E * f * E_m * L_p^3; % g, wet weight of reserve at f
+  Ww_p = Ww_Vp + Ww_Ep;                       % g, wet weight at puberty at f
+  aT_p = t_p/ k_M/ TC_ap;                     % d, age at puberty
 
   % ultimate
   L_i = L_m * l_i;                       % cm, ultimate structural length
   Lw_i = L_i/ del_M;                     % cm, ultimate physical length
-  Ww_i = L_i^3 * (1 + f * w);            % g, ultimate wet weight
-  
-  Ww_iV = L_i^3; % dry weight of structure
-  
-  Ww_iE = (w_E / mu_E * f * p_Am / v * L_i^3) / d_E;
-  Ww_i2 = Ww_iV + Ww_iE;
-  
+  Ww_Vi = L_i^3;                              % g, wet weight of structure at f
+  Ww_Ei = w_E / mu_E / d_E * f * E_m * L_i^3; % g, wet weight of reserve at f
+  Ww_i = Ww_Vi + Ww_Ei;                       % g, wet weight at puberty at f
+    
   % life span
   pars_tm = [g; l_T; h_a/ k_M^2; s_G];   % compose parameter vector
   t_m = get_tm_s(pars_tm, f, l_b, l_p);  % -, scaled mean life span
@@ -277,8 +280,12 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, pT_Am, vT, g, kT_J, kap, E_Hb, E_Hj, f); 
   ELH(1,:) = []; L = ELH(:,2); 
   EL4 = L/ del_M_SL;
-  EW4 = (del_M_SL * LW_juv4(:,1)).^3  .* (1 + f * w);
-
+  
+  Ww_V = (del_M_SL * LW_juv4(:,1)).^3;                              % g, wet weight of structure at f
+  Ww_E = w_E / mu_E / d_E * f * E_m * (del_M_SL * LW_juv4(:,1)).^3; % g, wet weight of reserve at f
+  EW4 = Ww_V + Ww_E;                       % g, wet weight at f
+  
+  
   % juvenile data set 5
   f = f_juv_lag;
   vT = v * TC_tL_juv5;kT_J = k_J * TC_tL_juv5;
@@ -287,8 +294,11 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, pT_Am, vT, g, kT_J, kap, E_Hb, E_Hj, f); 
   ELH(1,:) = []; L = ELH(:,2); % L3 = L.^3; U = LUH(:,2); 
   EL5 = L/ del_M_SL;
-  EW5 = (del_M_SL * LW_juv5(:,1)).^3 .* (1 + f * w);
-
+  
+  Ww_V = (del_M_SL * LW_juv5(:,1)).^3;                              % g, wet weight of structure at f
+  Ww_E = w_E / mu_E / d_E * f * E_m * (del_M_SL * LW_juv5(:,1)).^3; % g, wet weight of reserve at f
+  EW5 = Ww_V + Ww_E;                       % g, wet weight at f
+ 
   % juvenile data set 6
   f = f_juv_lag;
   vT = v * TC_tL_juv6;kT_J = k_J * TC_tL_juv6;
@@ -297,8 +307,10 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, pT_Am, vT, g, kT_J, kap, E_Hb, E_Hj, f); 
   ELH(1,:) = []; L = ELH(:,2); 
   EL6 = L/ del_M_SL;
-  EW6 = (del_M_SL * LW_juv6(:,1)).^3  .* (1 + f * w);
-
+  Ww_V = (del_M_SL * LW_juv6(:,1)).^3;                              % g, wet weight of structure at f
+  Ww_E = w_E / mu_E / d_E * f * E_m * (del_M_SL * LW_juv6(:,1)).^3; % g, wet weight of reserve at f
+  EW6 = Ww_V + Ww_E;                       % g, wet weight at f
+ 
   % larval data set
   f = f_tL_larv;
    [t_j t_p t_b l_j l_p l_b l_i rho_j rho_B info] = get_tj(pars_lj, f);
@@ -329,9 +341,9 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   % adult female length-weigth data set - without reproduction buffer and
   % without gonads
   aL = LW_ad(:,1);
-  EW_ad = (del_M * aL).^3 * (1 + f * w);
-  
- 
+  Ww_V = (del_M * aL).^3;                              % g, wet weight of structure at f
+  Ww_E = w_E / mu_E / d_E * f * E_m * (del_M * aL).^3; % g, wet weight of reserve at f
+  EW_ad = Ww_V + Ww_E;                       % g, wet weight at f  
   
   % We look at a year cycle for an individual of L_init_tE cm, starting day 55 (minimum T)
   % we assume same average f as for the tL_ad_f dataset, thus same Lb, Lj
