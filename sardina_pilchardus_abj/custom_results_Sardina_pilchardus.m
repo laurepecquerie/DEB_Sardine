@@ -61,7 +61,7 @@ function custom_results_Sardina_pilchardus(par, metaPar, data, txtData, auxData)
   [stat, txt_stat]  = feval(statnm, par, C2K(15), par.f, metaPar.model);
  
   if isfield(stat,'s_M')
-    fprintf(['\n acceleration factor s_M is ', num2str(stat.s_M), ' \n'])
+    fprintf(['\nacceleration factor s_M is ', num2str(stat.s_M), ' \n'])
   end
   fprintf(['age at metamorphosis at ', num2str(stat.T - 273.15),' degC is ', num2str(stat.a_j), 'd \n'])
   fprintf(['d_E = ', num2str(par.d_E),'  \n'])

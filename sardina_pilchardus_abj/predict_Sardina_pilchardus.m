@@ -65,7 +65,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
     return
   end
 
-  if mu_E < mu_V  % energy constraint
+  if mu_E < mu_V    % energy constraint
     info = 0;
     prdData = {};
     return
@@ -77,43 +77,43 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
     return
   end
   
+  if del_M < del_Mb   % shape constraint
+    info = 0;
+    prdData = {};
+    return
+  end
    
-   if ~reach_birth(g, k, v_Hb, f_tL_ad) % constraint required for reaching birth with f
-     info = 0;
-     prdData = {};
-     return;
-   end  
+  if var_f_tL_ad < 0 || var_f_tL_ad > f_tL_ad   % non-negativity
+    info = 0;
+    prdData = {};
+    return
+  end
    
-   % constraint required for reaching puberty with f_tL_ad (adults in the wild)
-   pars_lj = [g; k; l_T; v_Hb; v_Hj; v_Hp];
-   [t_j t_p t_b l_j l_p l_b l_i rho_j rho_B info] = get_tj(pars_lj, f_tL_ad);
-   if info ~= 1 % numerical procedure failed
-     fprintf('warning: invalid parameter value combination for get_tj \n')
-   end
-   s_M = l_j / l_b;
-   if k * v_Hp >= f_tL_ad^3 * s_M^3 % constraint required for reaching puberty with f_tL_ad (adults in the wild)
-     info = 0;
-     prdData = {};
-     return
-   end
+  if ~reach_birth(g, k, v_Hb, f_tL_ad) % constraint required for reaching birth with f
+    info = 0;
+    prdData = {};
+    return;
+  end  
    
-   if L_init_tE * del_M / L_m < l_p %  all individuals larger than L_init_tE should be adults 
-       info = 0;
-       prdData = {};
-       return
-   end
+  % constraint required for reaching puberty with f_tL_ad (adults in the wild)
+  pars_lj = [g; k; l_T; v_Hb; v_Hj; v_Hp];
+  [t_j t_p t_b l_j l_p l_b l_i rho_j rho_B info] = get_tj(pars_lj, f_tL_ad);
+  if info ~= 1 % numerical procedure failed
+    fprintf('warning: invalid parameter value combination for get_tj \n')
+  end
+  s_M = l_j / l_b;
+  if k * v_Hp >= f_tL_ad^3 * s_M^3 % constraint required for reaching puberty with f_tL_ad (adults in the wild)
+    info = 0;
+    prdData = {};
+    return
+  end
+   
+  if L_init_tE * del_M / L_m < l_p %  all individuals larger than L_init_tE should be adults 
+    info = 0;
+    prdData = {};
+    return
+  end
 
-   if del_M < del_Mb 
-       info = 0;
-       prdData = {};
-       return
-   end
-   
-   if var_f_tL_ad < 0 || var_f_tL_ad > f_tL_ad
-       info = 0;
-       prdData = {};
-       return
-   end
    
   del_M_SL = del_M / 0.87; % -, shape coefficient for standard length - juveniles and adults % Gaygusuz et al. 2006
   
