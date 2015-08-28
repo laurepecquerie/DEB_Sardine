@@ -65,7 +65,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
     return
   end
 
-  if mu_E < mu_V  % fraction
+  if mu_E < mu_V  % energy constraint
     info = 0;
     prdData = {};
     return
