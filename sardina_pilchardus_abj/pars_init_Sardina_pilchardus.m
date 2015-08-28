@@ -47,7 +47,7 @@ par.kap_R = 0.95;      free.kap_R = 0;   units.kap_R = '-';        label.kap_R =
 par.p_M   = 92.51;     free.p_M   = 1;   units.p_M   = 'J/d.cm^3'; label.p_M   = '[p_M], vol-spec somatic maint';
 par.p_T   =  0;        free.p_T   = 0;   units.p_T   = 'J/d.cm^2'; label.p_T   = '{p_T}, surf-spec somatic maint';
 par.k_J   = 0.002;     free.k_J   = 0;   units.k_J   = '1/d';      label.k_J   = 'maturity maint rate coefficient';
-par.E_G   = 6200;      free.E_G   = 1;   units.E_G   = 'J/cm^3';   label.E_G   = '[E_G], spec cost for structure';
+par.E_G   = 6800;      free.E_G   = 1;   units.E_G   = 'J/cm^3';   label.E_G   = '[E_G], spec cost for structure';
 %par.E_Hh = 0.1;        free.E_Hh  = 0;   units.E_Hh = 'J';         label.E_Hh = 'E_Hh';    % maturity at hatching
 par.E_Hb  = 0.5 * 1.372e0;   free.E_Hb  = 1;   units.E_Hb  = 'J';        label.E_Hb  = 'maturity at birth';
 par.E_Hj  = 30*1.944e1;   free.E_Hj  = 1;    units.E_Hj = 'J';         label.E_Hj  = 'maturity at metamorphosis';
@@ -77,10 +77,11 @@ par.var_f_tL_ad = 0.2; free.var_f_tL_ad = 0; units.var_f_tL_ad = '-'; label. var
 par.d_E = 0.44;      free.d_E   = 1;    
 par.d_V = 0.25;      free.d_V   = 0;
 par.mu_E = 575e3;    free.mu_E  = 1;   
+par.mu_V = 500e3;    free.mu_V  = 1;   
 
 % to simplify things, we estimate w_E and w_V without modifying n_O
-%par.w_E = 19;       free.w_E = 0;      units.w_E = 'g/mol';   label.w_E = 'w_E';      % molecular weight of reserve
-%par.w_V = 22;       free.w_V = 0;      units.w_V = 'g/mol';   label.w_V = 'w_V';      % molecular weight of structure
+par.w_E = 19;       free.w_E = 1;      units.w_E = 'g/mol';   label.w_E = 'w_E';      % molecular weight of reserve
+par.w_V = 22;       free.w_V = 1;      units.w_V = 'g/mol';   label.w_V = 'w_V';      % molecular weight of structure
 
 
 %% Pack output:

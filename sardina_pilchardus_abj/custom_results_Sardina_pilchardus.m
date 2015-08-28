@@ -65,7 +65,7 @@ function custom_results_Sardina_pilchardus(par, metaPar, data, txtData, auxData)
   end
   fprintf(['age at metamorphosis at ', num2str(stat.T - 273.15),' degC is ', num2str(stat.a_j), 'd \n'])
   fprintf(['d_E = ', num2str(par.d_E),'  \n'])
-  fprintf(['mu_E = ', num2str(par.mu_E),' J/mol \n'])
+  fprintf(['mu_E = ', num2str(par.mu_E),' J/mol and  mu_V = ', num2str(par.mu_V),' J/mol \n'])
   fprintf(['kap_G < ', num2str(par.mu_V/par.mu_E),' and kap_X < ', num2str(par.mu_X/par.mu_E),' \n'])
 
   % unpack data & predictions
