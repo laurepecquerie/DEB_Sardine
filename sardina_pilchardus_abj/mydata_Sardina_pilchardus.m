@@ -75,6 +75,8 @@ metaData.address  = {'IPMA, Lisbon, Portugal'};        % affiliation, postcode, 
 % age 0 is at onset of embryo development
 data.ab = 8;      units.ab = 'd';    label.ab = 'age at birth';  bibkey.ab = 'Mene2003';   comment.ab  = 'ab = ah + 4d - Mene2003'; 
   temp.ab = C2K(15);  units.temp.ab = 'K'; label.temp.ab = 'temperature';
+data.aj = 100; units.aj = 'd';    label.aj = 'age at metamorphosis';  bibkey.aj = 'Laure guess';   comment.aj  = 'we need to constrain a_j, I guess a 4cm sardine at 15degC could be 100 days'; 
+  temp.aj = C2K(15);  units.temp.aj = 'K'; label.temp.aj = 'temperature';
 data.ap = 365;     units.ap = 'd';    label.ap = 'age at puberty'; bibkey.ap = 'Guessed';
   temp.ap = C2K(15);  units.temp.ap = 'K'; label.temp.ap = 'temperature';
 data.am = 8 * 365;     units.am = 'd';    label.am = 'life span';     bibkey.am = 'Guessed';   
@@ -1206,8 +1208,11 @@ weights.Lj = 20 * weights.Lj;
 % (pseudo data are in data.psd and weights are in weights.psd)
 [data, units, label, weights] = addpseudodata(data, units, label, weights);
 
-% data.psd.d_E = 0.4;      units.psd.d_E = 'g/cm^3';    label.psd.d_E = 'density of reserve';       % bibkey.psd.d_E = 'Fill';    
-% weights.psd.d_E = 10 * 1 ./ data.psd.d_E^2;
+ data.psd.muw_E = 33000;      units.psd.muw_E = 'J/g';    label.psd.muw_E = 'energy content per g dry weight of reserve';       % bibkey.psd.d_E = 'Fill';    
+ weights.psd.muw_E = 10 * 1 ./ data.psd.muw_E^2;
+ 
+ data.psd.muw_V = 19000;      units.psd.muw_V = 'J/g';    label.psd.muw_V = 'energy content per g dry weight of structure';       % bibkey.psd.d_E = 'Fill';    
+ weights.psd.muw_V = 10 * 1 ./ data.psd.muw_V^2;
 
 % data.psd.w_E = 20;      units.psd.w_E = 'g/mol';    label.psd.w_E = 'molecular weight of reserve';      %  bibkey.psd.w_E = 'Fill';    
 % weights.psd.w_E = 100 * 1 ./ data.psd.w_E^2;

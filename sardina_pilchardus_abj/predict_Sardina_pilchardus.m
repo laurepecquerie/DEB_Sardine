@@ -53,19 +53,20 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
       return
     end
 
-  if mu_E <= 0 || d_E <= 0 || w_E <= 0|| w_V <= 0 % non-negativity
+  if mu_E <= 0 || d_E <= 0 || w_E <= 0|| w_V <= 0 ...
+          || d_E >= 1 || d_V > 0.21 % 0.21 is the min water content of sardine in tdw (ie if no reserve)
     info = 0;
     prdData = {};
     return
   end
   
-  if mu_E / w_E > 37000 || mu_E / w_E < 21000% (only lipids or lower than the observed minimum value total weight)
+  if muw_E  > 37000 || muw_E  < 21000% (only lipids or lower than the observed minimum value total weight)
     info = 0;
     prdData = {};
     return
   end
   
-  if mu_V / w_V > 21000 || mu_V / w_V < 15000  || mu_V > mu_E % if larger than 21000, larger than the minimum value observed
+  if muw_V  > 21000 || muw_V  < 15000  || mu_V > mu_E % if larger than 21000, larger than the minimum value observed
     info = 0;
     prdData = {};
     return
@@ -126,6 +127,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   
   % compute temperature correction factors
   TC_ab = tempcorr(temp.ab, T_ref, T_A);
+  TC_aj = tempcorr(temp.aj, T_ref, T_A);
   TC_ap = tempcorr(temp.ap, T_ref, T_A);
   TC_am = tempcorr(temp.am, T_ref, T_A);
   TC_Ri = tempcorr(temp.Ri, T_ref, T_A);
@@ -173,7 +175,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
 
   % metamorphosis
   L_j = l_j * L_m;                       % cm, length at metamorphosis
-  a_j = t_j/ k_M;                        % d, age at metam at f and T_ref
+  a_j = t_j/ k_M; aT_j = a_j/ TC_aj;                          % d, age at metam at f and T_ref
   Lw_j = L_j/ del_M_SL;                  % cm, standard length at metamorphosis at f
   
   % puberty 
@@ -204,6 +206,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   %% pack to output
   % the names of the fields in the structure must be the same as the data names in the mydata file
   prdData.ab  = aT_b;
+  prdData.aj  = aT_j;
   prdData.ap  = aT_p;
   prdData.am  = aT_m;
   prdData.Lb  = Lw_b;
@@ -428,8 +431,9 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   
   %% extra pseudodata
   
- % prdData.psd.d_E = d_E;
-  
+  prdData.psd.muw_E = muw_E ;
+  prdData.psd.muw_V = muw_V ;
+    
   
   %% sub subfuctions
 
