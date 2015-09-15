@@ -39,62 +39,24 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   cPar = parscomp_st(par); %vars_pull(par); 
   vars_pull(cPar); % w_E and w_V are overwritten in the next line (we want to estimate them, they are set in pars_init)
   vars_pull(par); vars_pull(data);  vars_pull(auxData);
-    
-  % customized filters
-    if f_juv_pen <= 0 || f_juv_lag <= 0 || f_tL_larv <= 0 || f_tL_ad <= 0 % non-negativity
-      info = 0;
-      prdData = {};
-      return
-    end
-    
-    if f_juv_pen > 1.6 || f_juv_lag > 1.6 || f_tL_larv > 1.6 || f_tL_ad > 1.6 % 
-      info = 0;
-      prdData = {};
-      return
-    end
-
-  if mu_E <= 0 || d_E <= 0 || w_E <= 0|| w_V <= 0 % non-negativity
-    info = 0;
-    prdData = {};
-    return
-  end
-
-  if d_E >= 1  % fraction
-    info = 0;
-    prdData = {};
-    return
-  end
-
-  if mu_E < mu_V    % energy constraint
-    info = 0;
-    prdData = {};
-    return
-  end
-   
-  if kap_G >= mu_V / mu_E %|| kap_X >= mu_X / mu_E  % constraint required for mass conservation and no production of CO2
-    info = 0;
-    prdData = {};
-    return
-  end
   
-  if del_M < del_Mb   % shape constraint
+  % customized filters
+  filterChecks = f_juv_pen <= 0 || f_juv_lag <= 0 || f_tL_larv <= 0 || f_tL_ad <= 0 || ...      % non-negativity
+                 f_juv_pen > 2.0 || f_juv_lag > 2.0 || f_tL_larv > 2.0 || f_tL_ad > 1.6 || ...  % guestimation of possible maximum
+                 mu_E <= 0 || d_E <= 0 || w_E <= 0|| w_V <= 0 || ...  % non-negativity 
+                 d_E >= 1 || d_E < d_V || ...                         % fraction 
+                 mu_E < mu_V || ...                                   % energy constraint
+                 kap_G >= mu_V / mu_E || ...                          %|| kap_X >= mu_X / mu_E  % constraint required for mass conservation and no production of CO2
+                 del_M < del_Mb || ...                                % shape constraint
+                 var_f_tL_ad < 0 || var_f_tL_ad > f_tL_ad || ...      % non-negativity
+                 ~reach_birth(g, k, v_Hb, f_tL_ad);                   % constraint required for reaching birth with f
+            
+  if filterChecks 
     info = 0;
     prdData = {};
     return
   end
-   
-  if var_f_tL_ad < 0 || var_f_tL_ad > f_tL_ad   % non-negativity
-    info = 0;
-    prdData = {};
-    return
-  end
-   
-  if ~reach_birth(g, k, v_Hb, f_tL_ad) % constraint required for reaching birth with f
-    info = 0;
-    prdData = {};
-    return;
-  end  
-   
+    
   % constraint required for reaching puberty with f_tL_ad (adults in the wild)
   pars_lj = [g; k; l_T; v_Hb; v_Hj; v_Hp];
   [t_j t_p t_b l_j l_p l_b l_i rho_j rho_B info] = get_tj(pars_lj, f_tL_ad);
@@ -204,7 +166,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   prdData.Wd0 = Wd_0;
   prdData.E0  = E_0;
   
-  prdData.psd_mu_E  = mu_E;
+%  prdData.psd_mu_E  = mu_E;
   
   % uni-variate data
   
