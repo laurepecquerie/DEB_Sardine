@@ -3,38 +3,7 @@
 
 %%
 function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
-  % created by Starrlight Augustine, Dina Lika, Bas Kooijman, Goncalo Marques and Laure Pecquerie 2015/01/30; 
-  % last modified 2015/07/29
-  
-  %% Syntax
-  % [prdData, info] = <../predict_my_pet.m *predict_my_pet*>(par, chem, data)
-  
-  %% Description
-  % Obtains predictions, using parameters and data
-  %
-  % Input
-  %
-  % * par: structure with parameters (see below)
-  % * chem: structure with biochemical parameters
-  % * data: structure with data (not all elements are used)
-  %  
-  % Output
-  %
-  % * prdData: structure with predicted values for data
-  % * info: identified for correct setting of predictions (see remarks)
-  
-  %% Remarks
-  % Template for use in add_my_pet.
-  % The code calls <parscomp_st.html *parscomp_st*> in order to compute
-  % scaled quantities, compound parameters, molecular weights and compose
-  % matrixes of mass to energy couplers and chemical indices.
-  % With the use of filters, setting info = 0, prdData = {}, return, has the effect
-  % that the parameter-combination is not selected for finding the
-  % best-fitting combination; this setting acts as customized filter.
-  
-  %% Example of a costumized filter
-  % See the lines just below unpacking
-  
+ 
   % unpack par, data, auxData
   cPar = parscomp_st(par); %vars_pull(par); 
   vars_pull(cPar); % w_E and w_V are overwritten in the next line (we want to estimate them, they are set in pars_init)
@@ -76,7 +45,6 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
     return
   end
 
-   
   del_M_SL = del_M / 0.87; % -, shape coefficient for standard length - juveniles and adults % Gaygusuz et al. 2006
   
   % compute temperature correction factors
@@ -94,13 +62,6 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   TC_tL_ad = tempcorr(temp.tL_ad_f, T_ref, T_A); % same for adult females and males
   TC_LW_ad = tempcorr(temp.LW_ad, T_ref, T_A);
 
-% uncomment if you need this for computing moles of a gas to a volume of gas
-% - else feel free to delete  these lines
-% molar volume of gas at 1 bar and 20 C is 24.4 L/mol
-% T = C2K(20); % K, temp of measurement equipment- apperently this is
-% always the standard unless explicitely stated otherwise in a paper (pers.
-% comm. Mike Kearney).
-% X_gas = T_ref/ T/ 24.4;  % M,  mol of gas per litre at T_ref and 1 bar;
   
 % zero-variate data
 
@@ -110,7 +71,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   pars_E0 = [V_Hb; g; k_J; k_M; v]; % pars for initial_scaled_reserve
   [U_E0 L_b info] = initial_scaled_reserve(f, pars_E0); % d cm^2, initial scaled reserve
   E_0 = p_Am * U_E0;    % J, initial reserve (of embryo)
-  Wd_0 = E_0 * w_E / mu_E;
+  Wd_0 = E_0 * w_E / mu_E * d_E;
   
   %pars_lj = [g; k; l_T; v_Hb; v_Hj; v_Hp];
   [t_j t_p t_b l_j l_p l_b l_i rho_j rho_B info] = get_tj(pars_lj, f);
@@ -121,7 +82,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   % birth
   L_b = l_b * L_m;                       % cm, structural length at birth at f
   Lw_b = L_b/ del_Mb;                    % cm, standard length at birth at f
-  Ww_b = L_b^3 * (1 + w_E / mu_E / d_E * f * E_m);   % g, wet weight at birth at f
+  Ww_b = L_b^3 * (1 + f * w);            % g, wet weight at birth at f
   a_b = t_b/ k_M; aT_b = a_b/ TC_ab;     % d, age at birth at f, temp corrected
 
   % metamorphosis
@@ -132,13 +93,13 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   % puberty 
   L_p = l_p * L_m; 					     % cm, structural length at puberty
   Lw_p = L_p/ del_M;                     % cm, physical length at puberty
-  Ww_p = L_p^3 * (1 + w_E / mu_E / d_E * f * E_m);  % g, wet weight at puberty
+  Ww_p = L_p^3 * (1 + f * w);            % g, wet weight at puberty
   aT_p = t_p/ k_M/ TC_ap;                % d, age at puberty
 
   % ultimate
   L_i = L_m * l_i;                       % cm, ultimate structural length
   Lw_i = L_i/ del_M;                     % cm, ultimate physical length
-  Ww_i = L_i^3 * (1 + w_E / mu_E / d_E * f * E_m);  % g, ultimate wet weight
+  Ww_i = L_i^3 * (1 + f * w);            % g, ultimate wet weight
   
   % life span
   pars_tm = [g; l_T; h_a/ k_M^2; s_G];   % compose parameter vector
