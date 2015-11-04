@@ -149,7 +149,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   ELH(1,:) = []; L = ELH(:,2); % L3 = L.^3; U = LUH(:,2); 
   EL1 = L/ del_M_SL;
 %   EWt1 = J_E_Am * U * w_E + L3 * d_V;
-%  EW1 = L3 * d_V * (1 + f * w);
+%  EW1 = L3 * (d_V + f * w * d_E);
 
   % juvenile data set 2
   f = f_juv_pen;
@@ -160,7 +160,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   ELH(1,:) = []; L = ELH(:,2); % L3 = L.^3; U = LUH(:,2); 
   EL2 = L/ del_M_SL;
 %   EWt2 = J_E_Am * U * w_E + L3 * d_V;
-%   EW2 = L3 * d_V * (1 + f * w);
+%   EW2 = L3 * (d_V + f * w * d_E);
 
   % juvenile data set 3
   f = f_juv_pen;
@@ -171,7 +171,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   ELH(1,:) = []; L = ELH(:,2); % L3 = L.^3; U = LUH(:,2); 
   EL3 = L/ del_M_SL;
 %   EWt3 = J_E_Am * U * w_E + L3 * d_V;
-%   EW3 = L3 * d_V * (1 + f * w);
+%   EW3 = L3 * (d_V + f * w * d_E);
 
   % juvenile data set 4
   % we recalcultate E0, Lb and Lj as f is assumed to be different between
@@ -192,7 +192,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, pT_Am, vT, g, kT_J, kap, E_Hb, E_Hj, f); 
   ELH(1,:) = []; L = ELH(:,2); 
   EL4 = L/ del_M_SL;
-  EW4 = (del_M_SL * LW_juv4(:,1)).^3 * (1 + w_E / mu_E / d_E * f * E_m);
+  EW4 = (del_M_SL * LW_juv4(:,1)).^3 * (1 + f * w);
 
   % juvenile data set 5
   f = f_juv_lag;
@@ -202,7 +202,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, pT_Am, vT, g, kT_J, kap, E_Hb, E_Hj, f); 
   ELH(1,:) = []; L = ELH(:,2); % L3 = L.^3; U = LUH(:,2); 
   EL5 = L/ del_M_SL;
-  EW5 = (del_M_SL * LW_juv5(:,1)).^3 * (1 + w_E / mu_E / d_E * f * E_m);
+  EW5 = (del_M_SL * LW_juv5(:,1)).^3 * (1 + f * w);
 
   % juvenile data set 6
   f = f_juv_lag;
@@ -212,7 +212,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, pT_Am, vT, g, kT_J, kap, E_Hb, E_Hj, f); 
   ELH(1,:) = []; L = ELH(:,2); 
   EL6 = L/ del_M_SL;
-  EW6 = (del_M_SL * LW_juv6(:,1)).^3  * (1 + w_E / mu_E / d_E * f * E_m);
+  EW6 = (del_M_SL * LW_juv6(:,1)).^3  * (1 + f * w);
 
   % larval data set
   f = f_tL_larv;
@@ -244,7 +244,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   % adult female length-weigth data set - without reproduction buffer and
   % without gonads
   aL = LW_ad(:,1);
-  EW_ad = (del_M * aL).^3 * (1 + w_E / mu_E / d_E * f * E_m);
+  EW_ad = (del_M * aL).^3 * (1 + f * w);
   
  
   
