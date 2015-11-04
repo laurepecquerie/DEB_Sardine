@@ -71,7 +71,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   pars_E0 = [V_Hb; g; k_J; k_M; v]; % pars for initial_scaled_reserve
   [U_E0 L_b info] = initial_scaled_reserve(f, pars_E0); % d cm^2, initial scaled reserve
   E_0 = p_Am * U_E0;    % J, initial reserve (of embryo)
-  Wd_0 = E_0 * w_E / mu_E * d_E;
+  Wd_0 = E_0 * w_E / mu_E;
   
   %pars_lj = [g; k; l_T; v_Hb; v_Hj; v_Hp];
   [t_j t_p t_b l_j l_p l_b l_i rho_j rho_B info] = get_tj(pars_lj, f);
