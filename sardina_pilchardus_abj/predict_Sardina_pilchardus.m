@@ -48,19 +48,33 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   del_M_SL = del_M / 0.87; % -, shape coefficient for standard length - juveniles and adults % Gaygusuz et al. 2006
   
   % compute temperature correction factors
-  TC_ab = tempcorr(temp.ab, T_ref, T_A);
-  TC_ap = tempcorr(temp.ap, T_ref, T_A);
-  TC_am = tempcorr(temp.am, T_ref, T_A);
-  TC_Ri = tempcorr(temp.Ri, T_ref, T_A);
-  TC_tL_juv1 = tempcorr(temp.tL_juv1, T_ref, T_A);
-  TC_tL_juv2 = tempcorr(temp.tL_juv2, T_ref, T_A);
-  TC_tL_juv3 = tempcorr(temp.tL_juv3, T_ref, T_A);
-  TC_tL_juv4 = tempcorr(temp.tL_juv4, T_ref, T_A);
-  TC_tL_juv5 = tempcorr(temp.tL_juv5, T_ref, T_A);
-  TC_tL_juv6 = tempcorr(temp.tL_juv6, T_ref, T_A);
-  TC_tL_larv = tempcorr(temp.tL_larv, T_ref, T_A);
-  TC_tL_ad = tempcorr(temp.tL_ad_f, T_ref, T_A); % same for adult females and males
-  TC_LW_ad = tempcorr(temp.LW_ad, T_ref, T_A);
+%   TC_ab = tempcorr(temp.ab, T_ref, T_A);
+%   TC_ap = tempcorr(temp.ap, T_ref, T_A);
+%   TC_am = tempcorr(temp.am, T_ref, T_A);
+%   TC_Ri = tempcorr(temp.Ri, T_ref, T_A);
+%   TC_tL_juv1 = tempcorr(temp.tL_juv1, T_ref, T_A);
+%   TC_tL_juv2 = tempcorr(temp.tL_juv2, T_ref, T_A);
+%   TC_tL_juv3 = tempcorr(temp.tL_juv3, T_ref, T_A);
+%   TC_tL_juv4 = tempcorr(temp.tL_juv4, T_ref, T_A);
+%   TC_tL_juv5 = tempcorr(temp.tL_juv5, T_ref, T_A);
+%   TC_tL_juv6 = tempcorr(temp.tL_juv6, T_ref, T_A);
+%   TC_tL_larv = tempcorr(temp.tL_larv, T_ref, T_A);
+%   TC_tL_ad = tempcorr(temp.tL_ad_f, T_ref, T_A); % same for adult females and males
+%   TC_LW_ad = tempcorr(temp.LW_ad, T_ref, T_A);
+
+  TC_ab = tempcorr(C2K(17), T_ref, T_A);
+  TC_ap = TC_ab;
+  TC_am = TC_ab;
+  TC_Ri = TC_ab;
+  TC_tL_juv1 = TC_ab;
+  TC_tL_juv2 = TC_ab;
+  TC_tL_juv3 = TC_ab;
+  TC_tL_juv4 = TC_ab;
+  TC_tL_juv5 = TC_ab;
+  TC_tL_juv6 = TC_ab;
+  TC_tL_larv = TC_ab;
+  TC_tL_ad = TC_ab;
+  TC_LW_ad = TC_ab;
 
   
 % zero-variate data
@@ -143,6 +157,9 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
 
   vT = v * TC_tL_juv1;kT_J = k_J * TC_tL_juv1;
   pT_Am = p_Am * TC_tL_juv1;
+  
+%   a = [-1e-10;tL_juv1(1,1)];
+%   [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, pT_Am, vT, g, kT_J, kap, E_Hb, E_Hj, f); 
  
   a = [-1e-10;tL_juv1(:,1)];
   [a ELH] = ode45(@dget_ELH_pj, a, [E_0 1e-10 0], [], L_b, L_j, L_m, pT_Am, vT, g, kT_J, kap, E_Hb, E_Hj, f); 

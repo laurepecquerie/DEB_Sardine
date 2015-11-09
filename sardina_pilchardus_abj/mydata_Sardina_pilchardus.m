@@ -129,7 +129,7 @@ data.tL_juv1(:,1) = data.ab + data.tL_juv1(:,1);  % tranforming otolith age into
 % [LAURE : are we sure it's similar T between ab and tL-juv?] ? 
 units.tL_juv1 = {'d', 'cm'};     label.tL_juv1 = {'time since birth', 'standard length'};  bibkey.tL_juv1 = 'Mene2003';
 %   temp.tL_juv1 = T_C + 15;  % K, temperature [LAURE: which temp? should we set it as a parameter?]
-  temp.tL_juv1 = C2K(15); units.temp.tL_juv1 = 'K'; label.temp.tL_juv1 = 'temperature';  % K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_juv1 = C2K(16); units.temp.tL_juv1 = 'K'; label.temp.tL_juv1 = 'temperature';  % K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 % Peniche. winter 89 
 data.tL_juv2 = [125.01	8.68
@@ -211,7 +211,7 @@ data.tL_juv2 = [125.01	8.68
 %tL_juv2 = [tL_juv2, 10./tL_juv2(:,2).^2];      % append weight coefficients for WLS criterion
 data.tL_juv2(:,1) = data.ab + data.tL_juv2(:,1);  % tranforming otolith age into organism age
 units.tL_juv2 = {'d', 'cm'};     label.tL_juv2 = {'time since birth', 'standard length'};  bibkey.tL_juv2 = 'Mene2003';
-  temp.tL_juv2 = C2K(13);  units.temp.tL_juv2 = 'K'; label.temp.tL_juv2 = 'temperature';% K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_juv2 = C2K(14);  units.temp.tL_juv2 = 'K'; label.temp.tL_juv2 = 'temperature';% K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 % Peniche. spring 90 
 data.tL_juv3 = [145.10	9.14
@@ -244,7 +244,7 @@ data.tL_juv3 = [145.10	9.14
 data.tL_juv3(:,1) = data.ab + data.tL_juv3(:,1);  % tranforming otolith age into organism age
 % LAURE : are we sure it's similar T ? 
 units.tL_juv3 = {'d', 'cm'};     label.tL_juv3 = {'time since birth', 'standard length'};  bibkey.tL_juv3 = 'Mene2003';
-  temp.tL_juv3 = C2K(15);  units.temp.tL_juv3 = 'K'; label.temp.tL_juv3 = 'temperature';% K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_juv3 = C2K(16);  units.temp.tL_juv3 = 'K'; label.temp.tL_juv3 = 'temperature';% K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 % Lagoa de Óbidos. summer 89 
 data.tL_juv4 = [69.63	3.87
@@ -308,7 +308,7 @@ data.tL_juv4 = [69.63	3.87
 %data.tL_juv4 = [tL_juv4, 10./tL_juv4(:,2).^2];      % append weight coefficients for WLS criterion
 data.tL_juv4(:,1) = data.ab + data.tL_juv4(:,1);  % tranforming otolith age into organism age
 units.tL_juv4 = {'d', 'cm'};     label.tL_juv4 = {'time since birth', 'standard length'};  bibkey.tL_juv4 = 'Mene2003';
-  temp.tL_juv4 = C2K(23); units.temp.tL_juv4 = 'K'; label.temp.tL_juv4 = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_juv4 = C2K(21); units.temp.tL_juv4 = 'K'; label.temp.tL_juv4 = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 
 % Lagoa de Óbidos. spring 90 % LAURE: temp should be checked
@@ -338,7 +338,7 @@ data.tL_juv5 = [42.97	3.27
 %tL_juv5 = [tL_juv5, 10./tL_juv5(:,2).^2];      % append weight coefficients for WLS criterion
 data.tL_juv5(:,1) = data.ab + data.tL_juv5(:,1);  % tranforming otolith age into organism age
 units.tL_juv5 = {'d', 'cm'};     label.tL_juv5 = {'time since birth', 'standard length'};  bibkey.tL_juv5 = 'Mene2003';
-  temp.tL_juv5 = C2K(18);  units.temp.tL_juv5 = 'K'; label.temp.tL_juv5 = 'temperature';% K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_juv5 = C2K(19);  units.temp.tL_juv5 = 'K'; label.temp.tL_juv5 = 'temperature';% K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 % Lagoa de Óbidos. summer 90 % temp should be checked
 
@@ -390,7 +390,7 @@ data.tL_juv6 = [61.94	3.99
 %tL_juv6 = [tL_juv6, 10./tL_juv6(:,2).^2];      % append weight coefficients for WLS criterion
 data.tL_juv6(:,1) = data.ab + data.tL_juv6(:,1);  % tranforming otolith age into organism age
 units.tL_juv6 = {'d', 'cm'};     label.tL_juv6 = {'time since birth', 'standard length'};  bibkey.tL_juv6 = 'Mene2003';
-  temp.tL_juv6 = C2K(23); units.temp.tL_juv6 = 'K'; label.temp.tL_juv6 = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_juv6 = C2K(21); units.temp.tL_juv6 = 'K'; label.temp.tL_juv6 = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 % Larval data - fig. 7c in Mene2003
 
@@ -465,7 +465,7 @@ data.tL_larv = [4.03     6.00 % 4 days is the average age at first feeding (abso
 data.tL_larv(:,2) = data.tL_larv(:,2)/10;  % converting mm to cm 
 %tL_larv = [tL_larv, 1./tL_larv(:,2).^2];      % append weight coefficients for WLS criterion
 units.tL_larv = {'d', 'cm'};     label.tL_larv = {'time since birth', 'standard length'};  bibkey.tL_larv = 'Mene2003';
-  temp.tL_larv = C2K(15); units.temp.tL_larv = 'K'; label.temp.tL_larv = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_larv = C2K(17); units.temp.tL_larv = 'K'; label.temp.tL_larv = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
 % [LAURE : should we add data.ab as in the previous dataset?]
 
 % adult female average data [LAURE : bibkey, temp missing]
@@ -1207,8 +1207,8 @@ weights.Lj = 20 * weights.Lj;
 [data, units, label, weights] = addpseudodata(data, units, label, weights);
 data.psd.kap_G = 0.6; % smaller kap_G to allow for greater mu_E
 
-data.psd_mu_E = 650000;      units.psd_mu_E = 'g/cm^3';    label.psd_mu_E = 'density of reserve';       % bibkey.psd.d_E = 'Fill';    
-weights.psd_mu_E = 10 * 1 ./ data.psd_mu_E^2;
+% data.psd_mu_E = 650000;      units.psd_mu_E = 'g/cm^3';    label.psd_mu_E = 'density of reserve';       % bibkey.psd.d_E = 'Fill';    
+% weights.psd_mu_E = 10 * 1 ./ data.psd_mu_E^2;
 
 % data.psd.d_E = 0.4;      units.psd.d_E = 'g/cm^3';    label.psd.d_E = 'density of reserve';       % bibkey.psd.d_E = 'Fill';    
 % weights.psd.d_E = 10 * 1 ./ data.psd.d_E^2;

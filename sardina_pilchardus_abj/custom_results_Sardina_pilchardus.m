@@ -201,3 +201,132 @@ function custom_results_Sardina_pilchardus(par, metaPar, data, txtData, auxData)
 
 
   print -dpng results_Sardina_pilchardus_03.png
+  
+
+  %% gorwth curve with acceleration
+  linf = 26.8;
+  lb = 0.5;
+
+  g = 0.0075;
+  f = 0.8;
+  linf = linf * f;
+
+  rB = g/3 /(f + g);
+
+  accprop = [0.05, 0.1, 0.2, 0.3]; % acceleration proportion
+  sM = (accprop * linf + (1 - accprop) * lb)/ lb;
+
+  taub = 10;
+  tau = 0:1:2200;
+
+  for j = 1: length(sM)
+    lj = sM(j) * lb;
+    % rj = rB * (f - lb)/ lb;
+    rj = rB * (linf - lj)/ lj;
+    tauj = -1/ rB * log((linf - lj)/(linf - lb));
+
+    for i = 1:length(tau)
+      if tau(i) < tauj + taub
+        l(i, j) = lj * exp(rj * (tau(i) - taub - tauj));
+        if l(i, j) < lb
+          l(i, j) = lb;
+        end
+      else
+        l(i, j) = linf - (linf - lb) * exp (- rB * (tau(i) - taub));
+      end
+    end
+  end
+
+
+  %% vB growth curve 
+  linf = 21.8;
+  lb = 0.5;
+  f = 1;
+
+  g = 0.006;
+
+  rB = g/3 /(f + g);
+
+  taub = [-170, 0];
+  tau = 0:1:2200;
+
+  for j = 1: length(taub)
+    for i = 1:length(tau)
+      if tau(i) <  taub(j)
+        lvB(i, j) = lb;
+      else
+        lvB(i, j) = linf - (linf - lb) * exp (- rB * (tau(i) - taub(j)));
+      end
+    end
+  end
+
+  
+  %% vB growth curve with changing f
+  linf = 21.8;
+  lb = 0.5;
+
+  g = 0.006;
+
+  f = [10, 1];
+  linf = f * linf;
+  rB = g/3 ./(f + g);
+
+  taub = 0;
+  tauf = 300;
+  tau = 0:1:2200;
+  
+  lf = linf(1) - (linf(1) - lb) * exp (- rB(1) * (tauf - taub));
+  taub2 = tauf + 1/rB(2) * log((linf(2) - lf)/(linf(2) - lb));
+  for i = 1:length(tau)
+    if tau(i) <  taub
+      lvBf(i) = lb;
+    elseif tau(i) < tauf
+      lvBf(i) = linf(1) - (linf(1) - lb) * exp (- rB(1) * (tau(i) - taub));
+    else 
+      lvBf(i) = linf(2) - (linf(2) - lb) * exp (- rB(2) * (tau(i) - taub2));
+    end
+  end
+  
+  
+  extratL = [10	20	28	34	37	60	74	99	118	122	149	172	192 218	233	256	365	704	1460	1825;    % d, time since birth
+        1.0	1.6	2.1	2.5	2.5	3.6	4.6	5.6	6.0	6.8	9.3	9.5	10.7	10.5	11.7	11.4	15.4	17.9	20.2	20.8]'; % cm, physical length at f and T
+
+  
+  figure
+  subplot(1, 2, 1)
+    plot(tL_juv1(:,1), tL_juv1(:,2), '.k', ...
+     tL_juv2(:,1), tL_juv2(:,2), '.b', ...
+     tL_juv3(:,1), tL_juv3(:,2), '.m', ...
+     tL_juv4(:,1), tL_juv4(:,2), '.r', ...
+     tL_juv5(:,1), tL_juv5(:,2), '.b', ...
+     tL_juv6(:,1), tL_juv6(:,2), '.c', ...
+     tL_larv(:,1), tL_larv(:,2), '.g', ...
+     tL_ad_f(:,1), tL_ad_f(:,2), '.k', ...
+     extratL(:,1), extratL(:,2), '*c', ...
+     tau, l(:,1) , 'g', tau, l(:,2) , 'g', tau, l(:,3) , 'g', tau, l(:,4) , 'g', ...
+     tau, lvB(:,1), 'r', tau, lvB(:,2), 'm', tau, lvBf, 'k')
+  xlabel('age, d')
+  ylabel('length, cm')
+  axis([0 2200 0 27])
+  title('All')
+  
+  % figure
+  subplot(1, 2, 2)
+    plot(tL_juv1(:,1), tL_juv1(:,2), '.k', ...
+     tL_juv2(:,1), tL_juv2(:,2), '.b', ...
+     tL_juv3(:,1), tL_juv3(:,2), '.m', ...
+     tL_juv4(:,1), tL_juv4(:,2), '.r', ...
+     tL_juv5(:,1), tL_juv5(:,2), '.b', ...
+     tL_juv6(:,1), tL_juv6(:,2), '.c', ...
+     tL_larv(:,1), tL_larv(:,2), '.g', ...
+     tL_ad_f(:,1), tL_ad_f(:,2), '.k', ...
+     extratL(:,1), extratL(:,2), '*c', ...
+     tau, l(:,1) , 'g', tau, l(:,2) , 'g', tau, l(:,3) , 'g', tau, l(:,4) , 'g', ...
+     tau, lvB(:,1), 'r', tau, lvB(:,2), 'm', tau, lvBf, 'k')
+  xlabel('age, d')
+  ylabel('length, cm')
+  axis([0 300 0 15])
+  title('Larvae + Juvenile')
+
+  
+  
