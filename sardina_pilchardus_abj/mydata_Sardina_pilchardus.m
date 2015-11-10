@@ -73,6 +73,8 @@ metaData.address  = {'IPMA, Lisbon, Portugal'};        % affiliation, postcode, 
 % example
 
 % age 0 is at onset of embryo development
+data.ah = 2.5;      units.ah = 'd';    label.ah = 'age at hatching';  bibkey.ab = 'Mene2003';   comment.ab  = 'ab = 2-3 days'; 
+  temp.ah = C2K(15);  units.temp.ah = 'K'; label.temp.ah = 'temperature';
 data.ab = 8;      units.ab = 'd';    label.ab = 'age at birth';  bibkey.ab = 'Mene2003';   comment.ab  = 'ab = ah + 4d - Mene2003'; 
   temp.ab = C2K(15);  units.temp.ab = 'K'; label.temp.ab = 'temperature';
 data.aj = 100; units.aj = 'd';    label.aj = 'age at metamorphosis';  bibkey.aj = 'Laure guess';   comment.aj  = 'we need to constrain a_j, I guess a 4cm sardine at 15degC could be 100 days'; 

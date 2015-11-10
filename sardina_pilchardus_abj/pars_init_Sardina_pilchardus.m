@@ -49,7 +49,7 @@ par.p_T   =  0;        free.p_T   = 0;   units.p_T   = 'J/d.cm^2'; label.p_T   =
 par.k_J   = 0.002;     free.k_J   = 0;   units.k_J   = '1/d';      label.k_J   = 'maturity maint rate coefficient';
 par.E_G   = 6200;      free.E_G   = 0;   units.E_G   = 'J/cm^3';   label.E_G   = '[E_G], spec cost for structure';
 %par.E_Hh = 0.1;        free.E_Hh  = 0;   units.E_Hh = 'J';         label.E_Hh = 'E_Hh';    % maturity at hatching
-par.E_Hb  = 0.8 * 1.372e0;   free.E_Hb  = 1;   units.E_Hb  = 'J';        label.E_Hb  = 'maturity at birth';
+par.E_Hb  = 0.7 * 1.372e0;   free.E_Hb  = 1;   units.E_Hb  = 'J';        label.E_Hb  = 'maturity at birth';
 par.E_Hj  = 35*1.944e1;   free.E_Hj  = 1;    units.E_Hj = 'J';         label.E_Hj  = 'maturity at metamorphosis';
 par.E_Hp  = 0.1* 1.928e5;   free.E_Hp  = 1;   units.E_Hp  = 'J';        label.E_Hp  = 'maturity at puberty';
 par.h_a   = 1.184e-8;  free.h_a   = 1;   units.h_a   = '1/d^2';    label.h_a   = 'Weibull aging acceleration';

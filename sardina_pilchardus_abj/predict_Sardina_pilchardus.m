@@ -23,14 +23,6 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   % * prdData: structure with predicted values for data
   % * info: identified for correct setting of predictions (see remarks)
   
-  %% Remarks
-  % Template for use in add_my_pet.
-  % The code calls <parscomp_st.html *parscomp_st*> in order to compute
-  % scaled quantities, compound parameters, molecular weights and compose
-  % matrixes of mass to energy couplers and chemical indices.
-  % With the use of filters, setting info = 0, prdData = {}, return, has the effect
-  % that the parameter-combination is not selected for finding the
-  % best-fitting combination; this setting acts as customized filter.
   
   %% Example of a costumized filter
   % See the lines just below unpacking
@@ -41,7 +33,12 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   vars_pull(data);  vars_pull(auxData);
     
   % customized filters
-    if f_juv_pen <= 0 || f_juv_lag <= 0 || f_tL_larv <= 0 || f_tL_ad <= 0 % non-negativity
+  
+  if E_Hh >= E_Hb
+   info = 0; prdData = {}; return
+  end
+  
+  if f_juv_pen <= 0 || f_juv_lag <= 0 || f_tL_larv <= 0 || f_tL_ad <= 0 % non-negativity
       info = 0;
       prdData = {};
       return
@@ -126,6 +123,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   del_M_SL = del_M / 0.87; % -, shape coefficient for standard length - juveniles and adults % Gaygusuz et al. 2006
   
   % compute temperature correction factors
+  TC_ah = tempcorr(temp.ah, T_ref, T_A);
   TC_ab = tempcorr(temp.ab, T_ref, T_A);
   TC_aj = tempcorr(temp.aj, T_ref, T_A);
   TC_ap = tempcorr(temp.ap, T_ref, T_A);
@@ -158,6 +156,16 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   [U_E0 L_b info] = initial_scaled_reserve(f, pars_E0); % d cm^2, initial scaled reserve
   E_0 = p_Am * U_E0;    % J, initial reserve (of embryo)
   Wd_0 = E_0 * w_E / mu_E;
+  
+  
+  [U_H aUL] = ode45(@dget_aul, [0; U_Hh; U_Hb], [0 U_E0 1e-10], [], kap, v, k_J, g, L_m);
+  a_h = aUL(2,1); aT_h = a_h/ TC_ah;  % d, age at hatch at f and T
+  %M_Eh = J_E_Am * aUL(2,2);        % mol, reserve at hatch at f
+  %L_h = aUL(2,3);                  % cm, structural length at f
+  %Lw_h = L_h/ del_M;               % cm, total length at hatch at f
+  %Ww_h = L_h^3 + M_Eh * w_E/ d_E;  % g, wet weight at hatch at f
+
+  
   
   %pars_lj = [g; k; l_T; v_Hb; v_Hj; v_Hp];
   [t_j t_p t_b l_j l_p l_b l_i rho_j rho_B info] = get_tj(pars_lj, f);
@@ -205,6 +213,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
     
   %% pack to output
   % the names of the fields in the structure must be the same as the data names in the mydata file
+  prdData.ah  = aT_h;
   prdData.ab  = aT_b;
   prdData.aj  = aT_j;
   prdData.ap  = aT_p;
