@@ -468,7 +468,7 @@ units.tL_larv = {'d', 'cm'};     label.tL_larv = {'time since birth', 'standard 
   temp.tL_larv = C2K(17); units.temp.tL_larv = 'K'; label.temp.tL_larv = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
 % [LAURE : should we add data.ab as in the previous dataset?]
 
-% adult female average data [LAURE : bibkey, temp missing]
+% adult female average data 2000-2005 
 data.tL_ad_f = [1.00	14.42
            2.00	18.23
            3.00	20.08
@@ -477,7 +477,7 @@ data.tL_ad_f = [1.00	14.42
            6.00	21.61];
 data.tL_ad_f(:,1) = data.tL_ad_f(:,1)*365;  % converting years to days 
 %tL_ad_f = [tL_ad_f, 100./tL_ad_f(:,2).^2];      % append weight coefficients for WLS criterion
-units.tL_ad_f = {'d', 'cm'};     label.tL_ad_f = {'time since birth', 'total length'};  bibkey.tL_ad_f = '';
+units.tL_ad_f = {'d', 'cm'};     label.tL_ad_f = {'time since birth', 'total length'};  bibkey.tL_ad_f = 'SilvCarr2008';
   temp.tL_ad_f = C2K(15);  units.temp.tL_ad_f = 'K'; label.temp.tL_ad_f = 'temperature';% K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 % adult male average data [LAURE : bibkey, temp]
@@ -1298,3 +1298,11 @@ bibkey = 'RosaGonz2010'; type = 'Article'; bib = [ ... %
    'pages = {205--218}'];
 metaData.biblist.(bibkey) = ['''@', type, '{', bibkey, ', ' bib, '}'';'];
 %
+bibkey = 'SilvCarr2008'; type = 'Article'; bib = [ ...  
+'author = {Silva, A. and P. Carrera and J. Masse and A. D. Uriarte and M. B. Santos and P. B. Oliveira and E. Soares and C. Porteiro and Y. Stratoudakis}, ' ...
+'year = {2008}, ' ...
+'title = {Geographic variability of sardine growth across the northeastern Atlantic and the Mediterranean Sea.}, ' ... 
+'journal = {Fisheries Research}, ' ...
+'volume = 90, '...
+'pages = {56--69}'];
+metaData.biblist.(bibkey) = ['''@', type, '{', bibkey, ', ' bib, '}'';'];
