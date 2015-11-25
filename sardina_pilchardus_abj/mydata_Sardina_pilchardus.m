@@ -37,35 +37,33 @@ metaData.address  = {'IPMA, Lisbon, Portugal'};        % affiliation, postcode, 
 
 %% set data
 % zero-variate data;
-% typically depend on scaled functional response f.
-% here assumed to be equal for all real data; the value of f is specified in pars_init_my_pet.
-% add an optional comment structure to give any additional explanations on
-% how the value was chosen, see the last column of the ab data set for an
-% example
 
 % age 0 is at onset of embryo development
-data.ah = 2.5;      units.ah = 'd';    label.ah = 'age at hatching';  bibkey.ab = 'Mene2003';   comment.ab  = 'ab = 2-3 days'; 
+data.ah = 3;      units.ah = 'd';    label.ah = 'age at hatching';  bibkey.ab = 'Mene2003';   comment.ab  = 'ab = 2-3 days'; 
   temp.ah = C2K(14);  units.temp.ah = 'K'; label.temp.ah = 'temperature';
-data.ab = 7;      units.ab = 'd';    label.ab = 'age at birth';  bibkey.ab = 'Mene2003';   comment.ab  = 'ab = ah + 4d - Mene2003'; 
+data.ab = 7;      units.ab = 'd';    label.ab = 'age at birth';  bibkey.ab = {'BernIbai2008, SilvMira1992'};   comment.ab  = 'ab = ah + 4d '; 
   temp.ab = C2K(14);  units.temp.ab = 'K'; label.temp.ab = 'temperature';
-data.aj = 100; units.aj = 'd';    label.aj = 'age at metamorphosis';  bibkey.aj = 'Laure guess';   comment.aj  = 'we need to constrain a_j, I guess a 4cm sardine at 15degC could be 100 days'; 
+data.aj = 100; units.aj = 'd';    label.aj = 'age at metamorphosis';  bibkey.aj = 'Laure guess';   comment.aj  = 'we need to constrain a_j, I guessed a 4cm sardine at 15degC could be 100 days'; 
   temp.aj = C2K(15);  units.temp.aj = 'K'; label.temp.aj = 'temperature';
-data.ap = 365;     units.ap = 'd';    label.ap = 'age at puberty'; bibkey.ap = 'Guessed';
+data.ap = 365;     units.ap = 'd';    label.ap = 'age at puberty'; bibkey.ap = 'SilvSant2006';
   temp.ap = C2K(15);  units.temp.ap = 'K'; label.temp.ap = 'temperature';
-data.am = 8 * 365;     units.am = 'd';    label.am = 'life span';     bibkey.am = 'Guessed';   
+data.am = 8 * 365;     units.am = 'd';    label.am = 'life span';     bibkey.am = 'SilvCarr2008';   
   temp.am = C2K(15);  units.temp.am = 'K'; label.temp.am = 'temperature'; 
-data.Lb  = 0.5;   units.Lb  = 'cm';   label.Lb  = 'standard length at birth';    bibkey.Lb  = 'Mene2003';  
-data.Lj  = 4;    units.Lj  = 'cm';   label.Lj  = 'standard length at metamorphosis';    bibkey.Lj  = 'ReMene2009'; %[LAURE : see Cristina]
-data.Lp  = 13;   units.Lp  = 'cm';   label.Lp  = 'total length at puberty';      bibkey.Lp  = 'Guessed'; % for multiple references, please use commas to separate references
-data.Li  = 23.8;   units.Li  = 'cm';   label.Li  = 'ultimate total length';      bibkey.Li  = 'Fishbase';
-data.Wwb = 2.5e-4; units.Wwb = 'g';    label.Wwb = 'wet weight at birth';        bibkey.Wwb = 'Anon2015';
+data.Lb  = 0.5;   units.Lb  = 'cm';   label.Lb  = 'standard length at birth';    bibkey.Lb  = 'ReMene2009';  
+data.Lj  = 4;    units.Lj  = 'cm';   label.Lj  = 'standard length at metamorphosis';    bibkey.Lj  = 'ReMene2009'; 
+data.Lp  = 13;   units.Lp  = 'cm';   label.Lp  = 'total length at puberty';      bibkey.Lp  = 'SilvSant2006'; 
+data.Li  = 23.8;   units.Li  = 'cm';   label.Li  = 'ultimate total length';      bibkey.Li  = 'SilvCarr2008';
+data.Wwb = 2.5e-4; units.Wwb = 'g';    label.Wwb = 'wet weight at birth';        bibkey.Wwb = 'Guessed'; 
+    comment.Wwb = ['following an idea from B. Kooijman, the volume of a exotrophic larva was estimated from a digital image (considering the larva body as a long cylinder):'...
+ 'larva body height (diameter) ~ 0.24 mm;  larva body length = 5 mm; Volume = 0.250 mg ; Coombs et al. 2004: larva density at hatching = 1.027 g/cm3'...
+ 'larva wet weight = 2.5e-4 g'];
 data.Wwp = 20;   units.Wwp = 'g';    label.Wwp = 'wet weight at puberty';      bibkey.Wwp = 'Anon2015';
 data.Wwi = 112;   units.Wwi = 'g';    label.Wwi = 'ultimate wet weight';        bibkey.Wwi = 'Fishbase';
 data.Ri  = 1035;    units.Ri  = '#/d';  label.Ri  = 'maximum reprod rate';        bibkey.Ri  = 'Guessed';   
-comment.Ri = [' for an individual of ultimate length Li, 8-9 months of spawning season (8.5)'...
+comment.Ri = [' C. Nunes - G. Marques: for an individual of ultimate length Li, 8-9 months of spawning season (8.5)'...
    'a spawning event every 12-15 days (13.5), a maximum of 45000 eggs at the peak;'...
    '((8.5*30/13.5)*45000)/365 = 2329 eggs/day ~ 2300 eggs/day;'...
-   'let us suppose the peak the average is 1/2 of the peak and we have Ri = 1150;'...
+   'let us suppose that the average is 1/2 of the peak and we have Ri = 1150;'...
    'for f = 0.9. guess Ri = 1150 * 0.9 = 1035 '];
   temp.Ri = C2K(15);  units.temp.Ri = 'K'; label.temp.Ri = 'temperature';
 data.Wd0 = 3e-5;  units.Wd0 = 'g';    label.Wd0 = 'egg dry weight';    bibkey.Wd0 = 'Nunes2015' ;
