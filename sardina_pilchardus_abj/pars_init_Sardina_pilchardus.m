@@ -51,7 +51,7 @@ par.E_G   = 5800;      free.E_G   = 1;   units.E_G   = 'J/cm^3';   label.E_G   =
 %par.E_Hh = 0.1;        free.E_Hh  = 0;   units.E_Hh = 'J';         label.E_Hh = 'E_Hh';    % maturity at hatching
 par.E_Hb  = 0.5 * 1.372e0;   free.E_Hb  = 1;   units.E_Hb  = 'J';        label.E_Hb  = 'maturity at birth';
 par.E_Hj  = par.E_Hb * 1.001;   free.E_Hj  = 1;    units.E_Hj = 'J';         label.E_Hj  = 'maturity at metamorphosis';
-par.E_Hp  = 1.928e2;   free.E_Hp  = 1;   units.E_Hp  = 'J';        label.E_Hp  = 'maturity at puberty';
+par.E_Hp  = 1e4;   free.E_Hp  = 1;   units.E_Hp  = 'J';        label.E_Hp  = 'maturity at puberty';
 par.h_a   = 1.184e-8;  free.h_a   = 1;   units.h_a   = '1/d^2';    label.h_a   = 'Weibull aging acceleration';
 par.s_G   = 1e-4;      free.s_G   = 0;   units.s_G   = '-';        label.s_G   = 'Gompertz stress coefficient';
 
@@ -76,6 +76,21 @@ cPar = parscomp_st(par);
 g1 = cPar.g; kap1 = par.kap;
 xxx1 = (1 + par.f * cPar.w)^(1/3);
 
+% pars_lj = [cPar.g; cPar.k; cPar.l_T; cPar.v_Hb; cPar.v_Hj; cPar.v_Hp];
+% [t_j, t_p, t_b, l_j, l_p, l_b, l_i, rho_j, rho_B, info] = get_tj(pars_lj, par.f);
+% sM1 = l_j/ l_b;
+% 
+% par.E_Hj  = par.E_Hb * 5e2;
+% U_Hj = par.E_Hj/ cPar.p_Am;                   % cm^2 d, scaled maturity at level i
+% V_Hj = U_Hj/ (1 - par.kap);         % cm^2 d, scaled maturity at level i
+% v_Hj = V_Hj * cPar.g^2 * cPar.k_M^3/ par.v^2; % -, scaled maturity density at level i
+% pars_lj = [cPar.g; cPar.k; cPar.l_T; cPar.v_Hb; v_Hj; cPar.v_Hp];
+% [t_j, t_p, t_b, l_j, l_p, l_b, l_i, rho_j, rho_B, info] = get_tj(pars_lj, par.f);
+% sM2 = l_j/ l_b;
+% par.z = par.z * sM1/ sM2;
+% par.v = par.v * sM1/ sM2;
+
+
 % chemical parameters are modified to fit water content data and energy
 % density data from RosaGonz2010
 par.d_E = 0.65;      free.d_E   = 0;    
@@ -98,6 +113,20 @@ xxx2 = (1 + par.f * cPar.w)^(1/3);
 par.del_M = par.del_M * xxx1/ xxx2;
 par.del_Mb = par.del_Mb * xxx1/ xxx2;
 par.z = par.z * xxx1/ xxx2;
+
+% cPar = parscomp_st(par);
+% [par.v, par.p_M, par.kap, par.z]
+% [cPar.p_Am, cPar.g, cPar.E_m]
+% 
+% factor = 1.1;
+% par.v = par.v * factor;
+% par.p_M = par.p_M * factor;
+% par.E_G = par.E_G * factor;
+% 
+% cPar = parscomp_st(par);
+% [par.v, par.p_M, par.kap, par.z]
+% [cPar.p_Am, cPar.g, cPar.E_m]
+
 
 
 %% Pack output:
