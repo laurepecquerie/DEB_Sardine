@@ -3,36 +3,7 @@
 
 %%
 function [data, auxData, metaData, txtData, weights] = mydata_Sardina_pilchardus 
-  % created by Starrlight Augustine, Bas Kooijman, Dina Lika, Goncalo Marques and Laure Pecquerie 2015/03/31
-  % last modified: 2015/07/28 
   
-  %% Syntax
-  % [data, auxData, metaData, txtData, weights] = <../mydata_my_pet.m *mydata_my_pet*>
-  
-  %% Description
-  % Sets data, pseudodata, metadata, auxdata, explanatory text, weights coefficients.
-  % Meant to be a template in add-my-pet
-  %
-  % Output
-  %
-  % * data: structure with data
-  % * auxData: structure with auxilliairy information concerning the data
-  %   (temperature, food, initial size of organisms etc.). auxData is
-  %   unpacked in predict and the user needs to construct predictions
-  %   accordingly.
-  % * txtData: text vector for the presentation of results
-  % * metaData: structure with info about this entry
-  % * weights: structure with weights for each data set
-  
-  %% To do (remove these remarks after editing this file)
-  % * copy this template; replace 'my_pet' by the name of your species (Genus_species)
-  % * fill in metaData fields with the proper information
-  % * insert references for each data (an example is given), for multiple references, please use commas to separate references
-  % * edit real data; remove all data that to not belong to your pet
-  % * list facts - this is where you can add relevant/interesting information on its biology
-  % * edit discussion concerning e.g. choice of model, assumptions needed to model certain data sets etc. 
-  % * fill in all of the references
-
 %% set metaData
 
 metaData.phylum     = 'Chordata'; 
@@ -41,7 +12,7 @@ metaData.order      = 'Clupeiformes';
 metaData.family     = 'Clupeidae';
 metaData.species    = 'Sardina_pilchardus'; 
 metaData.species_en = 'European pilchard'; 
-metaData.T_typical  = C2K(15); % K, body temp
+metaData.T_typical  = C2K(15); % K, Average temperature off Portuguese W coast (Angelico, pers. comm.)
 metaData.data_0     = {'ab'; 'ap'; 'am'; 'Lb'; 'Lj'; 'Lp'; 'Li'; 'Wwb'; 'Wwp'; 'Wwi'; 'Ri'; 'Wd0'; 'E0'}; % tags for different types of zero-variate data
 metaData.data_1     = {'t-L'; 'L-W'}; % tags for different types of uni-variate data
 
@@ -74,9 +45,9 @@ metaData.address  = {'IPMA, Lisbon, Portugal'};        % affiliation, postcode, 
 
 % age 0 is at onset of embryo development
 data.ah = 2.5;      units.ah = 'd';    label.ah = 'age at hatching';  bibkey.ab = 'Mene2003';   comment.ab  = 'ab = 2-3 days'; 
-  temp.ah = C2K(15);  units.temp.ah = 'K'; label.temp.ah = 'temperature';
-data.ab = 8;      units.ab = 'd';    label.ab = 'age at birth';  bibkey.ab = 'Mene2003';   comment.ab  = 'ab = ah + 4d - Mene2003'; 
-  temp.ab = C2K(15);  units.temp.ab = 'K'; label.temp.ab = 'temperature';
+  temp.ah = C2K(14);  units.temp.ah = 'K'; label.temp.ah = 'temperature';
+data.ab = 7;      units.ab = 'd';    label.ab = 'age at birth';  bibkey.ab = 'Mene2003';   comment.ab  = 'ab = ah + 4d - Mene2003'; 
+  temp.ab = C2K(14);  units.temp.ab = 'K'; label.temp.ab = 'temperature';
 data.aj = 100; units.aj = 'd';    label.aj = 'age at metamorphosis';  bibkey.aj = 'Laure guess';   comment.aj  = 'we need to constrain a_j, I guess a 4cm sardine at 15degC could be 100 days'; 
   temp.aj = C2K(15);  units.temp.aj = 'K'; label.temp.aj = 'temperature';
 data.ap = 365;     units.ap = 'd';    label.ap = 'age at puberty'; bibkey.ap = 'Guessed';
