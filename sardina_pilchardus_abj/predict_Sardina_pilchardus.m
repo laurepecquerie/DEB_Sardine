@@ -49,6 +49,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   
   % compute temperature correction factors
 %   TC_ab = tempcorr(temp.ab, T_ref, T_A);
+%   TC_aj = tempcorr(temp.aj, T_ref, T_A);
 %   TC_ap = tempcorr(temp.ap, T_ref, T_A);
 %   TC_am = tempcorr(temp.am, T_ref, T_A);
 %   TC_Ri = tempcorr(temp.Ri, T_ref, T_A);
@@ -63,6 +64,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
 %   TC_LW_ad = tempcorr(temp.LW_ad, T_ref, T_A);
 
   TC_ab = tempcorr(C2K(17), T_ref, T_A);
+  TC_aj = TC_ab;
   TC_ap = TC_ab;
   TC_am = TC_ab;
   TC_Ri = TC_ab;
@@ -102,6 +104,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   % metamorphosis
   L_j = l_j * L_m;                       % cm, length at metamorphosis
   a_j = t_j/ k_M;                        % d, age at metam at f and T_ref
+  aT_j = a_j/ TC_aj;                     % d, age at metam at f and temp.aj
   Lw_j = L_j/ del_M_SL;                  % cm, standard length at metamorphosis at f
   
   % puberty 
@@ -128,6 +131,7 @@ function [prdData, info] = predict_Sardina_pilchardus(par, data, auxData)
   %% pack to output
   % the names of the fields in the structure must be the same as the data names in the mydata file
   prdData.ab  = aT_b;
+  prdData.aj  = aT_j;
   prdData.ap  = aT_p;
   prdData.am  = aT_m;
   prdData.Lb  = Lw_b;

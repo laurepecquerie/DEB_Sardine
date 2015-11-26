@@ -3,35 +3,8 @@
 
 %%
 function [par, metaPar, txtPar] = pars_init_Sardina_pilchardus(metaData)
-  % created by Starrlight Augustine, Dina Lika, Bas Kooijman, Goncalo Marques and Laure Pecquerie 2015/03/31
-  % modified 2015/07/29 by Starrlight 
-  
-  %% Syntax
-  % [par, metaPar, txtPar] = <../pars_init_my_pet.m *pars_init_my_pet*>(metaData)
-  
-  %% Description
-  % sets (initial values for) parameters
-  %
-  % Input
-  %
-  % * metaData for names of phylum and class to get d_V
-  %  
-  % Output
-  %
-  % * par : structure with values of parameters
-  % * metaPar: structure with information on metaparameters
-  % * txtPar: structure with information on parameters
 
-% parameters: initial values at reference temperature:
-% see online manual for explanation and alternatives 
-% be aware that each model type is associated with a specific list of core
-% primary parameters. Those listed here are for model 'std'. See the manual
-% for parameters associated with the other model types.
 metaPar.model = 'abj'; 
-
-% edit the values below such that predictions are not too far off;
-% the values must be set in the standard DEB units:
-%   d for time; cm for length; J for energy; K for temperature
 
 % reference parameter (not to be changed)
 par.T_ref = C2K(20); free.T_ref = 0; units.T_ref = 'K';        label.T_ref = 'Reference temperature';

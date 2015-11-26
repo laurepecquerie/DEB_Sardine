@@ -3,36 +3,7 @@
 
 %%
 function [data, auxData, metaData, txtData, weights] = mydata_Sardina_pilchardus 
-  % created by Starrlight Augustine, Bas Kooijman, Dina Lika, Goncalo Marques and Laure Pecquerie 2015/03/31
-  % last modified: 2015/07/28 
   
-  %% Syntax
-  % [data, auxData, metaData, txtData, weights] = <../mydata_my_pet.m *mydata_my_pet*>
-  
-  %% Description
-  % Sets data, pseudodata, metadata, auxdata, explanatory text, weights coefficients.
-  % Meant to be a template in add-my-pet
-  %
-  % Output
-  %
-  % * data: structure with data
-  % * auxData: structure with auxilliairy information concerning the data
-  %   (temperature, food, initial size of organisms etc.). auxData is
-  %   unpacked in predict and the user needs to construct predictions
-  %   accordingly.
-  % * txtData: text vector for the presentation of results
-  % * metaData: structure with info about this entry
-  % * weights: structure with weights for each data set
-  
-  %% To do (remove these remarks after editing this file)
-  % * copy this template; replace 'my_pet' by the name of your species (Genus_species)
-  % * fill in metaData fields with the proper information
-  % * insert references for each data (an example is given), for multiple references, please use commas to separate references
-  % * edit real data; remove all data that to not belong to your pet
-  % * list facts - this is where you can add relevant/interesting information on its biology
-  % * edit discussion concerning e.g. choice of model, assumptions needed to model certain data sets etc. 
-  % * fill in all of the references
-
 %% set metaData
 
 metaData.phylum     = 'Chordata'; 
@@ -41,7 +12,7 @@ metaData.order      = 'Clupeiformes';
 metaData.family     = 'Clupeidae';
 metaData.species    = 'Sardina_pilchardus'; 
 metaData.species_en = 'European pilchard'; 
-metaData.T_typical  = C2K(15); % K, body temp
+metaData.T_typical  = C2K(15); % K, Average temperature off Portuguese W coast (Angelico, pers. comm.)
 metaData.data_0     = {'ab'; 'ap'; 'am'; 'Lb'; 'Lj'; 'Lp'; 'Li'; 'Wwb'; 'Wwp'; 'Wwi'; 'Ri'; 'Wd0'; 'E0'}; % tags for different types of zero-variate data
 metaData.data_1     = {'t-L'; 'L-W'}; % tags for different types of uni-variate data
 
@@ -66,31 +37,33 @@ metaData.address  = {'IPMA, Lisbon, Portugal'};        % affiliation, postcode, 
 
 %% set data
 % zero-variate data;
-% typically depend on scaled functional response f.
-% here assumed to be equal for all real data; the value of f is specified in pars_init_my_pet.
-% add an optional comment structure to give any additional explanations on
-% how the value was chosen, see the last column of the ab data set for an
-% example
 
 % age 0 is at onset of embryo development
-data.ab = 8;      units.ab = 'd';    label.ab = 'age at birth';  bibkey.ab = 'Mene2003';   comment.ab  = 'ab = ah + 4d - Mene2003'; 
-  temp.ab = C2K(15);  units.temp.ab = 'K'; label.temp.ab = 'temperature';
-data.ap = 365;     units.ap = 'd';    label.ap = 'age at puberty'; bibkey.ap = 'Guessed';
+%data.ah = 3;      units.ah = 'd';    label.ah = 'age at hatching';  bibkey.ab = 'Mene2003';   comment.ab  = 'ab = 2-3 days'; 
+%  temp.ah = C2K(14);  units.temp.ah = 'K'; label.temp.ah = 'temperature';
+data.ab = 7;      units.ab = 'd';    label.ab = 'age at birth';  bibkey.ab = {'BernIbai2008, SilvMira1992'};   comment.ab  = 'ab = ah + 4d '; 
+  temp.ab = C2K(14);  units.temp.ab = 'K'; label.temp.ab = 'temperature';
+data.aj = 100; units.aj = 'd';    label.aj = 'age at metamorphosis';  bibkey.aj = 'Laure''s guess';   comment.aj  = 'we need to constrain a_j, I guessed a 4cm sardine at 15degC could be 100 days'; 
+  temp.aj = C2K(15);  units.temp.aj = 'K'; label.temp.aj = 'temperature';
+data.ap = 365;     units.ap = 'd';    label.ap = 'age at puberty'; bibkey.ap = 'SilvSant2006';
   temp.ap = C2K(15);  units.temp.ap = 'K'; label.temp.ap = 'temperature';
-data.am = 8 * 365;     units.am = 'd';    label.am = 'life span';     bibkey.am = 'Guessed';   
+data.am = 8 * 365;     units.am = 'd';    label.am = 'life span';     bibkey.am = 'SilvCarr2008';   
   temp.am = C2K(15);  units.temp.am = 'K'; label.temp.am = 'temperature'; 
-data.Lb  = 0.5;   units.Lb  = 'cm';   label.Lb  = 'standard length at birth';    bibkey.Lb  = 'Mene2003';  
-data.Lj  = 4;    units.Lj  = 'cm';   label.Lj  = 'standard length at metamorphosis';    bibkey.Lj  = 'ReMene2009'; %[LAURE : see Cristina]
-data.Lp  = 13;   units.Lp  = 'cm';   label.Lp  = 'total length at puberty';      bibkey.Lp  = 'Guessed'; % for multiple references, please use commas to separate references
-data.Li  = 23.8;   units.Li  = 'cm';   label.Li  = 'ultimate total length';      bibkey.Li  = 'Fishbase';
-data.Wwb = 2.5e-4; units.Wwb = 'g';    label.Wwb = 'wet weight at birth';        bibkey.Wwb = 'Anon2015';
+data.Lb  = 0.5;   units.Lb  = 'cm';   label.Lb  = 'standard length at birth';    bibkey.Lb  = 'ReMene2009';  
+data.Lj  = 4;    units.Lj  = 'cm';   label.Lj  = 'standard length at metamorphosis';    bibkey.Lj  = 'ReMene2009'; 
+data.Lp  = 13;   units.Lp  = 'cm';   label.Lp  = 'total length at puberty';      bibkey.Lp  = 'SilvSant2006'; 
+data.Li  = 23.8;   units.Li  = 'cm';   label.Li  = 'ultimate total length';      bibkey.Li  = 'SilvCarr2008';
+data.Wwb = 2.5e-4; units.Wwb = 'g';    label.Wwb = 'wet weight at birth';        bibkey.Wwb = 'Guessed'; 
+    comment.Wwb = ['following an idea from B. Kooijman, the volume of a exotrophic larva was estimated from a digital image (considering the larva body as a long cylinder):'...
+ 'larva body height (diameter) ~ 0.24 mm;  larva body length = 5 mm; Volume = 0.250 mg ; Coombs et al. 2004: larva density at hatching = 1.027 g/cm3'...
+ 'larva wet weight = 2.5e-4 g'];
 data.Wwp = 20;   units.Wwp = 'g';    label.Wwp = 'wet weight at puberty';      bibkey.Wwp = 'Anon2015';
 data.Wwi = 112;   units.Wwi = 'g';    label.Wwi = 'ultimate wet weight';        bibkey.Wwi = 'Fishbase';
 data.Ri  = 1035;    units.Ri  = '#/d';  label.Ri  = 'maximum reprod rate';        bibkey.Ri  = 'Guessed';   
-comment.Ri = [' for an individual of ultimate length Li, 8-9 months of spawning season (8.5)'...
+comment.Ri = [' C. Nunes - G. Marques: for an individual of ultimate length Li, 8-9 months of spawning season (8.5)'...
    'a spawning event every 12-15 days (13.5), a maximum of 45000 eggs at the peak;'...
    '((8.5*30/13.5)*45000)/365 = 2329 eggs/day ~ 2300 eggs/day;'...
-   'let us suppose the peak the average is 1/2 of the peak and we have Ri = 1150;'...
+   'let us suppose that the average is 1/2 of the peak and we have Ri = 1150;'...
    'for f = 0.9. guess Ri = 1150 * 0.9 = 1035 '];
   temp.Ri = C2K(15);  units.temp.Ri = 'K'; label.temp.Ri = 'temperature';
 data.Wd0 = 3e-5;  units.Wd0 = 'g';    label.Wd0 = 'egg dry weight';    bibkey.Wd0 = 'Nunes2015' ;
@@ -129,7 +102,7 @@ data.tL_juv1(:,1) = data.ab + data.tL_juv1(:,1);  % tranforming otolith age into
 % [LAURE : are we sure it's similar T between ab and tL-juv?] ? 
 units.tL_juv1 = {'d', 'cm'};     label.tL_juv1 = {'time since birth', 'standard length'};  bibkey.tL_juv1 = 'Mene2003';
 %   temp.tL_juv1 = T_C + 15;  % K, temperature [LAURE: which temp? should we set it as a parameter?]
-  temp.tL_juv1 = C2K(16); units.temp.tL_juv1 = 'K'; label.temp.tL_juv1 = 'temperature';  % K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_juv1 = C2K(15); units.temp.tL_juv1 = 'K'; label.temp.tL_juv1 = 'temperature';  % K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 % Peniche. winter 89 
 data.tL_juv2 = [125.01	8.68
@@ -211,7 +184,7 @@ data.tL_juv2 = [125.01	8.68
 %tL_juv2 = [tL_juv2, 10./tL_juv2(:,2).^2];      % append weight coefficients for WLS criterion
 data.tL_juv2(:,1) = data.ab + data.tL_juv2(:,1);  % tranforming otolith age into organism age
 units.tL_juv2 = {'d', 'cm'};     label.tL_juv2 = {'time since birth', 'standard length'};  bibkey.tL_juv2 = 'Mene2003';
-  temp.tL_juv2 = C2K(14);  units.temp.tL_juv2 = 'K'; label.temp.tL_juv2 = 'temperature';% K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_juv2 = C2K(13);  units.temp.tL_juv2 = 'K'; label.temp.tL_juv2 = 'temperature';% K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 % Peniche. spring 90 
 data.tL_juv3 = [145.10	9.14
@@ -244,7 +217,7 @@ data.tL_juv3 = [145.10	9.14
 data.tL_juv3(:,1) = data.ab + data.tL_juv3(:,1);  % tranforming otolith age into organism age
 % LAURE : are we sure it's similar T ? 
 units.tL_juv3 = {'d', 'cm'};     label.tL_juv3 = {'time since birth', 'standard length'};  bibkey.tL_juv3 = 'Mene2003';
-  temp.tL_juv3 = C2K(16);  units.temp.tL_juv3 = 'K'; label.temp.tL_juv3 = 'temperature';% K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_juv3 = C2K(15);  units.temp.tL_juv3 = 'K'; label.temp.tL_juv3 = 'temperature';% K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 % Lagoa de Óbidos. summer 89 
 data.tL_juv4 = [69.63	3.87
@@ -308,7 +281,7 @@ data.tL_juv4 = [69.63	3.87
 %data.tL_juv4 = [tL_juv4, 10./tL_juv4(:,2).^2];      % append weight coefficients for WLS criterion
 data.tL_juv4(:,1) = data.ab + data.tL_juv4(:,1);  % tranforming otolith age into organism age
 units.tL_juv4 = {'d', 'cm'};     label.tL_juv4 = {'time since birth', 'standard length'};  bibkey.tL_juv4 = 'Mene2003';
-  temp.tL_juv4 = C2K(21); units.temp.tL_juv4 = 'K'; label.temp.tL_juv4 = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_juv4 = C2K(23); units.temp.tL_juv4 = 'K'; label.temp.tL_juv4 = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 
 % Lagoa de Óbidos. spring 90 % LAURE: temp should be checked
@@ -338,7 +311,7 @@ data.tL_juv5 = [42.97	3.27
 %tL_juv5 = [tL_juv5, 10./tL_juv5(:,2).^2];      % append weight coefficients for WLS criterion
 data.tL_juv5(:,1) = data.ab + data.tL_juv5(:,1);  % tranforming otolith age into organism age
 units.tL_juv5 = {'d', 'cm'};     label.tL_juv5 = {'time since birth', 'standard length'};  bibkey.tL_juv5 = 'Mene2003';
-  temp.tL_juv5 = C2K(19);  units.temp.tL_juv5 = 'K'; label.temp.tL_juv5 = 'temperature';% K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_juv5 = C2K(18);  units.temp.tL_juv5 = 'K'; label.temp.tL_juv5 = 'temperature';% K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 % Lagoa de Óbidos. summer 90 % temp should be checked
 
@@ -390,7 +363,7 @@ data.tL_juv6 = [61.94	3.99
 %tL_juv6 = [tL_juv6, 10./tL_juv6(:,2).^2];      % append weight coefficients for WLS criterion
 data.tL_juv6(:,1) = data.ab + data.tL_juv6(:,1);  % tranforming otolith age into organism age
 units.tL_juv6 = {'d', 'cm'};     label.tL_juv6 = {'time since birth', 'standard length'};  bibkey.tL_juv6 = 'Mene2003';
-  temp.tL_juv6 = C2K(21); units.temp.tL_juv6 = 'K'; label.temp.tL_juv6 = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_juv6 = C2K(23); units.temp.tL_juv6 = 'K'; label.temp.tL_juv6 = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 % Larval data - fig. 7c in Mene2003
 
@@ -465,10 +438,10 @@ data.tL_larv = [4.03     6.00 % 4 days is the average age at first feeding (abso
 data.tL_larv(:,2) = data.tL_larv(:,2)/10;  % converting mm to cm 
 %tL_larv = [tL_larv, 1./tL_larv(:,2).^2];      % append weight coefficients for WLS criterion
 units.tL_larv = {'d', 'cm'};     label.tL_larv = {'time since birth', 'standard length'};  bibkey.tL_larv = 'Mene2003';
-  temp.tL_larv = C2K(17); units.temp.tL_larv = 'K'; label.temp.tL_larv = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_larv = C2K(15); units.temp.tL_larv = 'K'; label.temp.tL_larv = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
 % [LAURE : should we add data.ab as in the previous dataset?]
 
-% adult female average data 2000-2005 
+% adult female average data 2000-2005
 data.tL_ad_f = [1.00	14.42
            2.00	18.23
            3.00	20.08
@@ -1218,6 +1191,13 @@ data.psd.kap_G = 0.6; % smaller kap_G to allow for greater mu_E
  
 % data.psd.w_V = 23;      units.psd.w_V = 'g/mol';    label.psd.w_V = 'molecular weight of reserve';      %  bibkey.psd.w_V = 'Fill';    
 % weights.psd.w_V = 100 * 1 ./ data.psd.w_V^2;
+
+ %data.psd.muw_E = 33000;      units.psd.muw_E = 'J/g';    label.psd.muw_E = 'energy content per g dry weight of reserve';       % bibkey.psd.d_E = 'Fill';    
+ %weights.psd.muw_E = 10 * 1 ./ data.psd.muw_E^2;
+ 
+% data.psd.muw_V = 19000;      units.psd.muw_V = 'J/g';    label.psd.muw_V = 'energy content per g dry weight of structure';       % bibkey.psd.d_E = 'Fill';    
+% weights.psd.muw_V = 10 * 1 ./ data.psd.muw_V^2;
+
 
 %% pack auxData and txtData for output
 auxData.temp = temp;
