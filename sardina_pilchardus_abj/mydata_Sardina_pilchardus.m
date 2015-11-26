@@ -98,8 +98,8 @@ data.tL_juv1 = [186.97	10.98;
            243.07	11.88;
            248.14	11.86;];
 data.tL_juv1(:,1) =  data.tL_juv1(:,1) - 4;   
-comment.tL_juv1 = 'I. Meneses added 4 days (from hatching to first feeding) to all ages to obtain age since hatching';
-units.tL_juv1 = {'d', 'cm'};     label.tL_juv1 = {'time since birth', 'standard length'};  bibkey.tL_juv1 = 'Mene2003';
+comment.tL_juv1 = 'I. Meneses added 4 days (from hatching to first feeding) to all ages to obtain age since hatching from otolith data. otolith ring formation is probably initiated at the absorption of yolk sac (Ré 1984)';
+units.tL_juv1 = {'d', 'cm'};     label.tL_juv1 = {'time since birth', 'standard length'};  bibkey.tL_juv1 = {'Mene2003','Re1984'};
   temp.tL_juv1 = C2K(16); units.temp.tL_juv1 = 'K'; label.temp.tL_juv1 = 'temperature';  % K, temperature 
   % temperature from average months 4-6 1989, area A1, data P. Oliveira
 
@@ -181,8 +181,8 @@ data.tL_juv2 = [125.01	8.68
            263.04	12.45
            273.31	11.57];
 data.tL_juv2(:,1) = data.tL_juv2(:,1) - 4; 
-comment.tL_juv2 = 'I. Meneses added 4 days (from hatching to first feeding) to all ages to obtain age since hatching';
-units.tL_juv2 = {'d', 'cm'};     label.tL_juv2 = {'time since birth', 'standard length'};  bibkey.tL_juv2 = 'Mene2003';
+comment.tL_juv2 = 'I. Meneses added 4 days (from hatching to first feeding) to all ages to obtain age since hatching from otolith data. otolith ring formation is probably initiated at the absorption of yolk sac (Ré 1984)';
+units.tL_juv2 = {'d', 'cm'};     label.tL_juv2 = {'time since birth', 'standard length'};  bibkey.tL_juv2 = {'Mene2003','Re1984'};
   temp.tL_juv2 = C2K(14);  units.temp.tL_juv2 = 'K'; label.temp.tL_juv2 = 'temperature';% K, temperature
   % temperature from average months 1-3 1989, area A1, data P. Oliveira
 
@@ -214,8 +214,8 @@ data.tL_juv3 = [145.10	9.14
            223.09	11.96
            243.52	12.31];
 data.tL_juv3(:,1) = data.tL_juv3(:,1)-4;  % 
-comment.tL_juv3 = 'I. Meneses added 4 days (from hatching to first feeding) to all ages to obtain age since hatching';
-units.tL_juv3 = {'d', 'cm'};     label.tL_juv3 = {'time since birth', 'standard length'};  bibkey.tL_juv3 = 'Mene2003';
+comment.tL_juv3 = 'I. Meneses added 4 days (from hatching to first feeding) to all ages to obtain age since hatching from otolith data. otolith ring formation is probably initiated at the absorption of yolk sac (Ré 1984)';
+units.tL_juv3 = {'d', 'cm'};     label.tL_juv3 = {'time since birth', 'standard length'};  bibkey.tL_juv3 = {'Mene2003','Re1984'};
   temp.tL_juv3 = C2K(16);  units.temp.tL_juv3 = 'K'; label.temp.tL_juv3 = 'temperature';% K, temperature 
   % temperature from average months 4-6 1990, area A1, data P. Oliveira
 
@@ -279,8 +279,8 @@ data.tL_juv4 = [69.63	3.87
            122.49	6.41
            123.94	6.33];
 data.tL_juv4(:,1) = data.tL_juv4(:,1) - 4; 
-comment.tL_juv4 = 'I. Meneses added 4 days (from hatching to first feeding) to all ages to obtain age since hatching';
-units.tL_juv4 = {'d', 'cm'};     label.tL_juv4 = {'time since birth', 'standard length'};  bibkey.tL_juv4 = 'Mene2003';
+comment.tL_juv4 = 'I. Meneses added 4 days (from hatching to first feeding) to all ages to obtain age since hatching from otolith data. otolith ring formation is probably initiated at the absorption of yolk sac (Ré 1984)';
+units.tL_juv4 = {'d', 'cm'};     label.tL_juv4 = {'time since birth', 'standard length'};  bibkey.tL_juv4 = {'Mene2003','Re1984'};
   temp.tL_juv4 = C2K(19); units.temp.tL_juv4 = 'K'; label.temp.tL_juv4 = 'temperature'; % K, temperature 
   % temperature from average months 7-9 1989, area A1, data P. Oliveira
 
@@ -310,8 +310,8 @@ data.tL_juv5 = [42.97	3.27
            115.47	6.53
            119.00	6.51];
 data.tL_juv5(:,1) = data.tL_juv5(:,1) - 4; 
-comment.tL_juv5 = 'I. Meneses added 4 days (from hatching to first feeding) to all ages to obtain age since hatching';
-units.tL_juv5 = {'d', 'cm'};     label.tL_juv5 = {'time since birth', 'standard length'};  bibkey.tL_juv5 = 'Mene2003';
+comment.tL_juv5 = 'I. Meneses added 4 days (from hatching to first feeding) to all ages to obtain age since hatchingfrom otolith data. otolith ring formation is probably initiated at the absorption of yolk sac (Ré 1984)';
+units.tL_juv5 = {'d', 'cm'};     label.tL_juv5 = {'time since birth', 'standard length'};  bibkey.tL_juv5 = {'Mene2003','Re1984'};
   temp.tL_juv5 = C2K(16);  units.temp.tL_juv5 = 'K'; label.temp.tL_juv5 = 'temperature';% K, temperature 
   % temperature from average months 4-6 1990, area A1, data P. Oliveira
 
@@ -363,8 +363,8 @@ data.tL_juv6 = [61.94	3.99
            104.97	5.04
            104.98	5.00];
 data.tL_juv6(:,1) =  data.tL_juv6(:,1)-4;  % tranforming otolith age into organism age
-comment.tL_juv6 = 'I. Meneses added 4 days (from hatching to first feeding) to all ages to obtain age since hatching';
-units.tL_juv6 = {'d', 'cm'};     label.tL_juv6 = {'time since birth', 'standard length'};  bibkey.tL_juv6 = 'Mene2003';
+comment.tL_juv6 = 'I. Meneses added 4 days (from hatching to first feeding) to all ages to obtain age since hatching from otolith data. otolith ring formation is probably initiated at the absorption of yolk sac (Ré 1984)';
+units.tL_juv6 = {'d', 'cm'};     label.tL_juv6 = {'time since birth', 'standard length'};  bibkey.tL_juv6 = {'Mene2003','Re1984'} ;
   temp.tL_juv6 = C2K(19); units.temp.tL_juv6 = 'K'; label.temp.tL_juv6 = 'temperature'; % K, temperature 
   % temperature from average months 7-9 1990, area A1, data P. Oliveira
 
@@ -645,7 +645,7 @@ data.LW_juv4 = [3.8446	0.57421875
            7.1747	3.79296875
            7.2917	3.43359375
            7.3413	3.7578125];
- units.LW_juv4 = {'cm', 'g'};     label.LW_juv4 = {'standard length', 'wet weight'};  bibkey.LW_juv4 = 'Mene2003';
+ units.LW_juv4 = {'cm', 'g'};     label.LW_juv4 = {'standard length', 'wet weight without viscera'};  bibkey.LW_juv4 = 'Mene2003';
   temp.LW_juv4= temp.tL_juv4;  units.temp.LW_juv4 = 'K'; label.temp.LW_juv4 = 'temperature';% K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 
@@ -675,7 +675,7 @@ data.LW_juv5 = [3.1266	0.21875
            6.5401	2.9296875
            6.5402	3
            6.8558	3.4453125];
-units.LW_juv5 = {'cm', 'g'};     label.LW_juv5 = {'standard length length', 'wet weight'};  bibkey.LW_juv5 = 'Mene2003';
+units.LW_juv5 = {'cm', 'g'};     label.LW_juv5 = {'standard length length', 'wet weight without viscera'};  bibkey.LW_juv5 = 'Mene2003';
   temp.LW_juv5= temp.tL_juv5; units.temp.LW_juv5 = 'K'; label.temp.LW_juv5 = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 % Lagoa de Óbidos. summer 90 
@@ -741,7 +741,7 @@ data.LW_juv6 = [3.9792	0.77734375
            5.1154	1.6328125
            5.234	1.7109375
            5.3013	1.6796875];
-units.LW_juv6 = {'cm', 'g'};     label.LW_juv6 = {'standard length length', 'wet weight'};  bibkey.LW_juv6 = 'Mene2003';
+units.LW_juv6 = {'cm', 'g'};     label.LW_juv6 = {'standard length length', 'wet weight without viscera'};  bibkey.LW_juv6 = 'Mene2003';
   temp.LW_juv6= temp.tL_juv6; units.temp.LW_juv6 = 'K'; label.temp.LW_juv6 = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 
@@ -1213,12 +1213,12 @@ end
 %% Discussion points
 D1 = ['reproduction module in predict_SArdina_pilchardus (made to match time points in data.tE)'...
       '1st spawning : day 275 = October 2nd - spawning every 20 days = every other time point in data.tE'...
-  ' 20 days = average interval between 2 spawning events during the reproductive season:'
+  ' 20 days = average interval between 2 spawning events during the reproductive season:'...
   ' at peak spawning, a mean interval of about 14 days is observed (ICES 2012)'...
   '  and spawning interval can vary seasonally in clupeid fish (e.g., Hunter and Macewicz 1980)'];
 
 D2 = 'start of simulation on day 55, corresponding to minimum reserve density and maximum water content (Rosa et al. 2010)';
-metaData.bibkey.D1 = 'ICES2012';
+metaData.bibkey.D1 = {'ICES2012','HuntMace1980'};
 metaData.bibkey.D2 = 'RosaGonz2010';
 metaData.discussion = struct('D1', D1, 'D2', D2);
 
