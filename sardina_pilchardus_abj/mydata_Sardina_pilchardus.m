@@ -41,7 +41,7 @@ metaData.address  = {'IPMA, Lisbon, Portugal'};        % affiliation, postcode, 
 % age 0 is at onset of embryo development
 %data.ah = 3;      units.ah = 'd';    label.ah = 'age at hatching';  bibkey.ab = 'Mene2003';   comment.ab  = 'ab = 2-3 days'; 
 %  temp.ah = C2K(14);  units.temp.ah = 'K'; label.temp.ah = 'temperature';
-data.ab = 7;      units.ab = 'd';    label.ab = 'age at birth';  bibkey.ab = {'BernIbai2008, SilvMira1992'};   comment.ab  = 'ab = ah + 4d '; 
+data.ab = 7;      units.ab = 'd';    label.ab = 'age at birth';  bibkey.ab = {'BernIbai2008', 'SilvMira1992'};   comment.ab  = 'ab = ah + 4d '; 
   temp.ab = C2K(14);  units.temp.ab = 'K'; label.temp.ab = 'temperature';
 data.aj = 100; units.aj = 'd';    label.aj = 'age at metamorphosis';  bibkey.aj = 'Laure''s guess';   comment.aj  = 'we need to constrain a_j, I guessed a 4cm sardine at 15degC could be 100 days'; 
   temp.aj = C2K(15);  units.temp.aj = 'K'; label.temp.aj = 'temperature';
@@ -57,19 +57,19 @@ data.Wwb = 2.5e-4; units.Wwb = 'g';    label.Wwb = 'wet weight at birth';       
     comment.Wwb = ['following an idea from B. Kooijman, the volume of a exotrophic larva was estimated from a digital image (considering the larva body as a long cylinder):'...
  'larva body height (diameter) ~ 0.24 mm;  larva body length = 5 mm; Volume = 0.250 mg ; Coombs et al. 2004: larva density at hatching = 1.027 g/cm3'...
  'larva wet weight = 2.5e-4 g'];
-data.Wwp = 20;   units.Wwp = 'g';    label.Wwp = 'wet weight at puberty';      bibkey.Wwp = 'Anon2015';
-data.Wwi = 112;   units.Wwi = 'g';    label.Wwi = 'ultimate wet weight';        bibkey.Wwi = 'Fishbase';
-data.Ri  = 1035;    units.Ri  = '#/d';  label.Ri  = 'maximum reprod rate';        bibkey.Ri  = 'Guessed';   
+data.Wwp = 20;   units.Wwp = 'g';    label.Wwp = 'wet weight at puberty';      bibkey.Wwp = 'SilvCarr2008';
+data.Wwi = 112;   units.Wwi = 'g';    label.Wwi = 'ultimate wet weight';        bibkey.Wwi = 'SilvCarr2008';
+data.Ri  = 1035;    units.Ri  = '#/d';  label.Ri  = 'maximum reprod rate';        bibkey.Ri  = 'C. Nunes, G.Marques pers. com.';   
 comment.Ri = [' C. Nunes - G. Marques: for an individual of ultimate length Li, 8-9 months of spawning season (8.5)'...
    'a spawning event every 12-15 days (13.5), a maximum of 45000 eggs at the peak;'...
    '((8.5*30/13.5)*45000)/365 = 2329 eggs/day ~ 2300 eggs/day;'...
    'let us suppose that the average is 1/2 of the peak and we have Ri = 1150;'...
    'for f = 0.9. guess Ri = 1150 * 0.9 = 1035 '];
   temp.Ri = C2K(15);  units.temp.Ri = 'K'; label.temp.Ri = 'temperature';
-data.Wd0 = 3e-5;  units.Wd0 = 'g';    label.Wd0 = 'egg dry weight';    bibkey.Wd0 = 'Nunes2015' ;
-comment.Wd0 = '18 to 40 microg dry weight - see Cristina Nunes for ref';
+data.Wd0 = 3e-5;  units.Wd0 = 'g';    label.Wd0 = 'egg dry weight';    bibkey.Wd0 = 'Angelico and Nunes pers.com.' ;
+comment.Wd0 = '18 to 40 microg dry weight';
 data.E0 = data.Wd0 * 29e3;  units.E0 = 'J';    label.E0 = 'egg energy content';    bibkey.E0 = {'Lask1962','Nunes2015'} ;
-comment.E0 = 'Energy density of an egg between 20 and 30kJ /g dry weight in Kalmer 2005';
+comment.E0 = 'Energy density of an egg between 20 and 30kJ /g dry weight in Kamler 2005 ; 22kJ /g dw for Pacific sardine Lasker 1962';
 %% !! should be consistent with <E> = mu_E/w_E
   
 % uni-variate data
@@ -80,6 +80,8 @@ comment.E0 = 'Energy density of an egg between 20 and 30kJ /g dry weight in Kalm
 % t time since start of otolith formation. days
 %   otolith ring deposition starts after the absortion of the yolk/vitelline sac
 %   this corresponds to birth in DEB 
+
+%Juvenile data
 
 % Peniche. spring 89 
 % data extracted from figures in Mene2003 ; figs 3 and 6 in Chap. 5
@@ -95,14 +97,11 @@ data.tL_juv1 = [186.97	10.98;
            241.03	11.63;
            243.07	11.88;
            248.14	11.86;];
-%tL_juv1 = [tL_juv1, 10./tL_juv1(:,2).^2];      % append weight coefficients for WLS criterion
-data.tL_juv1(:,1) = data.ab + data.tL_juv1(:,1);  % tranforming otolith age into organism age
-% % [LAURE : current thoughts : we should not add ab as we mention in the
-% label that it is time since birth?
-% [LAURE : are we sure it's similar T between ab and tL-juv?] ? 
+data.tL_juv1(:,1) =  data.tL_juv1(:,1) - 4;   
+comment.tL_juv1 = 'I. Meneses added 4 days (from hatching to first feeding) to all ages to obtain age since hatching';
 units.tL_juv1 = {'d', 'cm'};     label.tL_juv1 = {'time since birth', 'standard length'};  bibkey.tL_juv1 = 'Mene2003';
-%   temp.tL_juv1 = T_C + 15;  % K, temperature [LAURE: which temp? should we set it as a parameter?]
-  temp.tL_juv1 = C2K(15); units.temp.tL_juv1 = 'K'; label.temp.tL_juv1 = 'temperature';  % K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_juv1 = C2K(16); units.temp.tL_juv1 = 'K'; label.temp.tL_juv1 = 'temperature';  % K, temperature 
+  % temperature from average months 4-6 1989, area A1, data P. Oliveira
 
 % Peniche. winter 89 
 data.tL_juv2 = [125.01	8.68
@@ -181,10 +180,11 @@ data.tL_juv2 = [125.01	8.68
            261.69	11.7
            263.04	12.45
            273.31	11.57];
-%tL_juv2 = [tL_juv2, 10./tL_juv2(:,2).^2];      % append weight coefficients for WLS criterion
-data.tL_juv2(:,1) = data.ab + data.tL_juv2(:,1);  % tranforming otolith age into organism age
+data.tL_juv2(:,1) = data.tL_juv2(:,1) - 4; 
+comment.tL_juv2 = 'I. Meneses added 4 days (from hatching to first feeding) to all ages to obtain age since hatching';
 units.tL_juv2 = {'d', 'cm'};     label.tL_juv2 = {'time since birth', 'standard length'};  bibkey.tL_juv2 = 'Mene2003';
-  temp.tL_juv2 = C2K(13);  units.temp.tL_juv2 = 'K'; label.temp.tL_juv2 = 'temperature';% K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_juv2 = C2K(14);  units.temp.tL_juv2 = 'K'; label.temp.tL_juv2 = 'temperature';% K, temperature
+  % temperature from average months 1-3 1989, area A1, data P. Oliveira
 
 % Peniche. spring 90 
 data.tL_juv3 = [145.10	9.14
@@ -213,11 +213,11 @@ data.tL_juv3 = [145.10	9.14
            215.08	11.53
            223.09	11.96
            243.52	12.31];
-%tL_juv3 = [tL_juv3, 10./tL_juv3(:,2).^2];      % append weight coefficients for WLS criterion
-data.tL_juv3(:,1) = data.ab + data.tL_juv3(:,1);  % tranforming otolith age into organism age
-% LAURE : are we sure it's similar T ? 
+data.tL_juv3(:,1) = data.tL_juv3(:,1)-4;  % 
+comment.tL_juv3 = 'I. Meneses added 4 days (from hatching to first feeding) to all ages to obtain age since hatching';
 units.tL_juv3 = {'d', 'cm'};     label.tL_juv3 = {'time since birth', 'standard length'};  bibkey.tL_juv3 = 'Mene2003';
-  temp.tL_juv3 = C2K(15);  units.temp.tL_juv3 = 'K'; label.temp.tL_juv3 = 'temperature';% K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_juv3 = C2K(16);  units.temp.tL_juv3 = 'K'; label.temp.tL_juv3 = 'temperature';% K, temperature 
+  % temperature from average months 4-6 1990, area A1, data P. Oliveira
 
 % Lagoa de Óbidos. summer 89 
 data.tL_juv4 = [69.63	3.87
@@ -278,13 +278,14 @@ data.tL_juv4 = [69.63	3.87
            121.98	6.45
            122.49	6.41
            123.94	6.33];
-%data.tL_juv4 = [tL_juv4, 10./tL_juv4(:,2).^2];      % append weight coefficients for WLS criterion
-data.tL_juv4(:,1) = data.ab + data.tL_juv4(:,1);  % tranforming otolith age into organism age
+data.tL_juv4(:,1) = data.tL_juv4(:,1) - 4; 
+comment.tL_juv4 = 'I. Meneses added 4 days (from hatching to first feeding) to all ages to obtain age since hatching';
 units.tL_juv4 = {'d', 'cm'};     label.tL_juv4 = {'time since birth', 'standard length'};  bibkey.tL_juv4 = 'Mene2003';
-  temp.tL_juv4 = C2K(23); units.temp.tL_juv4 = 'K'; label.temp.tL_juv4 = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_juv4 = C2K(19); units.temp.tL_juv4 = 'K'; label.temp.tL_juv4 = 'temperature'; % K, temperature 
+  % temperature from average months 7-9 1989, area A1, data P. Oliveira
 
 
-% Lagoa de Óbidos. spring 90 % LAURE: temp should be checked
+% Lagoa de Óbidos. spring 90 
 
 data.tL_juv5 = [42.97	3.27
            45.93	3.12
@@ -308,10 +309,11 @@ data.tL_juv5 = [42.97	3.27
            108.45	6.84
            115.47	6.53
            119.00	6.51];
-%tL_juv5 = [tL_juv5, 10./tL_juv5(:,2).^2];      % append weight coefficients for WLS criterion
-data.tL_juv5(:,1) = data.ab + data.tL_juv5(:,1);  % tranforming otolith age into organism age
+data.tL_juv5(:,1) = data.tL_juv5(:,1) - 4; 
+comment.tL_juv5 = 'I. Meneses added 4 days (from hatching to first feeding) to all ages to obtain age since hatching';
 units.tL_juv5 = {'d', 'cm'};     label.tL_juv5 = {'time since birth', 'standard length'};  bibkey.tL_juv5 = 'Mene2003';
-  temp.tL_juv5 = C2K(18);  units.temp.tL_juv5 = 'K'; label.temp.tL_juv5 = 'temperature';% K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_juv5 = C2K(16);  units.temp.tL_juv5 = 'K'; label.temp.tL_juv5 = 'temperature';% K, temperature 
+  % temperature from average months 4-6 1990, area A1, data P. Oliveira
 
 % Lagoa de Óbidos. summer 90 % temp should be checked
 
@@ -360,10 +362,11 @@ data.tL_juv6 = [61.94	3.99
            103.52	5.49
            104.97	5.04
            104.98	5.00];
-%tL_juv6 = [tL_juv6, 10./tL_juv6(:,2).^2];      % append weight coefficients for WLS criterion
-data.tL_juv6(:,1) = data.ab + data.tL_juv6(:,1);  % tranforming otolith age into organism age
+data.tL_juv6(:,1) =  data.tL_juv6(:,1)-4;  % tranforming otolith age into organism age
+comment.tL_juv6 = 'I. Meneses added 4 days (from hatching to first feeding) to all ages to obtain age since hatching';
 units.tL_juv6 = {'d', 'cm'};     label.tL_juv6 = {'time since birth', 'standard length'};  bibkey.tL_juv6 = 'Mene2003';
-  temp.tL_juv6 = C2K(23); units.temp.tL_juv6 = 'K'; label.temp.tL_juv6 = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.tL_juv6 = C2K(19); units.temp.tL_juv6 = 'K'; label.temp.tL_juv6 = 'temperature'; % K, temperature 
+  % temperature from average months 7-9 1990, area A1, data P. Oliveira
 
 % Larval data - fig. 7c in Mene2003
 
@@ -436,10 +439,11 @@ data.tL_larv = [4.03     6.00 % 4 days is the average age at first feeding (abso
            33.48	25.04
            36.98	25.01];
 data.tL_larv(:,2) = data.tL_larv(:,2)/10;  % converting mm to cm 
-%tL_larv = [tL_larv, 1./tL_larv(:,2).^2];      % append weight coefficients for WLS criterion
+data.tL_larv(:,1) = data.tL_larv(:,1) - 4;  % converting mm to cm 
+comment.tL_larv = 'I. Meneses added 4 days (from hatching to first feeding) to all ages to obtain age since hatching';
 units.tL_larv = {'d', 'cm'};     label.tL_larv = {'time since birth', 'standard length'};  bibkey.tL_larv = 'Mene2003';
-  temp.tL_larv = C2K(15); units.temp.tL_larv = 'K'; label.temp.tL_larv = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
-% [LAURE : should we add data.ab as in the previous dataset?]
+  temp.tL_larv = C2K(15); units.temp.tL_larv = 'K'; label.temp.tL_larv = 'temperature'; % K, temperature 
+  %[LAURE: which temp? should we set it as a parameter?]
 
 % adult female average data 2000-2005
 data.tL_ad_f = [1.00	14.42
@@ -449,7 +453,6 @@ data.tL_ad_f = [1.00	14.42
            5.00	21.40
            6.00	21.61];
 data.tL_ad_f(:,1) = data.tL_ad_f(:,1)*365;  % converting years to days 
-%tL_ad_f = [tL_ad_f, 100./tL_ad_f(:,2).^2];      % append weight coefficients for WLS criterion
 units.tL_ad_f = {'d', 'cm'};     label.tL_ad_f = {'time since birth', 'total length'};  bibkey.tL_ad_f = 'SilvCarr2008';
   temp.tL_ad_f = C2K(15);  units.temp.tL_ad_f = 'K'; label.temp.tL_ad_f = 'temperature';% K, temperature [LAURE: which temp? should we set it as a parameter?]
 
@@ -461,7 +464,6 @@ units.tL_ad_f = {'d', 'cm'};     label.tL_ad_f = {'time since birth', 'total len
 %            5.00	20.97
 %            6.00	21.15];
 % data.tL_ad_m(:,1) = data.tL_ad_m(:,1)*365;  % converting years to days 
-%tL_ad_m = [tL_ad_m, 100./tL_ad_m(:,2).^2];      % append weight coefficients for WLS criterion
 % units.tL_ad_m = {'d', 'cm'};     label.tL_ad_m = {'time since birth', 'total length'};  bibkey.tL_ad_m = '';
 %   temp.tL_ad_m = C2K(15); units.temp.tL_ad_m = 'K'; label.temp.tL_ad_m = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
 
@@ -643,7 +645,7 @@ data.LW_juv4 = [3.8446	0.57421875
            7.1747	3.79296875
            7.2917	3.43359375
            7.3413	3.7578125];
- units.LW_juv4 = {'cm', 'g'};     label.LW_juv4 = {'total length', 'wet weight'};  bibkey.LW_juv4 = 'Mene2003';
+ units.LW_juv4 = {'cm', 'g'};     label.LW_juv4 = {'standard length', 'wet weight'};  bibkey.LW_juv4 = 'Mene2003';
   temp.LW_juv4= temp.tL_juv4;  units.temp.LW_juv4 = 'K'; label.temp.LW_juv4 = 'temperature';% K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 
@@ -673,7 +675,7 @@ data.LW_juv5 = [3.1266	0.21875
            6.5401	2.9296875
            6.5402	3
            6.8558	3.4453125];
-units.LW_juv5 = {'cm', 'g'};     label.LW_juv5 = {'total length', 'wet weight'};  bibkey.LW_juv5 = 'Mene2003';
+units.LW_juv5 = {'cm', 'g'};     label.LW_juv5 = {'standard length length', 'wet weight'};  bibkey.LW_juv5 = 'Mene2003';
   temp.LW_juv5= temp.tL_juv5; units.temp.LW_juv5 = 'K'; label.temp.LW_juv5 = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 % Lagoa de Óbidos. summer 90 
@@ -739,7 +741,7 @@ data.LW_juv6 = [3.9792	0.77734375
            5.1154	1.6328125
            5.234	1.7109375
            5.3013	1.6796875];
-units.LW_juv6 = {'cm', 'g'};     label.LW_juv6 = {'total length', 'wet weight'};  bibkey.LW_juv6 = 'Mene2003';
+units.LW_juv6 = {'cm', 'g'};     label.LW_juv6 = {'standard length length', 'wet weight'};  bibkey.LW_juv6 = 'Mene2003';
   temp.LW_juv6= temp.tL_juv6; units.temp.LW_juv6 = 'K'; label.temp.LW_juv6 = 'temperature'; % K, temperature [LAURE: which temp? should we set it as a parameter?]
 
 
@@ -1111,7 +1113,7 @@ LW_ad   = [ 12.2    14      0.63
 data.LW_ad(:,1) = LW_ad(:,1);
 data.LW_ad(:,2) = LW_ad(:,2) - LW_ad(:,3);          % remove the gonad 
 units.LW_ad = {'d', 'cm'};     label.LW_ad = {'total length', 'wet weight without gonads'};  bibkey.LW_ad = 'IPMA';
-  temp.LW_ad = C2K(15);  units.temp.LW_ad = 'K'; label.temp.LW_ad = 'temperature';% K, temperature [LAURE: which temp? should we set it as a parameter?]
+  temp.LW_ad = C2K(15);  units.temp.LW_ad = 'K'; label.temp.LW_ad = 'temperature';% K, temperature 
       
 
 %% dw / ww ratio  = (1 - Water content)
@@ -1209,23 +1211,25 @@ if exist('comment','var')
 end
 
 %% Discussion points
-%D1 = 'Author_mod_1: I found information on the number of eggs per female as a function of length in Anon2013 that was much higher than in Anon2015 but chose to not include it as the temperature was not provided';
-% optional bibkey: metaData.bibkey.D1 = 'Anon2013';
-%D2 = 'Author_mod_1: I was surprised to observe that the weights coefficient for ab changed so much the parameter values';     
-% optional bibkey: metaData.bibkey.D2 = 'Kooy2010';
-%metaData.discussion = struct('D1', D1, 'D2', D2);
+D1 = ['reproduction module in predict_SArdina_pilchardus (made to match time points in data.tE)'...
+      '1st spawning : day 275 = October 2nd - spawning every 20 days = every other time point in data.tE'...
+  ' 20 days = average interval between 2 spawning events during the reproductive season:'
+  ' at peak spawning, a mean interval of about 14 days is observed (ICES 2012)'...
+  '  and spawning interval can vary seasonally in clupeid fish (e.g., Hunter and Macewicz 1980)'];
+
+D2 = 'start of simulation on day 55, corresponding to minimum reserve density and maximum water content (Rosa et al. 2010)';
+metaData.bibkey.D1 = 'ICES2012';
+metaData.bibkey.D2 = 'RosaGonz2010';
+metaData.discussion = struct('D1', D1, 'D2', D2);
 
 %% Facts
-% list facts: F1, F2, etc.
-% make sure each fact has a corresponding bib key
 % do not put any DEB modelling assumptions here, only relevant information on
 % biology and life-cycles etc.
-%F1 = 'The larval stage lasts 202 days and no feeding occurs';
-%metaData.bibkey.F1 = 'Wiki'; % optional bibkey
-%metaData.facts = struct('F1',F1);
+F1 = 'relative fecundity for iberian sardine -  Zwolinski et al. 2001  - 338-448 eggs/ g female ovary-free weight';
+metaData.bibkey.F1 = 'ZwolStrat2001'; 
+metaData.facts = struct('F1',F1);
 
 %% References
-% the following two references should be kept-----------------------------------------------------------
 bibkey = 'Kooy2010'; type = 'Book'; bib = [ ...  % used in setting of chemical parameters and pseudodata
 'author = {Kooijman, S.A.L.M.}, ' ...
 'year = {2010}, ' ...
@@ -1246,11 +1250,6 @@ bibkey = 'LikaKear2011'; type = 'Article'; bib = [ ...  % used for the estimatio
 'DOI = {10.1016/j.seares.2011.07.010},'...
 'howpublished = {\url{http://www.sciencedirect.com/science/article/pii/S1385110111001055}}'];
 metaData.biblist.(bibkey) = ['''@', type, '{', bibkey, ', ' bib, '}'';'];
-%------------------------------------------------------------------------------------------------------
-
- % References for the data, following BibTex rules
- % author names : author = {Last Name, F. and Last Name2, F2. and Last Name 3, F3. and Last Name 4, F4.}
- % latin names in title e.g. \emph{Pleurobrachia pileus}
 
 bibkey = 'Wiki'; type = 'Misc'; bib = [...
 'howpublished = {\url{http://en.wikipedia.org/wiki/European_pilchard}},'...
@@ -1261,13 +1260,6 @@ bibkey = 'Fishbase'; type = 'Misc'; bib = [...
 'howpublished = {\url{http://www.fishbase.org/summary/1350}},'...
 'note = {Accessed : 2015-04-30}'];
 metaData.biblist.(bibkey) = ['''@', type, '{', bibkey, ', ' bib, '}'';'];
-
-bibkey = 'Mene2003'; type = 'phdthesis'; bib = [ ...  
-  'author = {Meneses. I}, ' ...
-  'year = {2003}, ' ...
-  'title  = {Estimação de factores que condicionam a variabilidade do recrutamento de peixes na costa atlântica da península Ibérica}, ' ...
-  'school = {Instituto Nacional de Investigação Agrária e das Pescas}'];
-metaData.biblist.(bibkey) = ['''@', type, '{', bibkey, ', ' bib, '}'';'];
 %
 bibkey = 'RosaGonz2010'; type = 'Article'; bib = [ ... %
    'author = {Rosa, Rui and Gonzalez, Liliana and Broitman, Bernardo R. and Garrido, Susana and Santos, A. Miguel P. and Nunes, Maria L.}, ' ... 
@@ -1277,12 +1269,121 @@ bibkey = 'RosaGonz2010'; type = 'Article'; bib = [ ... %
    'volume = {410}, ' ...
    'pages = {205--218}'];
 metaData.biblist.(bibkey) = ['''@', type, '{', bibkey, ', ' bib, '}'';'];
-%
-bibkey = 'SilvCarr2008'; type = 'Article'; bib = [ ...  
-'author = {Silva, A. and P. Carrera and J. Masse and A. D. Uriarte and M. B. Santos and P. B. Oliveira and E. Soares and C. Porteiro and Y. Stratoudakis}, ' ...
-'year = {2008}, ' ...
-'title = {Geographic variability of sardine growth across the northeastern Atlantic and the Mediterranean Sea.}, ' ... 
-'journal = {Fisheries Research}, ' ...
-'volume = 90, '...
-'pages = {56--69}'];
+
+bibkey = 'BernIbai2008'; type = 'Article'; bib = [ ... 
+   'author = {Bernal, M. and Ibaibarriaga, L. and Lago de Lanzós, A. and Lonergan, M. E. and Hernández, C. and Franco, C. and Rasines, I. and Valdes, L. and and Borchers, D.L.}, ' ... 
+   'year = {2008}, ' ...
+   'title = {Using multinomial models to analyse data from Iberian sardine egg incubation experiments: a comparison with traditional techniques}, '...
+   'journal = {ICES Journal Marine Science}, ' ...
+   'volume = {65}, ' ...
+   'pages = {51-59}'];
 metaData.biblist.(bibkey) = ['''@', type, '{', bibkey, ', ' bib, '}'';'];
+
+bibkey = 'SilvMira1992'; type = 'Article'; bib = [ ... 
+   'author = {Silva, A., and Miranda, M.}, ' ... 
+   'year = {1992}, ' ...
+   'title = {Laboratory rearing of sardine larvae, \emph{Sardina pilchardus} (Walb.), and early effects of starvation: a preliminary experiment}, '...
+   'journal = {Boletín Instituto Español Oceanografía}, ' ...
+   'volume = {8(1)}, ' ...
+   'pages = {163-174}'];
+metaData.biblist.(bibkey) = ['''@', type, '{', bibkey, ', ' bib, '}'';'];
+
+bibkey = 'SilvSant2006'; type = 'Article'; bib = [ ... 
+   'author = {Silva, A. and  Santos, M.B. and  Caneco, B. and  Pestana, G. and  Porteiro, C. and  Carrera, P., and Stratoudakis, Y.}, ' ... 
+   'year = {2006}, ' ...
+   'title = {Temporal and  geographic variability of  sardine maturity  at  length  in  the north-eastern  Atlantic  and  the  western  Mediterranean}, '...
+   'journal = {ICES Journal Marine Science}, ' ...
+   'volume = {63}, ' ...
+   'pages = {663-676}'];
+metaData.biblist.(bibkey) = ['''@', type, '{', bibkey, ', ' bib, '}'';'];
+
+bibkey = 'SilvCarr2008'; type = 'Article'; bib = [ ... 
+   'author = {Silva, A. and  Carrera, P. and  Mass\''{e}, J. and  Uriarte, A. and  Santos., M.B. and  Oliveira, P.B. and  Soares, E. and  Porteiro, C. and Stratoudakis, Y.}, ' ... 
+   'year = {2008}, ' ...
+   'title = {Geographic variability of sardine growth across the northeastern Atlantic and the Mediterranean Sea}, '...
+   'journal = {Fisheries Research}, ' ...
+   'volume = {90}, ' ...
+   'pages = {56--69}'];
+metaData.biblist.(bibkey) = ['''@', type, '{', bibkey, ', ' bib, '}'';'];
+
+bibkey = 'ReMene2009'; type = 'book'; bib = [ ...  
+  'author = {R\''{e}, P. , and Meneses, I.}, ' ...
+  'editor = {R\''{e}, P. , and Meneses, I.}, ' ...
+  'year = {2009}, ' ...
+  'title  = {Early stages of marine fishes occurring in the Iberian Peninsula}, ' ...
+  'publisher = {IPIMAR, Lisboa}'];
+metaData.biblist.(bibkey) = ['''@', type, '{', bibkey, ', ' bib, '}'';'];
+
+bibkey = 'CoomBoyr2004'; type = 'Article'; bib = [ ... 
+   'author = {Coombs, S.H. and  Boyra, G. and  Rueda, L.D. and  Uriarte, A. and  Santos. M. and  Conway, D.V.P. and  Halliday, N.C.}, ' ... 
+   'year = {2004}, ' ...
+   'title = {Buoyancy measurements and vertical distribution of eggs of sardine (\emph{Sardina pilchardus}) and anchovy (Engraulis encrasicolus)}, '...
+   'journal = {Marine Biology}, ' ...
+   'volume = {145}, ' ...
+   'pages = {959?970}'];
+metaData.biblist.(bibkey) = ['''@', type, '{', bibkey, ', ' bib, '}'';'];
+
+bibkey = 'ICES2012'; type = 'report'; bib = [ ...  
+  'author = {Anonymous}, ' ...
+  'year = {2012}, ' ...
+  'title  = {Report of the Working Group on Acoustic and Egg Surveys for Sardine and Anchovy in ICES Areas VIII and IX (WGACEGG), 26-30 November 2012, Fuengirola, Spain}, ' ...
+   'volume = {CM 2012/SSGESST:16}, ' ...
+  'publisher = {ICES, Copenhagen}'];
+metaData.biblist.(bibkey) = ['''@', type, '{', bibkey, ', ' bib, '}'';'];
+
+  bibkey = 'HuntMace1980'; type = 'Article'; bib = [ ... 
+   'author = {Hunter, J.R. and  Macewicz, B.J.}, ' ... 
+   'year = {1980}, ' ...
+   'title = {Sexual maturity, batch fecundity, spawning frequency, and temporal pattern of spawning for the northern anchovy, \emph{Engraulis mordax}, during the 1979 spawning season}, '...
+   'journal = {CalCOFI Rep.}, ' ...
+   'volume = {XXI}, ' ...
+   'pages = {139-149}'];
+metaData.biblist.(bibkey) = ['''@', type, '{', bibkey, ', ' bib, '}'';'];
+
+bibkey = 'ZwolStrat2001'; type = 'Article'; bib = [ ... 
+   'author = {Zwolinski, J. and Stratoudakis, Y. and Soares, E.}, ' ... 
+   'year = {2001}, ' ...
+   'title = {Intra-annual variation in the batch fecundity of sardine off Portugal}, '...
+   'journal = {Journal of Fish Biology}, ' ...
+   'volume = {58}, ' ...
+   'pages = {1633?1645}'];
+metaData.biblist.(bibkey) = ['''@', type, '{', bibkey, ', ' bib, '}'';'];
+
+bibkey = 'Lask1962'; type = 'Article'; bib = [ ... 
+   'author = {Lasker, R.}, ' ... 
+   'year = {1962}, ' ...
+   'title = {Efficiency and rate of yolk utilization by developing embryos and larvae of the Pacific sardine \emph{Sardinops caerulea} (Girard)}, '...
+   'journal = {Journal of the Fisheries Research Board of Canada}, ' ...
+   'volume = {19(5)}, ' ...
+   'pages = {867-875}'];
+metaData.biblist.(bibkey) = ['''@', type, '{', bibkey, ', ' bib, '}'';'];
+
+bibkey = 'Kaml2005'; type = 'Article'; bib = [ ... 
+   'author = {Kamler, E.}, ' ... 
+   'year = {2005}, ' ...
+   'title = {Parent?egg?progeny relationships in teleost ?shes: an energetics perspective}, '...
+   'journal = {Reviews in Fish Biology and Fisheries}, ' ...
+   'volume = {15}, ' ...
+   'pages = {399-421}'];
+metaData.biblist.(bibkey) = ['''@', type, '{', bibkey, ', ' bib, '}'';'];
+
+bibkey = 'Mene2003'; type = 'phdthesis'; bib = [ ...  
+  'author = {Meneses. I}, ' ...
+  'year = {2003}, ' ...
+  'title  = {Estimação de factores que condicionam a variabilidade do recrutamento de peixes na costa atlântica da península Ibérica}, ' ...
+  'school = {Instituto Nacional de Investigação Agrária e das Pescas}'];
+metaData.biblist.(bibkey) = ['''@', type, '{', bibkey, ', ' bib, '}'';'];
+
+
+bibkey = 'Re1984'; type = 'Article'; bib = [ ... 
+   'author = {R\''{e}, P.}, ' ... 
+   'year = {1984}, ' ...
+   'title = {Evidence of daily and hourly growth in pilchard larvae based on otolith growth increments, \emph{Sardina pilchardus} (Walbaum, 1792)}, '...
+   'journal = {Cybium}, ' ...
+   'volume = {8(1)}, ' ...
+   'pages = {33-38}'];
+metaData.biblist.(bibkey) = ['''@', type, '{', bibkey, ', ' bib, '}'';'];
+
+
+
+
